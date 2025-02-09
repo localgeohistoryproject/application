@@ -11,6 +11,9 @@ class About extends BaseController
 
     public function index(string $jurisdiction = ''): void
     {
+        if ($jurisdiction !== '') {
+            $this->title .= ' (' . strtoupper($jurisdiction) . ')';
+        }
         echo view('core/header', ['title' => $this->title]);
         $DocumentationModel = new DocumentationModel();
         $jurisdictions = [];
