@@ -10,9 +10,10 @@ class AppModel extends BaseModel
     public function getLastUpdated(): array
     {
         $query = <<<QUERY
-                SELECT calendar.historicdatetextformat(lastrefreshdate::calendar.historicdatetext::calendar.historicdate, 'long', ?) AS fulldate,
-                    to_char(lastrefreshdate, 'J') AS sortdate,
-                    to_char(lastrefreshdate, 'Mon FMDD, YYYY') AS sortdatetext
+                SELECT calendar.historicdatetextformat(lastrefresh.lastrefreshdate::calendar.historicdatetext::calendar.historicdate, 'short', ?) AS fulldate,
+                    to_char(lastrefresh.lastrefreshdate, 'J') AS sortdate,
+                    to_char(lastrefresh.lastrefreshdate, 'Mon FMDD, YYYY') AS sortdatetext,
+                    lastrefresh.lastrefreshversion
                 FROM geohistory.lastrefresh
             QUERY;
 

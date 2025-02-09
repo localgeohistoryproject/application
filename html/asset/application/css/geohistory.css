@@ -109,7 +109,7 @@ header .headerfooter {
 #headertext {
     margin: 0 auto;
     width: 94vw;
-    max-width: 960px;
+    max-width: 1075px;
 }
 
 header a:link,
@@ -121,7 +121,7 @@ header a:hover {
 
 .bodytext {
     width: 94vw;
-    max-width: 960px;
+    max-width: 1075px;
     margin: 0 auto;
     font-size: 85%;
 }
@@ -461,7 +461,7 @@ screen and (min-width: 690px) {
     #headertext {
         height: 70px;
         width: 94vw;
-        max-width: 960px;
+        max-width: 1075px;
         margin: 0 auto;
     }
 

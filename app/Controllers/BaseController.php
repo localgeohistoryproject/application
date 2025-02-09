@@ -90,11 +90,17 @@ abstract class BaseController extends Controller
         }
     }
 
-    public static function lastUpdated(): string
+    public static function lastUpdatedDate(): string
     {
         date_default_timezone_set('America/New_York');
         $AppModel = new AppModel();
         return $AppModel->getLastUpdated()[0]->fulldate ?? '';
+    }
+
+    public static function lastUpdatedVersion(): string
+    {
+        $AppModel = new AppModel();
+        return $AppModel->getLastUpdated()[0]->lastrefreshversion ?? '';
     }
 
     protected function getIdInt(int|string $id): int|string

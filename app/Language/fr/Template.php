@@ -3,7 +3,9 @@
 return [
     'projectName' => getenv('app_title_fr'),
     'originalContent' => 'Contenu original',
-    'license' => 'et sous licence',
+    'code' => 'Code',
+    'data' => 'Données',
+    'license' => 'licence',
     'disclaimers' => 'Avis',
     'opendata' => 'Données ouvertes',
 ];
