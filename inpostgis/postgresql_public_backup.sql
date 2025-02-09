@@ -1069,7 +1069,9 @@ RAISE INFO '%', clock_timestamp();
 RAISE INFO '%', clock_timestamp();
     REFRESH MATERIALIZED VIEW geohistory.governmentchangecountpartcache;
 RAISE INFO '%', clock_timestamp();
-    REFRESH MATERIALIZED VIEW geohistory.lastrefresh;
+    UPDATE geohistory.lastrefresh
+    SET lastrefreshdate = current_date
+    WHERE lastrefreshversion = 'LIVE';
 RAISE INFO '%', clock_timestamp();
 END
 $$;
@@ -4706,15 +4708,16 @@ ALTER SEQUENCE geohistory.governmentsourceevent_governmentsourceeventid_seq OWNE
 
 
 --
--- Name: lastrefresh; Type: MATERIALIZED VIEW; Schema: geohistory; Owner: postgres
+-- Name: lastrefresh; Type: TABLE; Schema: geohistory; Owner: postgres
 --
 
-CREATE MATERIALIZED VIEW geohistory.lastrefresh AS
- SELECT '2024-11-02'::date AS lastrefreshdate
-  WITH NO DATA;
+CREATE TABLE geohistory.lastrefresh (
+    lastrefreshversion character varying(5) NOT NULL,
+    lastrefreshdate date NOT NULL
+);
 
 
-ALTER MATERIALIZED VIEW geohistory.lastrefresh OWNER TO postgres;
+ALTER TABLE geohistory.lastrefresh OWNER TO postgres;
 
 --
 -- Name: law_lawid_seq; Type: SEQUENCE; Schema: geohistory; Owner: postgres
