@@ -109,33 +109,6 @@ class AdjudicationModel extends BaseModel
         return $this->getObject($query);
     }
 
-    public function getGovernmentShort(bool $addLocation = false): string
-    {
-        return "
-                CASE
-                    WHEN government" . ($addLocation ? 'location' : '') . ".governmentindigobook <> '' THEN government" . ($addLocation ? 'location' : '') . ".governmentindigobook
-                    WHEN government" . ($addLocation ? 'location' : '') . ".governmentabbreviation <> '' THEN government" . ($addLocation ? 'location' : '') . ".governmentabbreviation || '.'
-                    ELSE government" . ($addLocation ? 'location' : '') . ".governmentshort || '.'
-                END ||
-                CASE
-                    WHEN tribunal" . ($addLocation ? 'location' : '') . ".tribunaldistrictcircuit::text <> ''::text THEN tribunal" . ($addLocation ? 'location' : '') . ".tribunaldistrictcircuit::text || CASE
-                        WHEN tribunal" . ($addLocation ? 'location' : '') . ".tribunaldistrictcircuit::text = '1' THEN 'st'
-                        WHEN tribunal" . ($addLocation ? 'location' : '') . ".tribunaldistrictcircuit::text IN ('2', '3') THEN 'd'
-                        WHEN tribunal" . ($addLocation ? 'location' : '') . ".tribunaldistrictcircuit::text ~ '^\d+$' THEN 'th'
-                        ELSE ''
-                    END || '.'::text
-                    ELSE ''::text
-                END
-            ";
-    }
-
-    public function getShort(bool $addLocation = false): string
-    {
-        return $this->getGovernmentShort($addLocation) . "
-            || tribunal" . ($addLocation ? 'location' : '') . "type.tribunaltypeshort
-        ";
-    }
-
     private function getSlugId(string $id): int
     {
         $query = <<<QUERY
