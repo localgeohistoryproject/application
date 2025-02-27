@@ -1,5 +1,68 @@
 # Changelog
 
+## [3.0.0] - 2025-03-??
+
+### Added
+
+- Database function refresh_view to any schema without it.
+- Database schema gis_extra, to store some database functions, materialized views, and views from the removed extra schema.
+- DOCKER_COMPOSER variable to .env.
+- Generated columns in database, mostly for slug generation and to replace features in database functions, materialized views, and views from the removed extra schema.
+- Jurisdiction (state) as a search option where jurisdiction-specific search pages removed.
+- Mastodon profile link to .env and as link tag on welcome page.
+- Redirects to handle removed jurisdiction (state) segments from URLs.
+- Shared content for CSV handling and textual representations relating to tribunals from private repositories.
+- Status page.
+- Table of Contents label to the about and key pages.
+
+### Changed
+
+- CodeIgniter from 4.5.5 to 4.6.0.
+- Composer docker image from 2.6.5 to 2.8.4.
+- Composer.json to add project name, license, and author.
+- CSS page width.
+- CSS print media to ensure printing in black instead of blue.
+- Database import scripts to include column names.
+- Database materialized view geohistory.lastrefresh to a table, and added lastrefreshversion column.
+- DataTables from 2.1.8 to 2.2.1.
+- docker-compose.yaml to remove version and accommodate new folder structure.
+- Existing Material Icon PNGs and SVGs to use Material Symbols Outlined font.
+- Folders to allow for modularization of private features, by moving all content in app and env to the root folder.
+- Footer to bifurcate Code and Data versions and licenses.
+- Government page to fold Other Successful Event Links into Other Event Links, and remove events under Government Action from Other Event Links.
+- Government record text representations to include the jurisdiction (state) in most forms.
+- Model queries to replace features in database functions, materialized views, and views from the removed extra schema.
+- Model result handling harmonized.
+- PHP coding style to PER-CS.
+- PHP CS Fixer from 3.64.0 to 3.68.1.
+- PHP dockerfile to also install git.
+- PHP docker image from 8.3.11-apache to 8.4.3-apache-bookworm.
+- PHPStan CodeIgniter from 1.4.3 to 1.5.1.
+- PHPStan from 1.12.6 to 2.1.1.
+- phpstan.neon.dist to remove most remaining excludePaths and add additional ignoreErrors and strictRules.
+- PHPStan Strict Rules from 1.6.1 to 2.0.2.
+- PMTiles from 3.2.0 to 4.2.1.
+- Postgis/postgis docker image from 16-3.4 to 16-3.5.
+- Rector from 1.2.6 to 2.0.7.
+- Rector PHP sets from 8.2 to 8.4.
+- Routes to specify get/post methods.
+- Welcome page to use feature icons.
+
+### Fixed
+
+- Government page, Related table, to accurately mark parent governments that are more than one level above as having a current status where appropriate, instead of always showing former.
+- Various code quality and linting issues using PhpStan, PHP CS Fixer, and Rector.
+
+### Removed
+
+- "Detail" word from most page titles.
+- Extra schema in database, along with the majority of remaining database functions, materialized views, and views.
+- Jurisdiction (state) as a segment in most URLs, including removing state icons and separate search pages.
+- "Modifications for other operating systems" section from README.
+- Statistics page content not used in production.
+- Symbolic links to .env and private features from repository.
+- Text content on the key and welcome pages to the Open Data repository.
+
 ## [2.1.0] - 2024-10-09
 
 ### Added
@@ -317,6 +380,7 @@
 
 - Public release of the Local Geohistory Project: Application repository.
 
+[3.0.0]: https://github.com/localgeohistoryproject/application/compare/v2.1.0...v3.0.0
 [2.1.0]: https://github.com/localgeohistoryproject/application/compare/v2.0.2...v2.1.0
 [2.0.2]: https://github.com/localgeohistoryproject/application/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/localgeohistoryproject/application/compare/v2.0.0...v2.0.1
