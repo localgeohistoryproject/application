@@ -7,8 +7,8 @@
     <?php if (isset($query['Text'])) {
         echo $query['Text']->keylong;
         unset($query['Text']);
-    } if (count($query) > 0) { 
-?>
+    } if ($query !== []) {
+        ?>
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
