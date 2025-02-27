@@ -20,6 +20,7 @@
 - CodeIgniter from 4.5.5 to 4.6.0.
 - Composer docker image from 2.6.5 to 2.8.4.
 - Composer.json to add project name, license, and author.
+- Controller and model references when they can be overridden by private repositories.
 - CSS page width.
 - CSS print media to ensure printing in black instead of blue.
 - Database import scripts to include column names.
