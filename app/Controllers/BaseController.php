@@ -68,6 +68,22 @@ abstract class BaseController extends Controller
         return $jurisdictions;
     }
 
+    public static function getModelNamespace(object $controller, string $model): object
+    {
+        $controller = $controller::class;
+        $controller = explode('\\', $controller);
+        array_pop($controller);
+        array_pop($controller);
+        $controller[] = 'Models';
+        $controller = implode('\\', $controller);
+        $modelNamespace = $controller . '\\' . $model;
+        if (!class_exists($modelNamespace)) {
+            $modelNamespace = 'App\\Models\\' . $model;
+
+        }
+        return new $modelNamespace();
+    }
+
     public static function getProductionJurisdictions(): array
     {
         $jurisdictions = trim(($_ENV['app_jurisdiction'] ?? ''), '|');

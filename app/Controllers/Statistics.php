@@ -141,12 +141,7 @@ class Statistics extends BaseController
             'eventtype' => 'Event',
             'mapped' => 'GovernmentShape',
         ];
-        if ($types[$for] === 'GovernmentShape' && class_exists(\Localgeohistoryproject\Development\Models\GovernmentShapeModel::class)) {
-            $model = \Localgeohistoryproject\Development\Models\GovernmentShapeModel::class;
-        } else {
-            $model = "App\\Models\\" . $types[$for] . 'Model';
-        }
-        $model = new $model();
+        $model = $this->getModelNamespace($this, $types[$for] . 'Model');
         $type = 'getByStatistics' . ($jurisdiction === '' ? 'Nation' : 'State') . 'Whole';
 
         $wholeQuery = $model->$type($fields);

@@ -48,11 +48,7 @@ class Event extends BaseController
             $jurisdictions = $affectedGovernment['jurisdictions'];
             $hasAffectedGovernmentMap = $hasMap;
             $affectedGovernment = $affectedGovernment['affectedGovernment'];
-            if ($this->isLive()) {
-                $MetesDescriptionLineModel = new \Localgeohistoryproject\Development\Models\MetesDescriptionLineModel();
-            } else {
-                $MetesDescriptionLineModel = new \App\Models\MetesDescriptionLineModel();
-            }
+            $MetesDescriptionLineModel = $this->getModelNamespace($this, 'MetesDescriptionLineModel');
             $metesDescriptionGisQuery = $MetesDescriptionLineModel->getGeometryByEvent($id);
             if ($metesDescriptionGisQuery !== []) {
                 $hasMap = true;
@@ -83,10 +79,7 @@ class Event extends BaseController
             echo view('governmentsource/table', ['query' => $GovernmentSourceModel->getByEvent($id), 'type' => 'event']);
             $SourceCitationModel = new SourceCitationModel();
             echo view('source/table_citation', ['query' => $SourceCitationModel->getByEvent($id), 'hasColor' => false, 'hasLink' => true, 'title' => 'Source']);
-            if ($this->isLive()) {
-                $FileSourceModel = new \Localgeohistoryproject\Development\Models\FileSourceModel();
-                echo view('Localgeohistoryproject\Development\filesource/table', ['query' => $FileSourceModel->getByEvent($id)]);
-            }
+            $this->viewPrivate($id);
             if ($hasMap) {
                 $i = 0;
                 echo view('leaflet/start', ['type' => 'event', 'jurisdictions' => $jurisdictions, 'includeBase' => true, 'needRotation' => false]);
@@ -125,4 +118,6 @@ class Event extends BaseController
             echo view('core/footer');
         }
     }
+
+    protected function viewPrivate(int $id): void {}
 }

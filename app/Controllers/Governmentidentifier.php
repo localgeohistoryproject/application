@@ -22,11 +22,7 @@ class Governmentidentifier extends BaseController
             $this->response->setStatusCode(301);
             return redirect()->to("/" . $this->request->getLocale() . '/governmentidentifier/' . $type . '/' . strtolower($id) . '/');
         }
-        if ($this->isLive()) {
-            $GovernmentIdentifierModel = new \Localgeohistoryproject\Development\Models\GovernmentIdentifierModel();
-        } else {
-            $GovernmentIdentifierModel = new \App\Models\GovernmentIdentifierModel();
-        }
+        $GovernmentIdentifierModel = $this->getModelNamespace($this, 'GovernmentIdentifierModel');
         $query = $GovernmentIdentifierModel->getDetail($type, $id);
         if (count($query) !== 1) {
             $this->noRecord();

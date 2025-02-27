@@ -10,14 +10,17 @@ if (mb_strpos(base_url(), $_ENV['app_baseLocalGeohistoryProjectUrl']) !== false)
     $routes->get('robots.txt', 'Bot::robotsTxt');
 
     $controllerRegex = ['adjudication', 'area', 'event', 'government', 'governmentsource', 'law', 'metes', 'reporter', 'source'];
+    $controllerRegexOverride = ['event', 'government', 'law', 'metes'];
     $mainSearchRegex = '(event|government|adjudication|law)';
 
     foreach ($controllerRegex as $c) {
-        $routes->get('{locale}/' . $c . '/(:segment)', ucwords($c) . '::view/$1');
-        if ($_ENV['app_jurisdiction'] !== '') {
-            $routes->get('{locale}/(' . $_ENV['app_jurisdiction'] . ')/' . $c . '/(:segment)', ucwords($c) . '::redirect/$2');
+        if (!(in_array($c, $controllerRegexOverride) && class_exists('Localgeohistoryproject\\Development\\Controllers\\' . ucwords($c)))) {
+            $routes->get('{locale}/' . $c . '/(:segment)', ucwords($c) . '::view/$1', ['priority' => 100]);
+            if ($_ENV['app_jurisdiction'] !== '') {
+                $routes->get('{locale}/(' . $_ENV['app_jurisdiction'] . ')/' . $c . '/(:segment)', ucwords($c) . '::redirect/$2', ['priority' => 100]);
+            }
+            $routes->get('{locale}/' . $c, ucwords($c) . '::noRecord', ['priority' => 100]);
         }
-        $routes->get('{locale}/' . $c, ucwords($c) . '::noRecord');
     }
 
     if ($_ENV['app_jurisdiction'] !== '') {
@@ -45,14 +48,18 @@ if (mb_strpos(base_url(), $_ENV['app_baseLocalGeohistoryProjectUrl']) !== false)
     $routes->get('{locale}/disclaimer', 'Disclaimer');
     $routes->get('{locale}/key', 'Key::index');
 
-    $routes->get('{locale}/governmentidentifier/(:segment)/(:segment)', 'Governmentidentifier::view/$1/$2');
+    if (!class_exists(\Localgeohistoryproject\Development\Controllers\Governmentidentifier::class, true)) {
+        $routes->get('{locale}/governmentidentifier/(:segment)/(:segment)', 'Governmentidentifier::view/$1/$2');
+    }
 
     $routes->get('{locale}/leaflet', 'Map::leaflet');
     $routes->get('{locale}/map-base', 'Map::baseStyle');
     $routes->get('{locale}/map-overlay', 'Map::overlayStyle');
     $routes->get('{locale}/map-tile/(:num)/(:num)/(:num)', 'Map::tile/$1/$2/$3');
 
-    $routes->post('{locale}/statistics/report/', 'Statistics::view');
+    if (!class_exists(\Localgeohistoryproject\Development\Controllers\Statistics::class, true)) {
+        $routes->post('{locale}/statistics/report/', 'Statistics::view');
+    }
     $routes->get('{locale}/statistics/', 'Statistics::index');
 
     $routes->get('{locale}/status/', 'Status::index');
