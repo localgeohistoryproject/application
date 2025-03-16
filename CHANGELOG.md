@@ -4,6 +4,7 @@
 
 ### Added
 
+- Adjudication, Government Action, and Recorded Document entry to Key.
 - Database function refresh_view to any schema without it.
 - Database schema gis_extra, to store some database functions, materialized views, and views from the removed extra schema.
 - DOCKER_COMPOSER variable to .env.
