@@ -15,6 +15,7 @@ class Key extends BaseController
         $keyQueries = [];
 
         $keys = [
+            'Adjudication, Government Action, and Recorded Document' => 'adjudicationgovernmentactionrecordeddocument',
             'Date' => 'date',
             'Government Level' => 'governmentlevel',
             'Government Map Status' => 'governmentmapstatus',
