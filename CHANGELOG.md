@@ -48,6 +48,7 @@
 - Rector from 1.2.6 to 2.0.9.
 - Rector PHP sets from 8.2 to 8.4.
 - Routes to specify get/post methods.
+- Search page, Law searches to require Government search term.
 - Welcome page to use feature icons.
 
 ### Fixed
