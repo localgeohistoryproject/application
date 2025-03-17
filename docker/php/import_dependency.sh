@@ -48,3 +48,12 @@ curl -s -S -o "${license_folder}/PMTiles.txt" "https://raw.githubusercontent.com
 curl -s -S -o ${asset_folder}/css/selectize.css "https:/${dependency_selectize}/css/selectize.css"
 curl -s -S -o ${asset_folder}/js/standalone/selectize.min.js "https:/${dependency_selectize}/js/standalone/selectize.min.js"
 curl -s -S -o "${license_folder}/Selectize.txt" "https:/${dependency_selectize}/../LICENSE"
+
+app_folder=/var/www/app/Config/
+vendor_folder=/var/www/vendor/codeigniter4/framework/app/Config/
+
+for fileName in ${vendor_folder}*.php; do
+    if [ ! -f "${app_folder}$(basename $fileName .php).php" ]; then
+        cp "${vendor_folder}$(basename $fileName .php).php" "${app_folder}";
+    fi;
+done
