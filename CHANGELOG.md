@@ -18,6 +18,7 @@
 
 ### Changed
 
+- app_jurisdiction in .env to use commas instead of pipe delimiters.
 - CodeIgniter from 4.5.5 to 4.6.0.
 - Composer docker image from 2.6.5 to 2.8.4.
 - Composer.json to add project name, license, and author.

@@ -62,8 +62,8 @@ abstract class BaseController extends Controller
 
     public static function getJurisdictions(): array
     {
-        $jurisdictions = trim(($_ENV['app_jurisdiction'] ?? '') . '|' . ($_ENV['app_jurisdiction_development'] ?? ''), '|');
-        $jurisdictions = explode('|', $jurisdictions);
+        $jurisdictions = trim(($_ENV['app_jurisdiction'] ?? '') . ',' . ($_ENV['app_jurisdiction_development'] ?? ''), ',');
+        $jurisdictions = explode(',', $jurisdictions);
         sort($jurisdictions);
         return $jurisdictions;
     }
