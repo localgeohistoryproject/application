@@ -58,6 +58,7 @@
 
 ### Removed
 
+- app/Config files that match CodeIgniter defaults from repository.
 - "Detail" word from most page titles.
 - Extra schema in database, along with the majority of remaining database functions, materialized views, and views.
 - Jurisdiction (state) as a segment in most URLs, including removing state icons and separate search pages.
