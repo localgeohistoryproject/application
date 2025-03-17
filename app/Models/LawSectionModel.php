@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use App\Models\GovernmentModel;
 
 class LawSectionModel extends BaseModel
 {
@@ -138,11 +139,14 @@ class LawSectionModel extends BaseModel
 
     public function getSearchByDateEvent(array $parameters): array
     {
-        $date = $parameters[0];
-        $eventType = $parameters[1];
+        $government = $parameters[0];
+        $GovernmentModel = new GovernmentModel();
+        $government = $GovernmentModel->getIdByGovernmentShort($government);
+        $date = $parameters[1];
+        $eventType = $parameters[2];
 
         $query = <<<QUERY
-                SELECT lawsection.lawsectionslug,
+                SELECT DISTINCT lawsection.lawsectionslug,
                    lawsection.lawsectioncitation,
                    lawapproved,
                    eventtypeshort
@@ -159,6 +163,9 @@ class LawSectionModel extends BaseModel
                     JOIN geohistory.source
                       ON law.source = source.sourceid
                       AND source.sourcetype = 'session laws'
+                    JOIN geohistory.sourcegovernment
+                      ON source.sourceid = sourcegovernment.source
+                      AND sourcegovernment.government = ANY (?)
             QUERY;
 
         $query = $this->db->query($query, [
@@ -167,6 +174,7 @@ class LawSectionModel extends BaseModel
             $eventType,
             $eventType,
             $date,
+            $government,
         ]);
 
         return $this->getObject($query);
@@ -174,12 +182,15 @@ class LawSectionModel extends BaseModel
 
     public function getSearchByReference(array $parameters): array
     {
-        $yearVolume = $parameters[0];
-        $page = $parameters[1];
-        $numberChapter = $parameters[2];
+        $government = $parameters[0];
+        $GovernmentModel = new GovernmentModel();
+        $government = $GovernmentModel->getIdByGovernmentShort($government);
+        $yearVolume = $parameters[1];
+        $page = $parameters[2];
+        $numberChapter = $parameters[3];
 
         $query = <<<QUERY
-                SELECT lawsection.lawsectionslug,
+                SELECT DISTINCT lawsection.lawsectionslug,
                    lawsection.lawsectioncitation,
                    lawapproved,
                    eventtypeshort
@@ -192,6 +203,9 @@ class LawSectionModel extends BaseModel
                     JOIN geohistory.source
                       ON law.source = source.sourceid
                       AND source.sourcetype = 'session laws'
+                    JOIN geohistory.sourcegovernment
+                      ON source.sourceid = sourcegovernment.source
+                      AND sourcegovernment.government = ANY (?)
                  WHERE (0 = ? OR law.lawpage = ? OR (lawsection.lawsectionpagefrom >= ? AND lawsection.lawsectionpageto <= ?))
                    AND (0 = ? OR law.lawnumberchapter = ?)
             QUERY;
@@ -199,6 +213,7 @@ class LawSectionModel extends BaseModel
         $query = $this->db->query($query, [
             $yearVolume,
             $yearVolume,
+            $government,
             $page,
             $page,
             $page,

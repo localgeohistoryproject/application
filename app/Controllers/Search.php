@@ -145,6 +145,7 @@ class Search extends BaseController
                 switch ($type) {
                     case 'reference':
                         $fields = [
+                            $this->request->getPost('governmentjurisdiction'),
                             $this->request->getPost('yearvolume'),
                             (int) $this->request->getPost('page'),
                             (int) $this->request->getPost('numberchapter'),
@@ -152,6 +153,7 @@ class Search extends BaseController
                         break;
                     case 'dateEvent':
                         $fields = [
+                            $this->request->getPost('governmentjurisdiction'),
                             $this->request->getPost('date'),
                             $this->request->getPost('eventtype'),
                         ];

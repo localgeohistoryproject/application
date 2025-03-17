@@ -97,6 +97,9 @@ echo view('search/submit', ['type' => 'point']);
     </div>
     <div id="forms_law" class="option_select option_indent">
         <form method="post" action="/<?= \Config\Services::request()->getLocale() ?>/search/law/" class="form_select" id="form_law_reference">
+            <?php
+echo view('search/form_governmentjurisdiction', ['form' => 'form_law_reference']);
+?>
             <label for="form_law_reference_yearvolume" class="forselectize">Year/Volume</label><br>
             <input id="form_law_reference_yearvolume" class="selectize-input required stringcheck forselectize" name="yearvolume" type="text" required="required" style="width: 100px;">
             <br>
@@ -111,6 +114,9 @@ echo view('search/submit', ['type' => 'reference']);
 ?>
         </form>
         <form method="post" action="/<?= \Config\Services::request()->getLocale() ?>/search/law/" class="form_select" id="form_law_dateevent">
+            <?php
+echo view('search/form_governmentjurisdiction', ['form' => 'form_law_dateevent']);
+?>
             <label for="form_law_dateevent_date" class="forselectize">Date</label><br>
             <input id="form_law_dateevent_date" class="selectize-input required stringcheck forselectize" name="date" type="date" required="required" pattern="\d{4}-\d{2}-\d{2}" title="Date should be formatted as YYYY-MM-DD." style="width: 150px;">
             <br>
