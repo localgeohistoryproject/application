@@ -1,4 +1,4 @@
-FROM php:8.3.11-apache
+FROM php:8.4.3-apache-bookworm
 # Create writable dictory for CodeIgniter
 RUN mkdir /writable
 RUN mkdir /writable/cache
@@ -22,13 +22,13 @@ COPY /docker/php/mods-enabled/headers.conf /etc/apache2/mods-enabled/
 RUN mkdir /usr/src/docker
 ARG DOCKER_PHP
 ARG DOCKER_PHP_PERSONAL
-COPY /docker/php/import_common_php.sh /docker/php/import_dependency.sh /src/private/${DOCKER_PHP}/docker/* /src/private/${DOCKER_PHP_PERSONAL}/docker/* /usr/src/docker/
+COPY /docker/php/import_common_php.sh /docker/php/import_dependency.sh /private/${DOCKER_PHP}/docker/* /private/${DOCKER_PHP_PERSONAL}/docker/* /usr/src/docker/
 RUN chmod -R 764 /usr/src/docker/*
 ARG CI_ENVIRONMENT
 RUN apt-get update
-RUN apt-get install -y unzip zip
+RUN apt-get install -y git unzip zip
 RUN /usr/src/docker/import_common_php.sh
 # Restart Apache
 RUN service apache2 restart
 # Install Composer and prerequisites
-COPY --from=composer:2.6.5 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.8.4 /usr/bin/composer /usr/bin/composer
