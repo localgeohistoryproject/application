@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.6 (Debian 16.6-1.pgdg110+1)
--- Dumped by pg_dump version 16.6 (Ubuntu 16.6-0ubuntu0.24.04.1)
+-- Dumped from database version 16.8 (Debian 16.8-1.pgdg110+1)
+-- Dumped by pg_dump version 16.8 (Ubuntu 16.8-0ubuntu0.24.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -4170,8 +4170,8 @@ ALTER SEQUENCE geohistory.currentgovernment_currentgovernmentid_seq OWNED BY geo
 
 CREATE TABLE geohistory.documentation (
     documentationid integer NOT NULL,
-    documentationtype character varying(30) NOT NULL,
-    documentationshort character varying(50) NOT NULL,
+    documentationtype character varying(50) NOT NULL,
+    documentationshort character varying(100) NOT NULL,
     documentationlong text NOT NULL,
     documentationcolor character varying(40) DEFAULT ''::character varying NOT NULL,
     documentationlocale character varying(2) DEFAULT 'en'::character varying NOT NULL,
