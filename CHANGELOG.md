@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.0.0] - 2025-03-??
+## [3.0.0] - 2025-03-23
 
 ### Added
 
@@ -35,6 +35,8 @@
 - Government page to fold Other Successful Event Links into Other Event Links, and remove events under Government Action from Other Event Links.
 - Government record text representations to include the jurisdiction (state) in most forms.
 - Html to Image 1.11.11 to 1.11.13.
+- License for code from CC-BY-SA-4.0 to Apache-2.0.
+- License references to use SPDX Identifiers.
 - Model queries to replace features in database functions, materialized views, and views from the removed extra schema.
 - Model result handling harmonized.
 - PHP coding style to PER-CS.
