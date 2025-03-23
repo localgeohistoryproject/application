@@ -31,4 +31,4 @@ RUN /usr/src/docker/import_common_php.sh
 # Restart Apache
 RUN service apache2 restart
 # Install Composer and prerequisites
-COPY --from=composer:2.8.4 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.8.6 /usr/bin/composer /usr/bin/composer
