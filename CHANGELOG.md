@@ -48,7 +48,7 @@
 - phpstan.neon.dist to remove most remaining excludePaths and add additional ignoreErrors and strictRules.
 - PHPStan Strict Rules from 1.6.1 to 2.0.4.
 - PMTiles from 3.2.0 to 4.3.0.
-- Postgis/postgis docker image from 16-3.4 to 16-3.5.
+- Postgis/postgis docker image from 16-3.4 to 17-3.5.
 - Rector from 1.2.6 to 2.0.10.
 - Rector PHP sets from 8.2 to 8.4.
 - Routes to specify get/post methods.
