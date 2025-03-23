@@ -12,21 +12,22 @@ if (mb_strpos(base_url(), $_ENV['app_baseLocalGeohistoryProjectUrl']) !== false)
     $controllerRegex = ['adjudication', 'area', 'event', 'government', 'governmentsource', 'law', 'metes', 'reporter', 'source'];
     $controllerRegexOverride = ['event', 'government', 'law', 'metes'];
     $mainSearchRegex = '(event|government|adjudication|law)';
+    $jurisdictionRedirectRegex = str_replace(',', '|', $_ENV['app_jurisdiction'] ?? '');
 
     foreach ($controllerRegex as $c) {
         if (!(in_array($c, $controllerRegexOverride) && class_exists('Localgeohistoryproject\\Development\\Controllers\\' . ucwords($c)))) {
             $routes->get('{locale}/' . $c . '/(:segment)', ucwords($c) . '::view/$1', ['priority' => 100]);
-            if ($_ENV['app_jurisdiction'] !== '') {
-                $routes->get('{locale}/(' . $_ENV['app_jurisdiction'] . ')/' . $c . '/(:segment)', ucwords($c) . '::redirect/$2', ['priority' => 100]);
+            if ($jurisdictionRedirectRegex !== '') {
+                $routes->get('{locale}/(' . $jurisdictionRedirectRegex . ')/' . $c . '/(:segment)', ucwords($c) . '::redirect/$2', ['priority' => 100]);
             }
             $routes->get('{locale}/' . $c, ucwords($c) . '::noRecord', ['priority' => 100]);
         }
     }
 
-    if ($_ENV['app_jurisdiction'] !== '') {
-        $routes->get('{locale}/(' . $_ENV['app_jurisdiction'] . ')/about', 'About::redirect/$1');
-        $routes->get('{locale}/(' . $_ENV['app_jurisdiction'] . ')/statistics', 'Statistics::redirect');
-        $routes->get('{locale}/(' . $_ENV['app_jurisdiction'] . ')', 'Search::redirect');
+    if ($jurisdictionRedirectRegex !== '') {
+        $routes->get('{locale}/(' . $jurisdictionRedirectRegex . ')/about', 'About::redirect/$1');
+        $routes->get('{locale}/(' . $jurisdictionRedirectRegex . ')/statistics', 'Statistics::redirect');
+        $routes->get('{locale}/(' . $jurisdictionRedirectRegex . ')', 'Search::redirect');
     }
 
     $routes->get('{locale}/lookup/government/(:segment)', 'Search::governmentlookup/$1/');
