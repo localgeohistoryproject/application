@@ -27,26 +27,27 @@
 - CSS print media to ensure printing in black instead of blue.
 - Database import scripts to include column names.
 - Database materialized view geohistory.lastrefresh to a table, and added lastrefreshversion column.
-- DataTables from 2.1.8 to 2.2.1.
+- DataTables from 2.1.8 to 2.2.2.
 - docker-compose.yaml to remove version and accommodate new folder structure.
 - Existing Material Icon PNGs and SVGs to use Material Symbols Outlined font.
 - Folders to allow for modularization of private features, by moving all content in app and env to the root folder.
 - Footer to bifurcate Code and Data versions and licenses.
 - Government page to fold Other Successful Event Links into Other Event Links, and remove events under Government Action from Other Event Links.
 - Government record text representations to include the jurisdiction (state) in most forms.
+- Html to Image 1.11.11 to 1.11.13.
 - Model queries to replace features in database functions, materialized views, and views from the removed extra schema.
 - Model result handling harmonized.
 - PHP coding style to PER-CS.
-- PHP CS Fixer from 3.64.0 to 3.70.0.
+- PHP CS Fixer from 3.64.0 to 3.73.1.
 - PHP dockerfile to also install git.
 - PHP docker image from 8.3.11-apache to 8.4.3-apache-bookworm.
 - PHPStan CodeIgniter from 1.4.3 to 1.5.3.
-- PHPStan from 1.12.6 to 2.1.6.
+- PHPStan from 1.12.6 to 2.1.8.
 - phpstan.neon.dist to remove most remaining excludePaths and add additional ignoreErrors and strictRules.
-- PHPStan Strict Rules from 1.6.1 to 2.0.3.
-- PMTiles from 3.2.0 to 4.2.1.
+- PHPStan Strict Rules from 1.6.1 to 2.0.4.
+- PMTiles from 3.2.0 to 4.3.0.
 - Postgis/postgis docker image from 16-3.4 to 16-3.5.
-- Rector from 1.2.6 to 2.0.9.
+- Rector from 1.2.6 to 2.0.10.
 - Rector PHP sets from 8.2 to 8.4.
 - Routes to specify get/post methods.
 - Search page, Law searches to require Government search term.
