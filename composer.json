@@ -1,0 +1,26 @@
+{
+    "name": "localgeohistoryproject/application",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Mark A. Connelly",
+            "email": "mark@markconnelly.pro"
+        }
+    ],
+    "require": {
+        "codeigniter4/framework": "4.6.0"
+    },
+    "require-dev": {
+        "codeigniter/phpstan-codeigniter": "1.5.3",
+        "friendsofphp/php-cs-fixer": "3.73.1",
+        "phpstan/extension-installer": "1.4.3",
+        "phpstan/phpstan": "2.1.8",
+        "phpstan/phpstan-strict-rules": "2.0.4",
+        "rector/rector": "2.0.10"
+    },
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
+    }
+}

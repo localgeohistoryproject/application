@@ -40,20 +40,9 @@ This will create a subfolder named **PHP**, which contains the application code.
 
 ### Create a .env file from the Sample.env
 
-Within the newly-created **PHP** folder, the **env** folder contains a Sample.env file that can be used to create the necessary .env file for the application, which is where information like credentials is stored.
+Within the newly-created **PHP** folder, there is a Sample.env file that can be used to create the necessary .env file for the application, which is where information like credentials is stored.
 
 First, copy the Sample.env, and name the copy **.env** (with nothing before the period). Then, populate the values labeled ***, following the directions in the file.
-
-### Modifications for other operating systems
-
-The application uses symbolic links to propagate the .env file to 2 other locations without having to copy the .env file itself: the root of the **PHP** folder, and in the **src** folder. If you are deploying this application in another operating system, such as Windows, these symbolic links may not work, and the .env file in the **env** folder may have to be copied into these other locations. **If symbolic links are not used to propagate the .env files to other folders, the .gitignore file must be changed to prevent the inadvertent release of credentials by adding the following 2 files:**
-
-```bash
-.env
-src/.env
-```
-
-The application also contains 2 Dockerfiles, one in **docker/php** and one in **docker/postgis**.
 
 ### Copy data files into the inpostgis folder
 
