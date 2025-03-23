@@ -2,12 +2,13 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.8 (Debian 16.8-1.pgdg110+1)
--- Dumped by pg_dump version 16.8 (Ubuntu 16.8-0ubuntu0.24.04.1)
+-- Dumped from database version 17.4 (Debian 17.4-1.pgdg110+2)
+-- Dumped by pg_dump version 17.4 (Ubuntu 17.4-1.pgdg24.04+2)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -3751,95 +3752,6 @@ CREATE TABLE geohistory.lawgroupgovernmenttype (
 ALTER TABLE geohistory.lawgroupgovernmenttype OWNER TO postgres;
 
 --
--- Name: tribunaltype; Type: TABLE; Schema: geohistory; Owner: postgres
---
-
-CREATE TABLE geohistory.tribunaltype (
-    tribunaltypeid integer NOT NULL,
-    tribunaltypelevel integer NOT NULL,
-    tribunaltypeshort character varying(20) NOT NULL,
-    tribunaltypelong text NOT NULL,
-    tribunaltypedivision character varying(25) DEFAULT ''::character varying NOT NULL,
-    tribunaltypefilingoffice character varying(50) NOT NULL,
-    tribunaltypefilingofficerlevel boolean DEFAULT false NOT NULL,
-    tribunaltypedistrictcircuit text DEFAULT ''::text NOT NULL,
-    tribunaltypesummary character varying(50) DEFAULT ''::character varying NOT NULL,
-    CONSTRAINT tribunaltype_check CHECK ((((tribunaltypefilingoffice)::text <> ''::text) AND (tribunaltypelong <> ''::text) AND ((tribunaltypeshort)::text <> ''::text)))
-);
-
-
-ALTER TABLE geohistory.tribunaltype OWNER TO postgres;
-
---
--- Name: adjudicationsourcecitation; Type: TABLE; Schema: geohistory; Owner: postgres
---
-
-CREATE TABLE geohistory.adjudicationsourcecitation (
-    adjudicationsourcecitationid integer NOT NULL,
-    source integer NOT NULL,
-    adjudicationsourcecitationvolume smallint NOT NULL,
-    adjudicationsourcecitationpagefrom smallint NOT NULL,
-    adjudicationsourcecitationpageto smallint,
-    adjudicationsourcecitationyear character varying(4) DEFAULT ''::character varying NOT NULL,
-    adjudicationsourcecitationdate calendar.historicdatetext DEFAULT (''::text)::calendar.historicdatetext NOT NULL,
-    adjudicationsourcecitationtitle text DEFAULT ''::text NOT NULL,
-    adjudicationsourcecitationauthor character varying(45) DEFAULT ''::character varying NOT NULL,
-    adjudicationsourcecitationjudge character varying(45) DEFAULT ''::character varying NOT NULL,
-    adjudicationsourcecitationdissentjudge character varying(45) DEFAULT ''::character varying NOT NULL,
-    adjudicationsourcecitationurl text DEFAULT ''::text NOT NULL,
-    adjudication integer NOT NULL,
-    adjudicationsourcecitationname text DEFAULT ''::text NOT NULL,
-    adjudicationsourcecitationslug text GENERATED ALWAYS AS (lower(replace(replace(replace(btrim((((((
-CASE
-    WHEN (adjudicationsourcecitationvolume = 0) THEN ''::text
-    ELSE (adjudicationsourcecitationvolume || '-'::text)
-END || geohistory.sourceshort(source)) ||
-CASE
-    WHEN (adjudicationsourcecitationpagefrom = 0) THEN ''::text
-    ELSE ('-'::text || adjudicationsourcecitationpagefrom)
-END) ||
-CASE
-    WHEN (((adjudicationsourcecitationdate)::text = ''::text) OR ("left"((adjudicationsourcecitationdate)::text, 4) = '0000'::text)) THEN
-    CASE
-        WHEN ((adjudicationsourcecitationyear)::text = ''::text) THEN ''::text
-        ELSE ('-'::text || (adjudicationsourcecitationyear)::text)
-    END
-    ELSE ('-'::text || "left"((adjudicationsourcecitationdate)::text, 4))
-END) || ' '::text) || adjudicationsourcecitationname)), '.'::text, ''::text), '& '::text, ''::text), ' '::text, '-'::text))) STORED,
-    adjudicationsourcecitationpage text GENERATED ALWAYS AS (geohistory.rangeformat((adjudicationsourcecitationpagefrom)::text, (adjudicationsourcecitationpageto)::text)) STORED
-);
-
-
-ALTER TABLE geohistory.adjudicationsourcecitation OWNER TO postgres;
-
---
--- Name: lawalternatesection; Type: TABLE; Schema: geohistory; Owner: postgres
---
-
-CREATE TABLE geohistory.lawalternatesection (
-    lawalternatesectionid integer NOT NULL,
-    lawalternate integer NOT NULL,
-    lawsection integer NOT NULL,
-    lawalternatesectionpagefrom smallint,
-    lawalternatesectionpageto smallint,
-    lawalternatesectioncitation text GENERATED ALWAYS AS ((((geohistory.lawalternatecitation(lawalternate) || ', '::text) || geohistory.lawsectionsymbol(lawsection)) ||
-CASE
-    WHEN (geohistory.lawsectionfrom(lawsection) = '0'::text) THEN '___'::text
-    WHEN (geohistory.lawsectionfrom(lawsection) = geohistory.lawsectionto(lawsection)) THEN (' '::text || geohistory.lawsectionfrom(lawsection))
-    ELSE ((('§ '::text || geohistory.lawsectionfrom(lawsection)) || '-'::text) || geohistory.lawsectionto(lawsection))
-END)) STORED,
-    lawalternatesectionslug text GENERATED ALWAYS AS (lower(replace(replace(regexp_replace(regexp_replace((((geohistory.lawalternatecitation(lawalternate) || ', '::text) || geohistory.lawsectionsymbol(lawsection)) ||
-CASE
-    WHEN (geohistory.lawsectionfrom(lawsection) = '0'::text) THEN '___'::text
-    WHEN (geohistory.lawsectionfrom(lawsection) = geohistory.lawsectionto(lawsection)) THEN (' '::text || geohistory.lawsectionfrom(lawsection))
-    ELSE ((('§ '::text || geohistory.lawsectionfrom(lawsection)) || '-'::text) || geohistory.lawsectionto(lawsection))
-END), '[,\.\[\]\(\)\'']'::text, ''::text, 'g'::text), '([ :\–\—\/]| of )'::text, '-'::text, 'g'::text), '§'::text, 's'::text), '¶'::text, 'p'::text))) STORED
-);
-
-
-ALTER TABLE geohistory.lawalternatesection OWNER TO postgres;
-
---
 -- Name: adjudication_adjudicationid_seq; Type: SEQUENCE; Schema: geohistory; Owner: postgres
 --
 
@@ -3922,6 +3834,48 @@ ALTER SEQUENCE geohistory.adjudicationlocationtype_adjudicationlocationtypeid_se
 
 ALTER SEQUENCE geohistory.adjudicationlocationtype_adjudicationlocationtypeid_seq OWNED BY geohistory.adjudicationlocationtype.adjudicationlocationtypeid;
 
+
+--
+-- Name: adjudicationsourcecitation; Type: TABLE; Schema: geohistory; Owner: postgres
+--
+
+CREATE TABLE geohistory.adjudicationsourcecitation (
+    adjudicationsourcecitationid integer NOT NULL,
+    source integer NOT NULL,
+    adjudicationsourcecitationvolume smallint NOT NULL,
+    adjudicationsourcecitationpagefrom smallint NOT NULL,
+    adjudicationsourcecitationpageto smallint,
+    adjudicationsourcecitationyear character varying(4) DEFAULT ''::character varying NOT NULL,
+    adjudicationsourcecitationdate calendar.historicdatetext DEFAULT (''::text)::calendar.historicdatetext NOT NULL,
+    adjudicationsourcecitationtitle text DEFAULT ''::text NOT NULL,
+    adjudicationsourcecitationauthor character varying(45) DEFAULT ''::character varying NOT NULL,
+    adjudicationsourcecitationjudge character varying(45) DEFAULT ''::character varying NOT NULL,
+    adjudicationsourcecitationdissentjudge character varying(45) DEFAULT ''::character varying NOT NULL,
+    adjudicationsourcecitationurl text DEFAULT ''::text NOT NULL,
+    adjudication integer NOT NULL,
+    adjudicationsourcecitationname text DEFAULT ''::text NOT NULL,
+    adjudicationsourcecitationslug text GENERATED ALWAYS AS (lower(replace(replace(replace(btrim((((((
+CASE
+    WHEN (adjudicationsourcecitationvolume = 0) THEN ''::text
+    ELSE (adjudicationsourcecitationvolume || '-'::text)
+END || geohistory.sourceshort(source)) ||
+CASE
+    WHEN (adjudicationsourcecitationpagefrom = 0) THEN ''::text
+    ELSE ('-'::text || adjudicationsourcecitationpagefrom)
+END) ||
+CASE
+    WHEN (((adjudicationsourcecitationdate)::text = ''::text) OR ("left"((adjudicationsourcecitationdate)::text, 4) = '0000'::text)) THEN
+    CASE
+        WHEN ((adjudicationsourcecitationyear)::text = ''::text) THEN ''::text
+        ELSE ('-'::text || (adjudicationsourcecitationyear)::text)
+    END
+    ELSE ('-'::text || "left"((adjudicationsourcecitationdate)::text, 4))
+END) || ' '::text) || adjudicationsourcecitationname)), '.'::text, ''::text), '& '::text, ''::text), ' '::text, '-'::text))) STORED,
+    adjudicationsourcecitationpage text GENERATED ALWAYS AS (geohistory.rangeformat((adjudicationsourcecitationpagefrom)::text, (adjudicationsourcecitationpageto)::text)) STORED
+);
+
+
+ALTER TABLE geohistory.adjudicationsourcecitation OWNER TO postgres;
 
 --
 -- Name: adjudicationsourcecitation_adjudicationsourcecitationid_seq; Type: SEQUENCE; Schema: geohistory; Owner: postgres
@@ -4872,6 +4826,33 @@ ALTER SEQUENCE geohistory.lawalternate_lawalternateid_seq OWNER TO postgres;
 
 ALTER SEQUENCE geohistory.lawalternate_lawalternateid_seq OWNED BY geohistory.lawalternate.lawalternateid;
 
+
+--
+-- Name: lawalternatesection; Type: TABLE; Schema: geohistory; Owner: postgres
+--
+
+CREATE TABLE geohistory.lawalternatesection (
+    lawalternatesectionid integer NOT NULL,
+    lawalternate integer NOT NULL,
+    lawsection integer NOT NULL,
+    lawalternatesectionpagefrom smallint,
+    lawalternatesectionpageto smallint,
+    lawalternatesectioncitation text GENERATED ALWAYS AS ((((geohistory.lawalternatecitation(lawalternate) || ', '::text) || geohistory.lawsectionsymbol(lawsection)) ||
+CASE
+    WHEN (geohistory.lawsectionfrom(lawsection) = '0'::text) THEN '___'::text
+    WHEN (geohistory.lawsectionfrom(lawsection) = geohistory.lawsectionto(lawsection)) THEN (' '::text || geohistory.lawsectionfrom(lawsection))
+    ELSE ((('§ '::text || geohistory.lawsectionfrom(lawsection)) || '-'::text) || geohistory.lawsectionto(lawsection))
+END)) STORED,
+    lawalternatesectionslug text GENERATED ALWAYS AS (lower(replace(replace(regexp_replace(regexp_replace((((geohistory.lawalternatecitation(lawalternate) || ', '::text) || geohistory.lawsectionsymbol(lawsection)) ||
+CASE
+    WHEN (geohistory.lawsectionfrom(lawsection) = '0'::text) THEN '___'::text
+    WHEN (geohistory.lawsectionfrom(lawsection) = geohistory.lawsectionto(lawsection)) THEN (' '::text || geohistory.lawsectionfrom(lawsection))
+    ELSE ((('§ '::text || geohistory.lawsectionfrom(lawsection)) || '-'::text) || geohistory.lawsectionto(lawsection))
+END), '[,\.\[\]\(\)\'']'::text, ''::text, 'g'::text), '([ :\–\—\/]| of )'::text, '-'::text, 'g'::text), '§'::text, 's'::text), '¶'::text, 'p'::text))) STORED
+);
+
+
+ALTER TABLE geohistory.lawalternatesection OWNER TO postgres;
 
 --
 -- Name: lawalternatesection_lawalternatesectionid_seq; Type: SEQUENCE; Schema: geohistory; Owner: postgres
@@ -6139,6 +6120,26 @@ ALTER SEQUENCE geohistory.tribunal_tribunalid_seq OWNER TO postgres;
 
 ALTER SEQUENCE geohistory.tribunal_tribunalid_seq OWNED BY geohistory.tribunal.tribunalid;
 
+
+--
+-- Name: tribunaltype; Type: TABLE; Schema: geohistory; Owner: postgres
+--
+
+CREATE TABLE geohistory.tribunaltype (
+    tribunaltypeid integer NOT NULL,
+    tribunaltypelevel integer NOT NULL,
+    tribunaltypeshort character varying(20) NOT NULL,
+    tribunaltypelong text NOT NULL,
+    tribunaltypedivision character varying(25) DEFAULT ''::character varying NOT NULL,
+    tribunaltypefilingoffice character varying(50) NOT NULL,
+    tribunaltypefilingofficerlevel boolean DEFAULT false NOT NULL,
+    tribunaltypedistrictcircuit text DEFAULT ''::text NOT NULL,
+    tribunaltypesummary character varying(50) DEFAULT ''::character varying NOT NULL,
+    CONSTRAINT tribunaltype_check CHECK ((((tribunaltypefilingoffice)::text <> ''::text) AND (tribunaltypelong <> ''::text) AND ((tribunaltypeshort)::text <> ''::text)))
+);
+
+
+ALTER TABLE geohistory.tribunaltype OWNER TO postgres;
 
 --
 -- Name: tribunaltype_tribunaltypeid_seq; Type: SEQUENCE; Schema: geohistory; Owner: postgres
@@ -10178,24 +10179,10 @@ GRANT SELECT ON TABLE geohistory.lawgroupgovernmenttype TO readonly;
 
 
 --
--- Name: TABLE tribunaltype; Type: ACL; Schema: geohistory; Owner: postgres
---
-
-GRANT SELECT ON TABLE geohistory.tribunaltype TO readonly;
-
-
---
 -- Name: TABLE adjudicationsourcecitation; Type: ACL; Schema: geohistory; Owner: postgres
 --
 
 GRANT SELECT ON TABLE geohistory.adjudicationsourcecitation TO readonly;
-
-
---
--- Name: TABLE lawalternatesection; Type: ACL; Schema: geohistory; Owner: postgres
---
-
-GRANT SELECT ON TABLE geohistory.lawalternatesection TO readonly;
 
 
 --
@@ -10266,6 +10253,13 @@ GRANT SELECT ON TABLE geohistory.lastrefresh TO readonly;
 --
 
 GRANT SELECT ON TABLE geohistory.lawalternate TO readonly;
+
+
+--
+-- Name: TABLE lawalternatesection; Type: ACL; Schema: geohistory; Owner: postgres
+--
+
+GRANT SELECT ON TABLE geohistory.lawalternatesection TO readonly;
 
 
 --
@@ -10378,6 +10372,13 @@ GRANT SELECT ON TABLE geohistory.sourceitempart TO readonly;
 --
 
 GRANT SELECT ON TABLE geohistory.sourcetype TO readonly;
+
+
+--
+-- Name: TABLE tribunaltype; Type: ACL; Schema: geohistory; Owner: postgres
+--
+
+GRANT SELECT ON TABLE geohistory.tribunaltype TO readonly;
 
 
 --
