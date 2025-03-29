@@ -4684,7 +4684,7 @@ ALTER SEQUENCE geohistory.governmentsourceevent_governmentsourceeventid_seq OWNE
 --
 
 CREATE TABLE geohistory.lastrefresh (
-    lastrefreshversion character varying(5) NOT NULL,
+    lastrefreshversion character varying(10) NOT NULL,
     lastrefreshdate date NOT NULL
 );
 
