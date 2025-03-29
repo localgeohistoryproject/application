@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+
+- Extraneous trailing hyphens in adjudication slugs.
+
 ## [3.0.1] - 2025-03-23
 
 ### Fixed

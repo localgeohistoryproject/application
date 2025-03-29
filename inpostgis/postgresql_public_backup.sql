@@ -2197,7 +2197,7 @@ CREATE TABLE geohistory.adjudication (
     adjudicationnotes text DEFAULT ''::text NOT NULL,
     adjudicationstatus text DEFAULT ''::text NOT NULL,
     adjudicationname text DEFAULT ''::text NOT NULL,
-    adjudicationslug text GENERATED ALWAYS AS (lower(regexp_replace(regexp_replace(((((((((geohistory.adjudicationtypegovernmentslug(adjudicationtype) || '-'::text) || geohistory.adjudicationtypetribunaltypesummary(adjudicationtype)) ||
+    adjudicationslug text GENERATED ALWAYS AS (rtrim(lower(regexp_replace(regexp_replace(((((((((geohistory.adjudicationtypegovernmentslug(adjudicationtype) || '-'::text) || geohistory.adjudicationtypetribunaltypesummary(adjudicationtype)) ||
 CASE
     WHEN ((adjudicationnumber)::text = ''::text) THEN ''::text
     ELSE ('-'::text || (adjudicationnumber)::text)
@@ -2210,7 +2210,7 @@ CASE
         WHEN (length((adjudicationterm)::text) = 7) THEN '-~28'::text
         ELSE ''::text
     END))::calendar.historicdate, 'short'::text, 'en'::text))
-END) || ' '::text) || adjudicationname), '[ \-]+'::text, '-'::text, 'g'::text), '[\/\,\.\(\)]'::text, ''::text, 'g'::text))) STORED,
+END) || ' '::text) || adjudicationname), '[ \-]+'::text, '-'::text, 'g'::text), '[\/\,\.\(\)]'::text, ''::text, 'g'::text)), '-'::text)) STORED,
     adjudicationtitle text GENERATED ALWAYS AS (regexp_replace(regexp_replace(((((((geohistory.adjudicationtypegovernmentshort(adjudicationtype) || ' '::text) || geohistory.adjudicationtypetribunaltypesummary(adjudicationtype)) ||
 CASE
     WHEN ((adjudicationnumber)::text = ''::text) THEN ''::text
