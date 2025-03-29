@@ -166,7 +166,9 @@ CREATE FUNCTION geohistory.array_to_slug(inputarray text[]) RETURNS text
             FROM unnest(inputarray)
             WITH ordinality AS t(textpart, keypart)
         LOOP
-            inputpart.textpart := replace(lower(public.unaccent(inputpart.textpart)), '§', 's');
+            inputpart.textpart := lower(public.unaccent(inputpart.textpart));
+			inputpart.textpart := replace(inputpart.textpart, '§', 's');
+			inputpart.textpart := replace(inputpart.textpart, '¶', 'p');
             inputpart.textpart := regexp_replace(inputpart.textpart, '[^a-z0-9]', '-', 'g');
             inputpart.textpart := regexp_replace(inputpart.textpart, '[-]+', '-', 'g');
             inputpart.textpart := trim(inputpart.textpart, '-');
