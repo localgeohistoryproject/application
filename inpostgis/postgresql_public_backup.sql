@@ -170,7 +170,7 @@ CREATE FUNCTION geohistory.array_to_slug(inputarray text[]) RETURNS text
             inputpart.textpart := regexp_replace(inputpart.textpart, '[^a-z0-9]', '-', 'g');
             inputpart.textpart := regexp_replace(inputpart.textpart, '[-]+', '-', 'g');
             inputpart.textpart := trim(inputpart.textpart, '-');
-            IF inputpart.textpart = '' OR inputpart.textpart = '-' THEN
+            IF inputpart.textpart = '' OR inputpart.textpart = '-' OR inputpart.textpart = '0' THEN
                 inputpart.textpart := NULL;
             END IF;
             outputarray[inputpart.keypart] = inputpart.textpart;
