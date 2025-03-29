@@ -9518,7 +9518,6 @@ REVOKE ALL ON FUNCTION geohistory.adjudicationtypetribunaltypesummary(i_id integ
 --
 
 REVOKE ALL ON FUNCTION geohistory.array_combine(integer[]) FROM PUBLIC;
-GRANT ALL ON FUNCTION geohistory.array_combine(integer[]) TO readonly;
 
 
 --
@@ -9526,7 +9525,6 @@ GRANT ALL ON FUNCTION geohistory.array_combine(integer[]) TO readonly;
 --
 
 REVOKE ALL ON FUNCTION geohistory.array_to_slug(inputarray text[]) FROM PUBLIC;
-GRANT ALL ON FUNCTION geohistory.array_to_slug(inputarray text[]) TO readonly;
 
 
 --
@@ -9724,7 +9722,6 @@ REVOKE ALL ON FUNCTION geohistory.metesdescriptionline_insertupdate() FROM PUBLI
 --
 
 REVOKE ALL ON FUNCTION geohistory.plssmeridianlong(i_id integer) FROM PUBLIC;
-GRANT ALL ON FUNCTION geohistory.plssmeridianlong(i_id integer) TO readonly;
 
 
 --

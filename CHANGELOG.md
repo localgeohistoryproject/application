@@ -4,7 +4,7 @@
 
 ### Added
 
-- Database function geohistory.array_to_slug(text[]) to standardize formatting of slugs.
+- Database function geohistory.array_to_slug to standardize formatting of slugs.
 
 ### Changed
 
@@ -13,6 +13,10 @@
 ### Fixed
 
 - In database tables geohistory.adjudication, geohistory.adjudicationsourcecitation, and geohistory.sourcecitation, irregularities in slug formatting.
+
+### Removed
+
+- Readonly user permissions from database functions geohistory.array_combine and geohistory.plssmeridianlong.
 
 ## [3.0.1] - 2025-03-23
 
