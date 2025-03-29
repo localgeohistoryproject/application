@@ -3882,23 +3882,11 @@ CREATE TABLE geohistory.adjudicationsourcecitation (
     adjudicationsourcecitationurl text DEFAULT ''::text NOT NULL,
     adjudication integer NOT NULL,
     adjudicationsourcecitationname text DEFAULT ''::text NOT NULL,
-    adjudicationsourcecitationslug text GENERATED ALWAYS AS (lower(replace(replace(replace(btrim((((((
+    adjudicationsourcecitationslug text GENERATED ALWAYS AS (geohistory.array_to_slug(ARRAY[(adjudicationsourcecitationvolume)::text, geohistory.sourceshort(source), (adjudicationsourcecitationpagefrom)::text,
 CASE
-    WHEN (adjudicationsourcecitationvolume = 0) THEN ''::text
-    ELSE (adjudicationsourcecitationvolume || '-'::text)
-END || geohistory.sourceshort(source)) ||
-CASE
-    WHEN (adjudicationsourcecitationpagefrom = 0) THEN ''::text
-    ELSE ('-'::text || adjudicationsourcecitationpagefrom)
-END) ||
-CASE
-    WHEN (((adjudicationsourcecitationdate)::text = ''::text) OR ("left"((adjudicationsourcecitationdate)::text, 4) = '0000'::text)) THEN
-    CASE
-        WHEN ((adjudicationsourcecitationyear)::text = ''::text) THEN ''::text
-        ELSE ('-'::text || (adjudicationsourcecitationyear)::text)
-    END
-    ELSE ('-'::text || "left"((adjudicationsourcecitationdate)::text, 4))
-END) || ' '::text) || adjudicationsourcecitationname)), '.'::text, ''::text), '& '::text, ''::text), ' '::text, '-'::text))) STORED,
+    WHEN ((adjudicationsourcecitationdate)::text = ''::text) THEN (adjudicationsourcecitationyear)::text
+    ELSE "left"((adjudicationsourcecitationdate)::text, 4)
+END, adjudicationsourcecitationname])) STORED,
     adjudicationsourcecitationpage text GENERATED ALWAYS AS (geohistory.rangeformat((adjudicationsourcecitationpagefrom)::text, (adjudicationsourcecitationpageto)::text)) STORED
 );
 
