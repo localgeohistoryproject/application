@@ -2,9 +2,13 @@
 
 ## [Unreleased]
 
+### Added
+
+- Database function geohistory.array_to_slug(text[]) to standardize formatting of slugs.
+
 ### Fixed
 
-- Extraneous trailing hyphens in adjudication slugs.
+- In database table geohistory.adjudication, irregularities in slug formatting.
 
 ## [3.0.1] - 2025-03-23
 

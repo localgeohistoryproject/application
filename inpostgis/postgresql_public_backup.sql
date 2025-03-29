@@ -151,6 +151,38 @@ $_$;
 ALTER FUNCTION geohistory.array_combine(integer[]) OWNER TO postgres;
 
 --
+-- Name: array_to_slug(text[]); Type: FUNCTION; Schema: geohistory; Owner: postgres
+--
+
+CREATE FUNCTION geohistory.array_to_slug(inputarray text[]) RETURNS text
+    LANGUAGE plpgsql IMMUTABLE
+    AS $$
+    DECLARE
+        inputpart record;
+        outputarray text[];
+    BEGIN
+	    FOR inputpart IN
+            SELECT *
+            FROM unnest(inputarray)
+            WITH ordinality AS t(textpart, keypart)
+        LOOP
+            inputpart.textpart := replace(lower(public.unaccent(inputpart.textpart)), '§', 's');
+            inputpart.textpart := regexp_replace(inputpart.textpart, '[^a-z0-9]', '-', 'g');
+            inputpart.textpart := regexp_replace(inputpart.textpart, '[-]+', '-', 'g');
+            inputpart.textpart := trim(inputpart.textpart, '-');
+            IF inputpart.textpart = '' OR inputpart.textpart = '-' THEN
+                inputpart.textpart := NULL;
+            END IF;
+            outputarray[inputpart.keypart] = inputpart.textpart;
+        END LOOP;
+        RETURN COALESCE(array_to_string(outputarray, '-'), '');
+    END;
+$$;
+
+
+ALTER FUNCTION geohistory.array_to_slug(inputarray text[]) OWNER TO postgres;
+
+--
 -- Name: datetonumeric(date); Type: FUNCTION; Schema: geohistory; Owner: postgres
 --
 
@@ -2197,20 +2229,16 @@ CREATE TABLE geohistory.adjudication (
     adjudicationnotes text DEFAULT ''::text NOT NULL,
     adjudicationstatus text DEFAULT ''::text NOT NULL,
     adjudicationname text DEFAULT ''::text NOT NULL,
-    adjudicationslug text GENERATED ALWAYS AS (rtrim(lower(regexp_replace(regexp_replace(((((((((geohistory.adjudicationtypegovernmentslug(adjudicationtype) || '-'::text) || geohistory.adjudicationtypetribunaltypesummary(adjudicationtype)) ||
+    adjudicationslug text GENERATED ALWAYS AS (geohistory.array_to_slug(ARRAY[geohistory.adjudicationtypegovernmentslug(adjudicationtype), geohistory.adjudicationtypetribunaltypesummary(adjudicationtype), (adjudicationnumber)::text, geohistory.adjudicationtypelong(adjudicationtype),
 CASE
-    WHEN ((adjudicationnumber)::text = ''::text) THEN ''::text
-    ELSE ('-'::text || (adjudicationnumber)::text)
-END) || '-'::text) || geohistory.adjudicationtypelong(adjudicationtype)) ||
-CASE
-    WHEN ((adjudicationterm)::text = ''::text) THEN ''::text
-    ELSE ('-'::text || calendar.historicdatetextformat((((adjudicationterm)::text ||
+    WHEN (adjudicationterm IS NOT NULL) THEN calendar.historicdatetextformat((((adjudicationterm)::text ||
     CASE
         WHEN (length((adjudicationterm)::text) = 4) THEN '-~07-~28'::text
         WHEN (length((adjudicationterm)::text) = 7) THEN '-~28'::text
         ELSE ''::text
-    END))::calendar.historicdate, 'short'::text, 'en'::text))
-END) || ' '::text) || adjudicationname), '[ \-]+'::text, '-'::text, 'g'::text), '[\/\,\.\(\)]'::text, ''::text, 'g'::text)), '-'::text)) STORED,
+    END))::calendar.historicdate, 'short'::text, 'en'::text)
+    ELSE NULL::text
+END, adjudicationname])) STORED,
     adjudicationtitle text GENERATED ALWAYS AS (regexp_replace(regexp_replace(((((((geohistory.adjudicationtypegovernmentshort(adjudicationtype) || ' '::text) || geohistory.adjudicationtypetribunaltypesummary(adjudicationtype)) ||
 CASE
     WHEN ((adjudicationnumber)::text = ''::text) THEN ''::text
@@ -9501,6 +9529,14 @@ REVOKE ALL ON FUNCTION geohistory.adjudicationtypetribunaltypesummary(i_id integ
 
 REVOKE ALL ON FUNCTION geohistory.array_combine(integer[]) FROM PUBLIC;
 GRANT ALL ON FUNCTION geohistory.array_combine(integer[]) TO readonly;
+
+
+--
+-- Name: FUNCTION array_to_slug(inputarray text[]); Type: ACL; Schema: geohistory; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION geohistory.array_to_slug(inputarray text[]) FROM PUBLIC;
+GRANT ALL ON FUNCTION geohistory.array_to_slug(inputarray text[]) TO readonly;
 
 
 --
