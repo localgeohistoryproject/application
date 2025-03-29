@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.0.2] - 2025-03-29
+
+### Added
+
+- Database function geohistory.array_to_slug to standardize formatting of slugs.
+
+### Changed
+
+- In database table geohistory.lastrefresh, expand maximum length of lastrefreshversion field to 10 characters.
+
+### Fixed
+
+- In database tables geohistory.adjudication, geohistory.adjudicationsourcecitation, and geohistory.sourcecitation, irregularities in slug formatting.
+
+### Removed
+
+- Readonly user permissions from database functions geohistory.array_combine and geohistory.plssmeridianlong.
+
 ## [3.0.1] - 2025-03-23
 
 ### Fixed
@@ -394,6 +412,7 @@
 
 - Public release of the Local Geohistory Project: Application repository.
 
+[3.0.2]: https://github.com/localgeohistoryproject/application/compare/v3.0.1...v3.0.2
 [3.0.1]: https://github.com/localgeohistoryproject/application/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/localgeohistoryproject/application/compare/v2.1.0...v3.0.0
 [2.1.0]: https://github.com/localgeohistoryproject/application/compare/v2.0.2...v2.1.0
