@@ -8,7 +8,7 @@
 
 ### Fixed
 
-- In database table geohistory.adjudication, irregularities in slug formatting.
+- In database tables geohistory.adjudication and geohistory.sourcecitation, irregularities in slug formatting.
 
 ## [3.0.1] - 2025-03-23
 

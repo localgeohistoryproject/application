@@ -3542,7 +3542,7 @@ CREATE TABLE geohistory.sourcecitation (
     sourcecitationstatus character varying(1) DEFAULT ''::character varying NOT NULL,
     sourcecitationissue character varying(20) DEFAULT ''::character varying NOT NULL,
     sourcecitationname text DEFAULT ''::text NOT NULL,
-    sourcecitationslug text GENERATED ALWAYS AS (lower(regexp_replace(regexp_replace(btrim(((((((((((((((geohistory.sourceshort(source) || ' '::text) || split_part(sourcecitationtypetitle, ' '::text, 1)) || ' '::text) || split_part(sourcecitationtypetitle, ' '::text, 2)) || ' '::text) || split_part(regexp_replace(sourcecitationgovernmentreferences, '[;]+'::text, ' '::text, 'g'::text), ' '::text, 1)) || ' '::text) || split_part(regexp_replace(sourcecitationgovernmentreferences, '[;]+'::text, ' '::text, 'g'::text), ' '::text, 2)) || ' '::text) || (sourcecitationvolume)::text) || ' '::text) || (sourcecitationpagefrom)::text) || ' '::text) || sourcecitationname)), '[ –—]+'::text, '-'::text, 'g'::text), '[\.\/''\(\);:,&"#§\?\[\]]'::text, ''::text, 'g'::text))) STORED,
+    sourcecitationslug text GENERATED ALWAYS AS (geohistory.array_to_slug(ARRAY[geohistory.sourceshort(source), split_part(sourcecitationtypetitle, ' '::text, 1), split_part(sourcecitationtypetitle, ' '::text, 2), split_part(regexp_replace(sourcecitationgovernmentreferences, '[;]+'::text, ' '::text, 'g'::text), ' '::text, 1), split_part(regexp_replace(sourcecitationgovernmentreferences, '[;]+'::text, ' '::text, 'g'::text), ' '::text, 2), (sourcecitationvolume)::text, (sourcecitationpagefrom)::text, sourcecitationname])) STORED,
     sourcecitationpage text GENERATED ALWAYS AS (geohistory.rangeformat((sourcecitationpagefrom)::text, (sourcecitationpageto)::text)) STORED
 );
 
