@@ -4861,12 +4861,12 @@ CASE
     WHEN (geohistory.lawsectionfrom(lawsection) = geohistory.lawsectionto(lawsection)) THEN (' '::text || geohistory.lawsectionfrom(lawsection))
     ELSE ((('§ '::text || geohistory.lawsectionfrom(lawsection)) || '-'::text) || geohistory.lawsectionto(lawsection))
 END)) STORED,
-    lawalternatesectionslug text GENERATED ALWAYS AS (lower(replace(replace(regexp_replace(regexp_replace((((geohistory.lawalternatecitation(lawalternate) || ', '::text) || geohistory.lawsectionsymbol(lawsection)) ||
+    lawalternatesectionslug text GENERATED ALWAYS AS (lower(replace(replace(regexp_replace(regexp_replace(((((geohistory.lawalternatecitation(lawalternate) || ', '::text) || geohistory.lawsectionsymbol(lawsection)) ||
 CASE
     WHEN (geohistory.lawsectionfrom(lawsection) = '0'::text) THEN '___'::text
     WHEN (geohistory.lawsectionfrom(lawsection) = geohistory.lawsectionto(lawsection)) THEN (' '::text || geohistory.lawsectionfrom(lawsection))
     ELSE ((('§ '::text || geohistory.lawsectionfrom(lawsection)) || '-'::text) || geohistory.lawsectionto(lawsection))
-END), '[,\.\[\]\(\)\'']'::text, ''::text, 'g'::text), '([ :\–\—\/]| of )'::text, '-'::text, 'g'::text), '§'::text, 's'::text), '¶'::text, 'p'::text))) STORED
+END) || '-alternate'::text), '[,\.\[\]\(\)\'']'::text, ''::text, 'g'::text), '([ :\–\—\/]| of )'::text, '-'::text, 'g'::text), '§'::text, 's'::text), '¶'::text, 'p'::text))) STORED
 );
 
 

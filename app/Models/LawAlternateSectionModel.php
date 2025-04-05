@@ -117,7 +117,7 @@ class LawAlternateSectionModel extends BaseModel
     private function getSlugId(string $id): int
     {
         $query = <<<QUERY
-                SELECT lawalternatesection.lawsectionid AS id
+                SELECT lawalternatesection.lawalternatesectionid AS id
                     FROM geohistory.lawalternatesection
                 WHERE lawalternatesection.lawalternatesectionslug = ?
             QUERY;
