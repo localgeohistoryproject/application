@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.3] - 2025-04-05
+
+### Fixed
+
+- In database table geohistory.lawalternatesection, slug to add "-alternate" to end.
+- Invalid column reference in LawAlternateSectionModel, getSlugId function.
+
 ## [3.0.2] - 2025-03-29
 
 ### Added
@@ -412,6 +419,7 @@
 
 - Public release of the Local Geohistory Project: Application repository.
 
+[3.0.3]: https://github.com/localgeohistoryproject/application/compare/v3.0.2...v3.0.3
 [3.0.2]: https://github.com/localgeohistoryproject/application/compare/v3.0.1...v3.0.2
 [3.0.1]: https://github.com/localgeohistoryproject/application/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/localgeohistoryproject/application/compare/v2.1.0...v3.0.0
