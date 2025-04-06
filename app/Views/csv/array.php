@@ -12,4 +12,5 @@ if (is_array($query ?? '') && $query !== []) {
         fputcsv($handle, $row);
     }
 }
+
 fclose($handle);
