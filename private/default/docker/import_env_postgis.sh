@@ -37,7 +37,7 @@ if [ "$CI_ENVIRONMENT" = "production" ]; then
     tableString+="COMMIT;
     ALTER TABLE gis.governmentshape ENABLE TRIGGER governmentshape_insert_trigger;
     "
-    if [[ $fileNameCount -eq 0 ]]
+    if [[ $fileNameCount -eq 0 ]]; then
         echo "ERROR: governmentshape data file(s) missing"
     fi
     ## GIS (Remaining)
