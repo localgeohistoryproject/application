@@ -2,15 +2,21 @@
 
 ## [Unreleased]
 
+### Changed
+
+- In database table geohistory.lawsection, slug to use law.lawcitation instead of law.lawslug.
+
 ### Fixed
 
 - Deprecation issues in PHP 8.4 with fputcsv.
-- In database tables geohistory.lawalternatesection and geohistory.metesdescription, irregularities in slug formatting.
+- In database tables geohistory.lawalternatesection, geohistory.lawsection, and geohistory.metesdescription, irregularities in slug formatting.
 - Various code quality, linting, and whitespace issues using PhpStan, PHP CS Fixer, and Rector.
 
 ### Removed
 
 - Database function geohistory.lawalternateslug.
+- Database function geohistory.lawslug.
+- In database table geohistory.law, generated column lawslug.
 - In database table geohistory.lawalternate, generated column lawalternateslug.
 
 ## [3.0.3] - 2025-04-05
