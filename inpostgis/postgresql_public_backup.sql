@@ -1833,54 +1833,30 @@ CASE
     END)::text) || ' ('::text) || (geohistory.governmentcurrentleadstate(governmentid, 1))::text) || ')'::text)
     ELSE ''::text
 END)) STORED,
-    governmentslug text GENERATED ALWAYS AS (lower(replace(regexp_replace(regexp_replace(
+    governmentslug text GENERATED ALWAYS AS (
 CASE
     WHEN ((governmentstatus)::text = 'placeholder'::text) THEN NULL::text
-    WHEN ((governmentlevel < 3) AND ((governmentabbreviation)::text <> ''::text)) THEN (governmentabbreviation)::text
-    ELSE ((((((geohistory.governmentcurrentleadstate(governmentid, 1))::text ||
+    WHEN ((governmentlevel < 3) AND ((governmentabbreviation)::text <> ''::text)) THEN geohistory.array_to_slug(ARRAY[(governmentabbreviation)::text])
+    ELSE geohistory.array_to_slug((ARRAY[geohistory.governmentcurrentleadstate(governmentid, 1), governmentarticle, governmentname, governmentnumber, (
     CASE
-        WHEN ((governmentarticle)::text <> ''::text) THEN ('-'::text || (governmentarticle)::text)
-        ELSE ''::text
-    END) ||
-    CASE
-        WHEN ((governmentname)::text <> ''::text) THEN ('-'::text || (governmentname)::text)
-        ELSE ''::text
-    END) ||
-    CASE
-        WHEN ((governmentnumber)::text <> ''::text) THEN ('-'::text || (governmentnumber)::text)
-        ELSE ''::text
-    END) ||
-    CASE
-        WHEN (governmentlevel > 1) THEN ('-'::text || (
+        WHEN (governmentlevel > 1) THEN (
         CASE
             WHEN ((governmentstyle)::text <> ''::text) THEN governmentstyle
             ELSE governmenttype
-        END)::text)
+        END)::text
         ELSE ''::text
-    END) ||
+    END)::character varying,
     CASE
-        WHEN (((governmentstatus)::text <> ''::text) OR governmentnotecurrentleadparent OR ((governmentnotecreation)::text <> ''::text) OR ((governmentnotedissolution)::text <> ''::text)) THEN ((((('-'::text || (
-        CASE
-            WHEN governmentnotecurrentleadparent THEN geohistory.governmentname(governmentcurrentleadparent)
-            ELSE ''::character varying
-        END)::text) ||
-        CASE
-            WHEN (governmentnotecurrentleadparent AND (((governmentnotecreation)::text <> ''::text) OR ((governmentnotedissolution)::text <> ''::text))) THEN '-'::text
-            ELSE ''::text
-        END) ||
-        CASE
-            WHEN (((governmentnotecreation)::text <> ''::text) AND ((governmentnotedissolution)::text <> ''::text)) THEN (((governmentnotecreation)::text || '-'::text) || (governmentnotedissolution)::text)
-            WHEN ((governmentnotecreation)::text <> ''::text) THEN ('since-'::text || (governmentnotecreation)::text)
-            WHEN ((governmentnotedissolution)::text <> ''::text) THEN ('thru-'::text || (governmentnotedissolution)::text)
-            ELSE ''::text
-        END) ||
-        CASE
-            WHEN (((governmentstatus)::text <> ''::text) AND (governmentnotecurrentleadparent OR ((governmentnotecreation)::text <> ''::text) OR ((governmentnotedissolution)::text <> ''::text))) THEN '-'::text
-            ELSE ''::text
-        END) || (governmentstatus)::text)
+        WHEN governmentnotecurrentleadparent THEN geohistory.governmentname(governmentcurrentleadparent)
+        ELSE ''::character varying
+    END, (
+    CASE
+        WHEN (((governmentnotecreation)::text <> ''::text) AND ((governmentnotedissolution)::text <> ''::text)) THEN (((governmentnotecreation)::text || '-'::text) || (governmentnotedissolution)::text)
+        WHEN ((governmentnotecreation)::text <> ''::text) THEN ('since-'::text || (governmentnotecreation)::text)
+        WHEN ((governmentnotedissolution)::text <> ''::text) THEN ('thru-'::text || (governmentnotedissolution)::text)
         ELSE ''::text
-    END)
-END, '[\(\)\,\.]'::text, ''::text, 'g'::text), '[ \/ʻ]'::text, '-'::text, 'g'::text), ''''::text, '-'::text))) STORED,
+    END)::character varying, ((governmentstatus)::text)::character varying])::text[])
+END) STORED,
     governmentslugsubstitute text GENERATED ALWAYS AS (geohistory.governmentslugsubstitute(governmentid, 1)) STORED,
     governmentshortshort text GENERATED ALWAYS AS (((
 CASE
