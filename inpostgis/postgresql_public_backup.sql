@@ -2192,7 +2192,7 @@ CASE
         WHEN (length((adjudicationterm)::text) = 4) THEN '-~07-~28'::text
         WHEN (length((adjudicationterm)::text) = 7) THEN '-~28'::text
         ELSE ''::text
-    END))::calendar.historicdate, 'short'::text, 'en'::text)
+    END))::calendar.historicdate, 'long'::text, 'en'::text)
     ELSE NULL::text
 END, adjudicationname])) STORED,
     adjudicationtitle text GENERATED ALWAYS AS (regexp_replace(regexp_replace(((((((geohistory.adjudicationtypegovernmentshort(adjudicationtype) || ' '::text) || geohistory.adjudicationtypetribunaltypesummary(adjudicationtype)) ||
@@ -2207,7 +2207,7 @@ CASE
         WHEN (length((adjudicationterm)::text) = 4) THEN '-~07-~28'::text
         WHEN (length((adjudicationterm)::text) = 7) THEN '-~28'::text
         ELSE ''::text
-    END))::calendar.historicdate, 'short'::text, 'en'::text))
+    END))::calendar.historicdate, 'long'::text, 'en'::text))
 END), '[ ]+'::text, ' '::text, 'g'::text), '[\/\,\.\(\)]'::text, ''::text, 'g'::text)) STORED,
     adjudicationsummary text GENERATED ALWAYS AS (btrim(((((adjudicationlong || ' '::text) || adjudicationshort) || ' '::text) || adjudicationnotes))) STORED
 );

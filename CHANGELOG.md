@@ -4,6 +4,7 @@
 
 ### Changed
 
+- In database table geohistory.adjudication, generated columns adjudicationslug and adjudicationtitle to use long date format.
 - In database table geohistory.lawsection, generated column lawsectionslug to use law.lawcitation instead of law.lawslug.
 
 ### Fixed
