@@ -34,9 +34,6 @@ if [ "$CI_ENVIRONMENT" = "production" ]; then
         "
         fileNameCount=$(($fileNameCount + 1))
     done
-    tableString+="COMMIT;
-    ALTER TABLE gis.governmentshape ENABLE TRIGGER governmentshape_insert_trigger;
-    "
     if [[ $fileNameCount -eq 0 ]]; then
         echo "ERROR: governmentshape data file(s) missing"
     fi
@@ -55,6 +52,7 @@ if [ "$CI_ENVIRONMENT" = "production" ]; then
     done
     ## Reinstate foreign key checks and refresh views
     tableString+="COMMIT;
+    ALTER TABLE gis.governmentshape ENABLE TRIGGER governmentshape_insert_trigger;
     SELECT geohistory.refresh_view();
     SELECT gis.refresh_view();
     SELECT gis.refresh_sequence();
