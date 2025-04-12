@@ -6,6 +6,7 @@
 
 - In database table geohistory.adjudication, generated columns adjudicationslug and adjudicationtitle to use long date format.
 - In database table geohistory.lawsection, generated column lawsectionslug to use law.lawcitation instead of law.lawslug.
+- PostGIS import to allow governmentshape table data to be split into multiple files.
 
 ### Fixed
 

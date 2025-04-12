@@ -22,10 +22,26 @@ if [ "$CI_ENVIRONMENT" = "production" ]; then
             echo "ERROR: ${tableName,,} data file missing"
         fi
     done
-    ## GIS
+    ## GIS (Governmentshape)
     tableString+="ALTER TABLE gis.governmentshape DISABLE TRIGGER governmentshape_insert_trigger;
     "
-    gisTables=(affectedgovernmentgis governmentshape metesdescriptiongis)
+    fileNameCount=$((0))
+    for fileName in /inpostgis/governmentshape*.tsv
+    do
+        tsvHeader=$(head -n +1 "${fileName}" | sed "s/\t/,/g")
+        tail -n +2 "${fileName}" > "${fileName}"
+        tableString+="\COPY gis.governmentshape ($tsvHeader) FROM '${fileName}';
+        "
+        fileNameCount=$(($fileNameCount + 1))
+    done
+    tableString+="COMMIT;
+    ALTER TABLE gis.governmentshape ENABLE TRIGGER governmentshape_insert_trigger;
+    "
+    if [[ $fileNameCount -eq 0 ]]
+        echo "ERROR: governmentshape data file(s) missing"
+    fi
+    ## GIS (Remaining)
+    gisTables=(affectedgovernmentgis metesdescriptiongis)
     for tableName in "${gisTables[@]}"
     do
         if [ -f "/inpostgis/${tableName,,}.tsv" ]; then
@@ -39,7 +55,6 @@ if [ "$CI_ENVIRONMENT" = "production" ]; then
     done
     ## Reinstate foreign key checks and refresh views
     tableString+="COMMIT;
-    ALTER TABLE gis.governmentshape ENABLE TRIGGER governmentshape_insert_trigger;
     SELECT geohistory.refresh_view();
     SELECT gis.refresh_view();
     SELECT gis.refresh_sequence();
