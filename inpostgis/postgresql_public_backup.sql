@@ -2683,11 +2683,7 @@ CASE
     WHEN ((metesdescriptionname)::text = ''::text) THEN ''::text
     ELSE (': '::text || (metesdescriptionname)::text)
 END)) STORED,
-    metesdescriptionslug text GENERATED ALWAYS AS ((geohistory.eventslug(event) ||
-CASE
-    WHEN ((metesdescriptionname)::text = ''::text) THEN ''::text
-    ELSE ('-'::text || lower(regexp_replace(regexp_replace(replace((metesdescriptionname)::text, ', '::text, ' '::text), '[ \/'',"]'::text, '-'::text, 'g'::text), '[\(\)\?\.\[\]]'::text, ''::text, 'g'::text)))
-END)) STORED,
+    metesdescriptionslug text GENERATED ALWAYS AS (geohistory.array_to_slug(ARRAY[geohistory.eventslug(event), (metesdescriptionname)::text])) STORED,
     CONSTRAINT metesdescription_check CHECK (((metesdescriptionacres >= (0)::double precision) AND ((metesdescriptionsource)::text <> ''::text) AND ((metesdescriptiontype)::text <> ''::text)))
 );
 

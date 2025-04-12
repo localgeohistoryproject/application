@@ -5,6 +5,7 @@
 ### Fixed
 
 - Deprecation issues in PHP 8.4 with fputcsv.
+- In database table geohistory.metesdescription, irregularities in slug formatting.
 - Various code quality, linting, and whitespace issues using PhpStan, PHP CS Fixer, and Rector.
 
 ## [3.0.3] - 2025-04-05
