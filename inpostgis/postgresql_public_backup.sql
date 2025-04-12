@@ -2570,6 +2570,13 @@ END)) STORED,
 ALTER TABLE geohistory.metesdescription OWNER TO postgres;
 
 --
+-- Name: COLUMN metesdescription.metesdescriptionquality; Type: COMMENT; Schema: geohistory; Owner: postgres
+--
+
+COMMENT ON COLUMN geohistory.metesdescription.metesdescriptionquality IS 'This field is used for internal tracking purposes, and is not included in open data.';
+
+
+--
 -- Name: sourcegovernment; Type: TABLE; Schema: geohistory; Owner: postgres
 --
 

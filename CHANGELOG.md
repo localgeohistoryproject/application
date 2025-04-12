@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- In database table geohistory.metesdescription, comment to column metesdescriptionquality to indicate removal from Open Data.
+
 ### Changed
 
 - In database table geohistory.adjudication, generated columns adjudicationslug and adjudicationtitle to use long date format.
