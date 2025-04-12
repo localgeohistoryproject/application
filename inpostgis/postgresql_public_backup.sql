@@ -2101,11 +2101,7 @@ CREATE TABLE gis.governmentshape (
     governmentshapeplsstownship integer,
     governmentward integer,
     governmentschooldistrict integer,
-    governmentshapeslug text GENERATED ALWAYS AS (ltrim((((geohistory.governmentslug(
-CASE
-    WHEN (governmentsubmunicipality IS NULL) THEN governmentmunicipality
-    ELSE governmentsubmunicipality
-END))::text || '-'::text) || public.st_geohash(public.st_pointonsurface(governmentshapegeometry), 9)), '-'::text)) STORED
+    governmentshapeslug text GENERATED ALWAYS AS (geohistory.array_to_slug((ARRAY[geohistory.governmentslug(COALESCE(governmentsubmunicipality, governmentmunicipality)), (public.st_geohash(public.st_pointonsurface(governmentshapegeometry), 9))::character varying])::text[])) STORED
 );
 ALTER TABLE ONLY gis.governmentshape ALTER COLUMN governmentshapegeometry SET STORAGE EXTERNAL;
 
