@@ -4,7 +4,7 @@
 
 ### Changed
 
-- In database table geohistory.lawsection, slug to use law.lawcitation instead of law.lawslug.
+- In database table geohistory.lawsection, generated column lawsectionslug to use law.lawcitation instead of law.lawslug.
 
 ### Fixed
 
