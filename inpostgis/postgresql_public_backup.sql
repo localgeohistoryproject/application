@@ -2360,11 +2360,11 @@ CREATE TABLE geohistory.governmentsource (
     sourcecitationpagefrom character varying(5) DEFAULT ''::character varying NOT NULL,
     sourcecitationpageto character varying(5) DEFAULT ''::character varying NOT NULL,
     governmentsourcename text DEFAULT ''::text NOT NULL,
-    governmentsourceslug text GENERATED ALWAYS AS (btrim(lower(regexp_replace(((((((((((((geohistory.governmentslug(government))::text || '-'::text) || (governmentsourcebody)::text) || '-'::text) || (governmentsourcetype)::text) || '-'::text) || (governmentsourcenumber)::text) || '-'::text) || (governmentsourceterm)::text) ||
+    governmentsourceslug text GENERATED ALWAYS AS (geohistory.array_to_slug((ARRAY[geohistory.governmentslug(government), governmentsourcebody, governmentsourcetype, governmentsourcenumber, governmentsourceterm, (
 CASE
-    WHEN ((governmentsourcevolume)::text <> ''::text) THEN ('-v'::text || (governmentsourcevolume)::text)
+    WHEN ((governmentsourcevolume)::text <> ''::text) THEN ('v'::text || (governmentsourcevolume)::text)
     ELSE ''::text
-END) || '-'::text) || geohistory.rangeformat((governmentsourcepagefrom)::text, (((governmentsourcepageto)::text || ' '::text) || governmentsourcename))), '[\s\-\–\.\/''\(\);:,&"#§\?\[\]]+'::text, '-'::text, 'g'::text)), '-'::text)) STORED,
+END)::character varying, (geohistory.rangeformat((governmentsourcepagefrom)::text, (governmentsourcepageto)::text))::character varying, (governmentsourcename)::character varying])::text[])) STORED,
     hassource boolean GENERATED ALWAYS AS ((source IS NOT NULL)) STORED,
     governmentsourcepage text GENERATED ALWAYS AS (geohistory.rangeformat((governmentsourcepagefrom)::text, (governmentsourcepageto)::text)) STORED,
     sourcecitationpage text GENERATED ALWAYS AS (geohistory.rangeformat((sourcecitationpagefrom)::text, (sourcecitationpageto)::text)) STORED,

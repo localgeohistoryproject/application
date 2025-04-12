@@ -9,7 +9,7 @@
 ### Fixed
 
 - Deprecation issues in PHP 8.4 with fputcsv.
-- In database tables geohistory.event, geohistory.lawalternatesection, geohistory.lawsection, geohistory.metesdescription, and gis.governmentshape, irregularities in slug formatting.
+- In database tables geohistory.event, geohistory.governmentsource, geohistory.lawalternatesection, geohistory.lawsection, geohistory.metesdescription, and gis.governmentshape, irregularities in slug formatting.
 - Various code quality, linting, and whitespace issues using PhpStan, PHP CS Fixer, and Rector.
 
 ### Removed
