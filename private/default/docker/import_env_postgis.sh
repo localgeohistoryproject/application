@@ -29,8 +29,8 @@ if [ "$CI_ENVIRONMENT" = "production" ]; then
     for fileName in /inpostgis/governmentshape*.tsv
     do
         tsvHeader=$(head -n +1 "${fileName}" | sed "s/\t/,/g")
-        tail -n +2 "${fileName}" > "${fileName}"
-        tableString+="\COPY gis.governmentshape ($tsvHeader) FROM '${fileName}';
+        tail -n +2 "${fileName}" > "/tmp${fileName}"
+        tableString+="\COPY gis.governmentshape ($tsvHeader) FROM '/tmp${fileName}';
         "
         fileNameCount=$(($fileNameCount + 1))
     done
