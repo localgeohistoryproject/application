@@ -8,6 +8,11 @@
 - In database tables geohistory.lawalternatesection and geohistory.metesdescription, irregularities in slug formatting.
 - Various code quality, linting, and whitespace issues using PhpStan, PHP CS Fixer, and Rector.
 
+### Removed
+
+- Database function geohistory.lawalternateslug.
+- In database table geohistory.lawalternate, generated column lawalternateslug.
+
 ## [3.0.3] - 2025-04-05
 
 ### Fixed

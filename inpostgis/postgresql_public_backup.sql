@@ -587,27 +587,6 @@ $$;
 ALTER FUNCTION geohistory.lawalternatesection_insertupdate() OWNER TO postgres;
 
 --
--- Name: lawalternateslug(integer); Type: FUNCTION; Schema: geohistory; Owner: postgres
---
-
-CREATE FUNCTION geohistory.lawalternateslug(i_id integer) RETURNS text
-    LANGUAGE plpgsql IMMUTABLE
-    AS $$
-    DECLARE o_value text;
-    BEGIN
-        SELECT lawalternateslug
-        INTO o_value
-        FROM geohistory.lawalternate
-        WHERE lawalternateid = i_id;
-
-        RETURN COALESCE(o_value, '');
-    END;
-$$;
-
-
-ALTER FUNCTION geohistory.lawalternateslug(i_id integer) OWNER TO postgres;
-
---
 -- Name: lawapproved(integer); Type: FUNCTION; Schema: geohistory; Owner: postgres
 --
 
@@ -4729,53 +4708,6 @@ CASE
         WHEN ((geohistory.lawapproved(law))::text = ''::text) THEN ''::text
         ELSE ' of '::text
     END || calendar.historicdatetextformat((geohistory.lawapproved(law))::calendar.historicdate, 'long'::text, 'en'::text)) || ' ('::text) ||
-    CASE
-        WHEN ((lawalternatevolume)::text ~~ '%/%'::text) THEN ((((((
-        CASE
-            WHEN (split_part((lawalternatevolume)::text, '/'::text, 3) <> ''::text) THEN (split_part((lawalternatevolume)::text, '/'::text, 3) || ', '::text)
-            ELSE ''::text
-        END || split_part((lawalternatevolume)::text, '/'::text, 2)) ||
-        CASE
-            WHEN (split_part((lawalternatevolume)::text, '/'::text, 2) = '1'::text) THEN 'st'::text
-            WHEN (split_part((lawalternatevolume)::text, '/'::text, 2) = '2'::text) THEN 'nd'::text
-            WHEN (split_part((lawalternatevolume)::text, '/'::text, 2) = '3'::text) THEN 'rd'::text
-            ELSE 'th'::text
-        END) || ' '::text) ||
-        CASE
-            WHEN geohistory.sourcelawhasspecialsession(source) THEN 'Sp.'::text
-            ELSE ''::text
-        END) || 'Sess., '::text) ||
-        CASE
-            WHEN ("left"((geohistory.lawapproved(law))::text, 4) <> split_part((lawalternatevolume)::text, '/'::text, 1)) THEN (split_part((lawalternatevolume)::text, '/'::text, 1) || ' '::text)
-            ELSE ''::text
-        END)
-        ELSE
-        CASE
-            WHEN (((lawalternatevolume)::text = "left"((geohistory.lawapproved(law))::text, 4)) OR ((lawalternatevolume)::text = ''::text)) THEN ''::text
-            ELSE ((lawalternatevolume)::text || ' '::text)
-        END
-    END) || geohistory.sourceshort(source)) || ' '::text) ||
-    CASE
-        WHEN (lawalternatepage = 0) THEN '___'::text
-        ELSE (lawalternatepage)::text
-    END) || ', '::text) ||
-    CASE
-        WHEN geohistory.sourcelawisbynumber(source) THEN 'No'::text
-        ELSE 'Ch'::text
-    END) || '. '::text) ||
-    CASE
-        WHEN (lawalternatenumberchapter = 0) THEN '___'::text
-        ELSE (lawalternatenumberchapter)::text
-    END) || ')'::text)
-END)) STORED,
-    lawalternateslug text GENERATED ALWAYS AS ((geohistory.sourcelawtype(source) ||
-CASE
-    WHEN ((lawalternatepage = 0) AND (lawalternatenumberchapter = 0)) THEN ' Unknown'::text
-    ELSE (((((((((((
-    CASE
-        WHEN ((geohistory.lawapproved(law))::text = ''::text) THEN ''::text
-        ELSE ' of '::text
-    END || calendar.historicdatetextformat((geohistory.lawapproved(law))::calendar.historicdate, 'short'::text, 'en'::text)) || ' ('::text) ||
     CASE
         WHEN ((lawalternatevolume)::text ~~ '%/%'::text) THEN ((((((
         CASE
@@ -9634,13 +9566,6 @@ REVOKE ALL ON FUNCTION geohistory.lawalternatecitation(i_id integer) FROM PUBLIC
 --
 
 REVOKE ALL ON FUNCTION geohistory.lawalternatesection_insertupdate() FROM PUBLIC;
-
-
---
--- Name: FUNCTION lawalternateslug(i_id integer); Type: ACL; Schema: geohistory; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION geohistory.lawalternateslug(i_id integer) FROM PUBLIC;
 
 
 --
