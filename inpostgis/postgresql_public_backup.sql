@@ -1595,7 +1595,7 @@ CASE
         ELSE 1
     END)::double precision
 END)::integer) STORED,
-    eventslug text GENERATED ALWAYS AS (lower(regexp_replace(regexp_replace(replace((eventlong)::text, ', '::text, ' '::text), '[ʻ \/'',]'::text, '-'::text, 'g'::text), '[:\*\(\)\?\.\[\]]'::text, ''::text, 'g'::text))) STORED,
+    eventslug text GENERATED ALWAYS AS (geohistory.array_to_slug((ARRAY[eventlong])::text[])) STORED,
     CONSTRAINT event_check CHECK (((eventfrom <= eventto) AND ((eventlong)::text <> ''::text) AND (((eventgranted = 17) AND (government IS NOT NULL)) OR ((eventgranted <> 17) AND (government IS NULL)))))
 );
 
