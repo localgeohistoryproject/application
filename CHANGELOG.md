@@ -1,5 +1,30 @@
 # Changelog
 
+## [3.1.0] - 2025-04-12
+
+### Added
+
+- In database table geohistory.metesdescription, comment to column metesdescriptionquality to indicate removal from Open Data.
+
+### Changed
+
+- In database table geohistory.adjudication, generated columns adjudicationslug and adjudicationtitle to use long date format.
+- In database table geohistory.lawsection, generated column lawsectionslug to use law.lawcitation instead of law.lawslug.
+- PostGIS import to allow governmentshape table data to be split into multiple files.
+
+### Fixed
+
+- Deprecation issues in PHP 8.4 with fputcsv.
+- In database tables geohistory.event, geohistory.government, geohistory.governmentsource, geohistory.lawalternatesection, geohistory.lawsection, geohistory.metesdescription, and gis.governmentshape, irregularities in slug formatting.
+- Various code quality, linting, and whitespace issues using PhpStan, PHP CS Fixer, and Rector.
+
+### Removed
+
+- Database function geohistory.lawalternateslug.
+- Database function geohistory.lawslug.
+- In database table geohistory.law, generated column lawslug.
+- In database table geohistory.lawalternate, generated column lawalternateslug.
+
 ## [3.0.3] - 2025-04-05
 
 ### Fixed
@@ -419,6 +444,7 @@
 
 - Public release of the Local Geohistory Project: Application repository.
 
+[3.1.0]: https://github.com/localgeohistoryproject/application/compare/v3.0.3...v3.1.0
 [3.0.3]: https://github.com/localgeohistoryproject/application/compare/v3.0.2...v3.0.3
 [3.0.2]: https://github.com/localgeohistoryproject/application/compare/v3.0.1...v3.0.2
 [3.0.1]: https://github.com/localgeohistoryproject/application/compare/v3.0.0...v3.0.1

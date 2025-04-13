@@ -3,13 +3,14 @@
 $handle = fopen('php://output', 'w');
 
 if (is_array($query ?? '') && $query !== []) {
-    $i = 0;
+    $isFirstRow = true;
     foreach ($query as $row) {
-        if ($i === 0) {
-            fputcsv($handle, array_keys($row));
-            $i++;
+        if ($isFirstRow) {
+            fputcsv($handle, array_keys($row), escape: '');
+            $isFirstRow = false;
         }
-        fputcsv($handle, $row);
+        fputcsv($handle, $row, escape: '');
     }
 }
+
 fclose($handle);

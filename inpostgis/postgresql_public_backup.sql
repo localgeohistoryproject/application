@@ -587,27 +587,6 @@ $$;
 ALTER FUNCTION geohistory.lawalternatesection_insertupdate() OWNER TO postgres;
 
 --
--- Name: lawalternateslug(integer); Type: FUNCTION; Schema: geohistory; Owner: postgres
---
-
-CREATE FUNCTION geohistory.lawalternateslug(i_id integer) RETURNS text
-    LANGUAGE plpgsql IMMUTABLE
-    AS $$
-    DECLARE o_value text;
-    BEGIN
-        SELECT lawalternateslug
-        INTO o_value
-        FROM geohistory.lawalternate
-        WHERE lawalternateid = i_id;
-
-        RETURN COALESCE(o_value, '');
-    END;
-$$;
-
-
-ALTER FUNCTION geohistory.lawalternateslug(i_id integer) OWNER TO postgres;
-
---
 -- Name: lawapproved(integer); Type: FUNCTION; Schema: geohistory; Owner: postgres
 --
 
@@ -807,27 +786,6 @@ $$;
 
 
 ALTER FUNCTION geohistory.lawsectionto(i_id integer) OWNER TO postgres;
-
---
--- Name: lawslug(integer); Type: FUNCTION; Schema: geohistory; Owner: postgres
---
-
-CREATE FUNCTION geohistory.lawslug(i_id integer) RETURNS text
-    LANGUAGE plpgsql IMMUTABLE
-    AS $$
-    DECLARE o_value text;
-    BEGIN
-        SELECT lawslug
-        INTO o_value
-        FROM geohistory.law
-        WHERE lawid = i_id;
-
-        RETURN COALESCE(o_value, '');
-    END;
-$$;
-
-
-ALTER FUNCTION geohistory.lawslug(i_id integer) OWNER TO postgres;
 
 --
 -- Name: metesdescriptionline_insertupdate(); Type: FUNCTION; Schema: geohistory; Owner: postgres
@@ -1637,7 +1595,7 @@ CASE
         ELSE 1
     END)::double precision
 END)::integer) STORED,
-    eventslug text GENERATED ALWAYS AS (lower(regexp_replace(regexp_replace(replace((eventlong)::text, ', '::text, ' '::text), '[ʻ \/'',]'::text, '-'::text, 'g'::text), '[:\*\(\)\?\.\[\]]'::text, ''::text, 'g'::text))) STORED,
+    eventslug text GENERATED ALWAYS AS (geohistory.array_to_slug((ARRAY[eventlong])::text[])) STORED,
     CONSTRAINT event_check CHECK (((eventfrom <= eventto) AND ((eventlong)::text <> ''::text) AND (((eventgranted = 17) AND (government IS NOT NULL)) OR ((eventgranted <> 17) AND (government IS NULL)))))
 );
 
@@ -1875,54 +1833,30 @@ CASE
     END)::text) || ' ('::text) || (geohistory.governmentcurrentleadstate(governmentid, 1))::text) || ')'::text)
     ELSE ''::text
 END)) STORED,
-    governmentslug text GENERATED ALWAYS AS (lower(replace(regexp_replace(regexp_replace(
+    governmentslug text GENERATED ALWAYS AS (
 CASE
     WHEN ((governmentstatus)::text = 'placeholder'::text) THEN NULL::text
-    WHEN ((governmentlevel < 3) AND ((governmentabbreviation)::text <> ''::text)) THEN (governmentabbreviation)::text
-    ELSE ((((((geohistory.governmentcurrentleadstate(governmentid, 1))::text ||
+    WHEN ((governmentlevel < 3) AND ((governmentabbreviation)::text <> ''::text)) THEN geohistory.array_to_slug(ARRAY[(governmentabbreviation)::text])
+    ELSE geohistory.array_to_slug((ARRAY[geohistory.governmentcurrentleadstate(governmentid, 1), governmentarticle, governmentname, governmentnumber, (
     CASE
-        WHEN ((governmentarticle)::text <> ''::text) THEN ('-'::text || (governmentarticle)::text)
-        ELSE ''::text
-    END) ||
-    CASE
-        WHEN ((governmentname)::text <> ''::text) THEN ('-'::text || (governmentname)::text)
-        ELSE ''::text
-    END) ||
-    CASE
-        WHEN ((governmentnumber)::text <> ''::text) THEN ('-'::text || (governmentnumber)::text)
-        ELSE ''::text
-    END) ||
-    CASE
-        WHEN (governmentlevel > 1) THEN ('-'::text || (
+        WHEN (governmentlevel > 1) THEN (
         CASE
             WHEN ((governmentstyle)::text <> ''::text) THEN governmentstyle
             ELSE governmenttype
-        END)::text)
+        END)::text
         ELSE ''::text
-    END) ||
+    END)::character varying,
     CASE
-        WHEN (((governmentstatus)::text <> ''::text) OR governmentnotecurrentleadparent OR ((governmentnotecreation)::text <> ''::text) OR ((governmentnotedissolution)::text <> ''::text)) THEN ((((('-'::text || (
-        CASE
-            WHEN governmentnotecurrentleadparent THEN geohistory.governmentname(governmentcurrentleadparent)
-            ELSE ''::character varying
-        END)::text) ||
-        CASE
-            WHEN (governmentnotecurrentleadparent AND (((governmentnotecreation)::text <> ''::text) OR ((governmentnotedissolution)::text <> ''::text))) THEN '-'::text
-            ELSE ''::text
-        END) ||
-        CASE
-            WHEN (((governmentnotecreation)::text <> ''::text) AND ((governmentnotedissolution)::text <> ''::text)) THEN (((governmentnotecreation)::text || '-'::text) || (governmentnotedissolution)::text)
-            WHEN ((governmentnotecreation)::text <> ''::text) THEN ('since-'::text || (governmentnotecreation)::text)
-            WHEN ((governmentnotedissolution)::text <> ''::text) THEN ('thru-'::text || (governmentnotedissolution)::text)
-            ELSE ''::text
-        END) ||
-        CASE
-            WHEN (((governmentstatus)::text <> ''::text) AND (governmentnotecurrentleadparent OR ((governmentnotecreation)::text <> ''::text) OR ((governmentnotedissolution)::text <> ''::text))) THEN '-'::text
-            ELSE ''::text
-        END) || (governmentstatus)::text)
+        WHEN governmentnotecurrentleadparent THEN geohistory.governmentname(governmentcurrentleadparent)
+        ELSE ''::character varying
+    END, (
+    CASE
+        WHEN (((governmentnotecreation)::text <> ''::text) AND ((governmentnotedissolution)::text <> ''::text)) THEN (((governmentnotecreation)::text || '-'::text) || (governmentnotedissolution)::text)
+        WHEN ((governmentnotecreation)::text <> ''::text) THEN ('since-'::text || (governmentnotecreation)::text)
+        WHEN ((governmentnotedissolution)::text <> ''::text) THEN ('thru-'::text || (governmentnotedissolution)::text)
         ELSE ''::text
-    END)
-END, '[\(\)\,\.]'::text, ''::text, 'g'::text), '[ \/ʻ]'::text, '-'::text, 'g'::text), ''''::text, '-'::text))) STORED,
+    END)::character varying, ((governmentstatus)::text)::character varying])::text[])
+END) STORED,
     governmentslugsubstitute text GENERATED ALWAYS AS (geohistory.governmentslugsubstitute(governmentid, 1)) STORED,
     governmentshortshort text GENERATED ALWAYS AS (((
 CASE
@@ -2143,11 +2077,7 @@ CREATE TABLE gis.governmentshape (
     governmentshapeplsstownship integer,
     governmentward integer,
     governmentschooldistrict integer,
-    governmentshapeslug text GENERATED ALWAYS AS (ltrim((((geohistory.governmentslug(
-CASE
-    WHEN (governmentsubmunicipality IS NULL) THEN governmentmunicipality
-    ELSE governmentsubmunicipality
-END))::text || '-'::text) || public.st_geohash(public.st_pointonsurface(governmentshapegeometry), 9)), '-'::text)) STORED
+    governmentshapeslug text GENERATED ALWAYS AS (geohistory.array_to_slug((ARRAY[geohistory.governmentslug(COALESCE(governmentsubmunicipality, governmentmunicipality)), (public.st_geohash(public.st_pointonsurface(governmentshapegeometry), 9))::character varying])::text[])) STORED
 );
 ALTER TABLE ONLY gis.governmentshape ALTER COLUMN governmentshapegeometry SET STORAGE EXTERNAL;
 
@@ -2238,7 +2168,7 @@ CASE
         WHEN (length((adjudicationterm)::text) = 4) THEN '-~07-~28'::text
         WHEN (length((adjudicationterm)::text) = 7) THEN '-~28'::text
         ELSE ''::text
-    END))::calendar.historicdate, 'short'::text, 'en'::text)
+    END))::calendar.historicdate, 'long'::text, 'en'::text)
     ELSE NULL::text
 END, adjudicationname])) STORED,
     adjudicationtitle text GENERATED ALWAYS AS (regexp_replace(regexp_replace(((((((geohistory.adjudicationtypegovernmentshort(adjudicationtype) || ' '::text) || geohistory.adjudicationtypetribunaltypesummary(adjudicationtype)) ||
@@ -2253,7 +2183,7 @@ CASE
         WHEN (length((adjudicationterm)::text) = 4) THEN '-~07-~28'::text
         WHEN (length((adjudicationterm)::text) = 7) THEN '-~28'::text
         ELSE ''::text
-    END))::calendar.historicdate, 'short'::text, 'en'::text))
+    END))::calendar.historicdate, 'long'::text, 'en'::text))
 END), '[ ]+'::text, ' '::text, 'g'::text), '[\/\,\.\(\)]'::text, ''::text, 'g'::text)) STORED,
     adjudicationsummary text GENERATED ALWAYS AS (btrim(((((adjudicationlong || ' '::text) || adjudicationshort) || ' '::text) || adjudicationnotes))) STORED
 );
@@ -2406,11 +2336,11 @@ CREATE TABLE geohistory.governmentsource (
     sourcecitationpagefrom character varying(5) DEFAULT ''::character varying NOT NULL,
     sourcecitationpageto character varying(5) DEFAULT ''::character varying NOT NULL,
     governmentsourcename text DEFAULT ''::text NOT NULL,
-    governmentsourceslug text GENERATED ALWAYS AS (btrim(lower(regexp_replace(((((((((((((geohistory.governmentslug(government))::text || '-'::text) || (governmentsourcebody)::text) || '-'::text) || (governmentsourcetype)::text) || '-'::text) || (governmentsourcenumber)::text) || '-'::text) || (governmentsourceterm)::text) ||
+    governmentsourceslug text GENERATED ALWAYS AS (geohistory.array_to_slug((ARRAY[geohistory.governmentslug(government), governmentsourcebody, governmentsourcetype, governmentsourcenumber, governmentsourceterm, (
 CASE
-    WHEN ((governmentsourcevolume)::text <> ''::text) THEN ('-v'::text || (governmentsourcevolume)::text)
+    WHEN ((governmentsourcevolume)::text <> ''::text) THEN ('v'::text || (governmentsourcevolume)::text)
     ELSE ''::text
-END) || '-'::text) || geohistory.rangeformat((governmentsourcepagefrom)::text, (((governmentsourcepageto)::text || ' '::text) || governmentsourcename))), '[\s\-\–\.\/''\(\);:,&"#§\?\[\]]+'::text, '-'::text, 'g'::text)), '-'::text)) STORED,
+END)::character varying, (geohistory.rangeformat((governmentsourcepagefrom)::text, (governmentsourcepageto)::text))::character varying, (governmentsourcename)::character varying])::text[])) STORED,
     hassource boolean GENERATED ALWAYS AS ((source IS NOT NULL)) STORED,
     governmentsourcepage text GENERATED ALWAYS AS (geohistory.rangeformat((governmentsourcepagefrom)::text, (governmentsourcepageto)::text)) STORED,
     sourcecitationpage text GENERATED ALWAYS AS (geohistory.rangeformat((sourcecitationpagefrom)::text, (sourcecitationpageto)::text)) STORED,
@@ -2528,57 +2458,6 @@ CASE
         WHEN ((lawpublished)::text <> ''::text) THEN (', '::text || calendar.historicdatetextformat((lawpublished)::calendar.historicdate, 'long'::text, 'en'::text))
         ELSE ''::text
     END) || ')'::text)
-END)) STORED,
-    lawslug text GENERATED ALWAYS AS ((geohistory.sourcelawtype(source) ||
-CASE
-    WHEN ((lawpage = 0) AND (lawnumberchapter = 0) AND ((lawapproved)::text = ''::text)) THEN ' Unknown'::text
-    ELSE ((((((((((((
-    CASE
-        WHEN ((lawapproved)::text = ''::text) THEN ''::text
-        ELSE ' of '::text
-    END || calendar.historicdatetextformat((lawapproved)::calendar.historicdate, 'short'::text, 'en'::text)) || ' ('::text) ||
-    CASE
-        WHEN ((lawvolume)::text ~~ '%/%'::text) THEN ((((((
-        CASE
-            WHEN (split_part((lawvolume)::text, '/'::text, 3) <> ''::text) THEN (split_part((lawvolume)::text, '/'::text, 3) || ', '::text)
-            ELSE ''::text
-        END || split_part((lawvolume)::text, '/'::text, 2)) ||
-        CASE
-            WHEN (split_part((lawvolume)::text, '/'::text, 2) = '1'::text) THEN 'st'::text
-            WHEN (split_part((lawvolume)::text, '/'::text, 2) = '2'::text) THEN 'nd'::text
-            WHEN (split_part((lawvolume)::text, '/'::text, 2) = '3'::text) THEN 'rd'::text
-            ELSE 'th'::text
-        END) || ' '::text) ||
-        CASE
-            WHEN geohistory.sourcelawhasspecialsession(source) THEN 'Sp.'::text
-            ELSE ''::text
-        END) || 'Sess., '::text) ||
-        CASE
-            WHEN ("left"((lawapproved)::text, 4) <> split_part((lawvolume)::text, '/'::text, 1)) THEN (split_part((lawvolume)::text, '/'::text, 1) || ' '::text)
-            ELSE ''::text
-        END)
-        ELSE
-        CASE
-            WHEN (((lawvolume)::text = "left"((lawapproved)::text, 4)) OR ((lawvolume)::text = ''::text)) THEN ''::text
-            ELSE ((lawvolume)::text || ' '::text)
-        END
-    END) || geohistory.sourceshort(source)) || ' '::text) ||
-    CASE
-        WHEN (lawpage = 0) THEN '___'::text
-        ELSE (lawpage)::text
-    END) || ', '::text) ||
-    CASE
-        WHEN geohistory.sourcelawisbynumber(source) THEN 'No'::text
-        ELSE 'Ch'::text
-    END) || '. '::text) ||
-    CASE
-        WHEN (lawnumberchapter = 0) THEN '___'::text
-        ELSE (lawnumberchapter)::text
-    END) ||
-    CASE
-        WHEN ((lawpublished)::text <> ''::text) THEN (', '::text || calendar.historicdatetextformat((lawpublished)::calendar.historicdate, 'short'::text, 'en'::text))
-        ELSE ''::text
-    END) || ')'::text)
 END)) STORED
 );
 
@@ -2623,12 +2502,12 @@ CASE
     WHEN ((lawsectionfrom)::text = (lawsectionto)::text) THEN (' '::text || (lawsectionfrom)::text)
     ELSE ((('§ '::text || (lawsectionfrom)::text) || '–'::text) || (lawsectionto)::text)
 END)) STORED,
-    lawsectionslug text GENERATED ALWAYS AS (lower(replace(replace(regexp_replace(regexp_replace((((geohistory.lawslug(law) || ', '::text) || (lawsectionsymbol)::text) ||
+    lawsectionslug text GENERATED ALWAYS AS (geohistory.array_to_slug(ARRAY[geohistory.lawcitation(law), ((lawsectionsymbol)::text ||
 CASE
     WHEN ((lawsectionfrom)::text = '0'::text) THEN '___'::text
     WHEN ((lawsectionfrom)::text = (lawsectionto)::text) THEN (' '::text || (lawsectionfrom)::text)
     ELSE ((('§ '::text || (lawsectionfrom)::text) || '–'::text) || (lawsectionto)::text)
-END), '[,\.\[\]\(\)\'']'::text, ''::text, 'g'::text), '([ :\–\—\/_]+| of )'::text, '-'::text, 'g'::text), '§'::text, 's'::text), '¶'::text, 'p'::text))) STORED,
+END)])) STORED,
     lawsectionnewsection text GENERATED ALWAYS AS (geohistory.rangeformat((lawsectionnewfrom)::text, (lawsectionnewto)::text)) STORED,
     lawsectionpage text GENERATED ALWAYS AS (geohistory.rangeformat((lawsectionpagefrom)::text, (lawsectionpageto)::text)) STORED
 );
@@ -2683,16 +2562,19 @@ CASE
     WHEN ((metesdescriptionname)::text = ''::text) THEN ''::text
     ELSE (': '::text || (metesdescriptionname)::text)
 END)) STORED,
-    metesdescriptionslug text GENERATED ALWAYS AS ((geohistory.eventslug(event) ||
-CASE
-    WHEN ((metesdescriptionname)::text = ''::text) THEN ''::text
-    ELSE ('-'::text || lower(regexp_replace(regexp_replace(replace((metesdescriptionname)::text, ', '::text, ' '::text), '[ \/'',"]'::text, '-'::text, 'g'::text), '[\(\)\?\.\[\]]'::text, ''::text, 'g'::text)))
-END)) STORED,
+    metesdescriptionslug text GENERATED ALWAYS AS (geohistory.array_to_slug(ARRAY[geohistory.eventslug(event), (metesdescriptionname)::text])) STORED,
     CONSTRAINT metesdescription_check CHECK (((metesdescriptionacres >= (0)::double precision) AND ((metesdescriptionsource)::text <> ''::text) AND ((metesdescriptiontype)::text <> ''::text)))
 );
 
 
 ALTER TABLE geohistory.metesdescription OWNER TO postgres;
+
+--
+-- Name: COLUMN metesdescription.metesdescriptionquality; Type: COMMENT; Schema: geohistory; Owner: postgres
+--
+
+COMMENT ON COLUMN geohistory.metesdescription.metesdescriptionquality IS 'This field is used for internal tracking purposes, and is not included in open data.';
+
 
 --
 -- Name: sourcegovernment; Type: TABLE; Schema: geohistory; Owner: postgres
@@ -4771,53 +4653,6 @@ CASE
         WHEN (lawalternatenumberchapter = 0) THEN '___'::text
         ELSE (lawalternatenumberchapter)::text
     END) || ')'::text)
-END)) STORED,
-    lawalternateslug text GENERATED ALWAYS AS ((geohistory.sourcelawtype(source) ||
-CASE
-    WHEN ((lawalternatepage = 0) AND (lawalternatenumberchapter = 0)) THEN ' Unknown'::text
-    ELSE (((((((((((
-    CASE
-        WHEN ((geohistory.lawapproved(law))::text = ''::text) THEN ''::text
-        ELSE ' of '::text
-    END || calendar.historicdatetextformat((geohistory.lawapproved(law))::calendar.historicdate, 'short'::text, 'en'::text)) || ' ('::text) ||
-    CASE
-        WHEN ((lawalternatevolume)::text ~~ '%/%'::text) THEN ((((((
-        CASE
-            WHEN (split_part((lawalternatevolume)::text, '/'::text, 3) <> ''::text) THEN (split_part((lawalternatevolume)::text, '/'::text, 3) || ', '::text)
-            ELSE ''::text
-        END || split_part((lawalternatevolume)::text, '/'::text, 2)) ||
-        CASE
-            WHEN (split_part((lawalternatevolume)::text, '/'::text, 2) = '1'::text) THEN 'st'::text
-            WHEN (split_part((lawalternatevolume)::text, '/'::text, 2) = '2'::text) THEN 'nd'::text
-            WHEN (split_part((lawalternatevolume)::text, '/'::text, 2) = '3'::text) THEN 'rd'::text
-            ELSE 'th'::text
-        END) || ' '::text) ||
-        CASE
-            WHEN geohistory.sourcelawhasspecialsession(source) THEN 'Sp.'::text
-            ELSE ''::text
-        END) || 'Sess., '::text) ||
-        CASE
-            WHEN ("left"((geohistory.lawapproved(law))::text, 4) <> split_part((lawalternatevolume)::text, '/'::text, 1)) THEN (split_part((lawalternatevolume)::text, '/'::text, 1) || ' '::text)
-            ELSE ''::text
-        END)
-        ELSE
-        CASE
-            WHEN (((lawalternatevolume)::text = "left"((geohistory.lawapproved(law))::text, 4)) OR ((lawalternatevolume)::text = ''::text)) THEN ''::text
-            ELSE ((lawalternatevolume)::text || ' '::text)
-        END
-    END) || geohistory.sourceshort(source)) || ' '::text) ||
-    CASE
-        WHEN (lawalternatepage = 0) THEN '___'::text
-        ELSE (lawalternatepage)::text
-    END) || ', '::text) ||
-    CASE
-        WHEN geohistory.sourcelawisbynumber(source) THEN 'No'::text
-        ELSE 'Ch'::text
-    END) || '. '::text) ||
-    CASE
-        WHEN (lawalternatenumberchapter = 0) THEN '___'::text
-        ELSE (lawalternatenumberchapter)::text
-    END) || ')'::text)
 END)) STORED
 );
 
@@ -4861,12 +4696,12 @@ CASE
     WHEN (geohistory.lawsectionfrom(lawsection) = geohistory.lawsectionto(lawsection)) THEN (' '::text || geohistory.lawsectionfrom(lawsection))
     ELSE ((('§ '::text || geohistory.lawsectionfrom(lawsection)) || '-'::text) || geohistory.lawsectionto(lawsection))
 END)) STORED,
-    lawalternatesectionslug text GENERATED ALWAYS AS (lower(replace(replace(regexp_replace(regexp_replace(((((geohistory.lawalternatecitation(lawalternate) || ', '::text) || geohistory.lawsectionsymbol(lawsection)) ||
+    lawalternatesectionslug text GENERATED ALWAYS AS (geohistory.array_to_slug(ARRAY[geohistory.lawalternatecitation(lawalternate), (geohistory.lawsectionsymbol(lawsection) ||
 CASE
     WHEN (geohistory.lawsectionfrom(lawsection) = '0'::text) THEN '___'::text
     WHEN (geohistory.lawsectionfrom(lawsection) = geohistory.lawsectionto(lawsection)) THEN (' '::text || geohistory.lawsectionfrom(lawsection))
     ELSE ((('§ '::text || geohistory.lawsectionfrom(lawsection)) || '-'::text) || geohistory.lawsectionto(lawsection))
-END) || '-alternate'::text), '[,\.\[\]\(\)\'']'::text, ''::text, 'g'::text), '([ :\–\—\/]| of )'::text, '-'::text, 'g'::text), '§'::text, 's'::text), '¶'::text, 'p'::text))) STORED
+END), 'alternate'::text])) STORED
 );
 
 
@@ -9641,13 +9476,6 @@ REVOKE ALL ON FUNCTION geohistory.lawalternatesection_insertupdate() FROM PUBLIC
 
 
 --
--- Name: FUNCTION lawalternateslug(i_id integer); Type: ACL; Schema: geohistory; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION geohistory.lawalternateslug(i_id integer) FROM PUBLIC;
-
-
---
 -- Name: FUNCTION lawapproved(i_id integer); Type: ACL; Schema: geohistory; Owner: postgres
 --
 
@@ -9701,13 +9529,6 @@ REVOKE ALL ON FUNCTION geohistory.lawsectionsymbol(i_id integer) FROM PUBLIC;
 --
 
 REVOKE ALL ON FUNCTION geohistory.lawsectionto(i_id integer) FROM PUBLIC;
-
-
---
--- Name: FUNCTION lawslug(i_id integer); Type: ACL; Schema: geohistory; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION geohistory.lawslug(i_id integer) FROM PUBLIC;
 
 
 --

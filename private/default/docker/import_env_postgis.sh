@@ -22,10 +22,23 @@ if [ "$CI_ENVIRONMENT" = "production" ]; then
             echo "ERROR: ${tableName,,} data file missing"
         fi
     done
-    ## GIS
+    ## GIS (Governmentshape)
     tableString+="ALTER TABLE gis.governmentshape DISABLE TRIGGER governmentshape_insert_trigger;
     "
-    gisTables=(affectedgovernmentgis governmentshape metesdescriptiongis)
+    fileNameCount=$((0))
+    for fileName in /inpostgis/governmentshape*.tsv
+    do
+        tsvHeader=$(head -n +1 "${fileName}" | sed "s/\t/,/g")
+        tail -n +2 "${fileName}" > "/tmp${fileName}"
+        tableString+="\COPY gis.governmentshape ($tsvHeader) FROM '/tmp${fileName}';
+        "
+        fileNameCount=$(($fileNameCount + 1))
+    done
+    if [[ $fileNameCount -eq 0 ]]; then
+        echo "ERROR: governmentshape data file(s) missing"
+    fi
+    ## GIS (Remaining)
+    gisTables=(affectedgovernmentgis metesdescriptiongis)
     for tableName in "${gisTables[@]}"
     do
         if [ -f "/inpostgis/${tableName,,}.tsv" ]; then
