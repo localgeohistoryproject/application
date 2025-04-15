@@ -9,13 +9,6 @@ class Governmentidentifier extends BaseController
 {
     private string $title = 'Government Identifier';
 
-    public function noRecord(): void
-    {
-        echo view('core/header', ['title' => $this->title]);
-        echo view('core/norecord');
-        echo view('core/footer');
-    }
-
     public function view(string $type, string $id): null|RedirectResponse
     {
         if ($id !== strtolower($id)) {

@@ -16,13 +16,6 @@ class Government extends BaseController
 {
     private string $title = 'Government';
 
-    public function noRecord(): void
-    {
-        echo view('core/header', ['title' => $this->title]);
-        echo view('core/norecord');
-        echo view('core/footer');
-    }
-
     public function redirect(int|string $id): RedirectResponse
     {
         return redirect()->to('/' . $this->request->getLocale() . '/government/' . $id . '/', 301);

@@ -49,13 +49,6 @@ class Area extends BaseController
         }
     }
 
-    public function noRecord(): void
-    {
-        echo view('core/header', ['title' => $this->title]);
-        echo view('core/norecord');
-        echo view('core/footer');
-    }
-
     public function point(float $y = 0, float $x = 0, string $addressText = ''): void
     {
         if ($y === 0.0 && $this->request->getPost('y', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) !== '') {

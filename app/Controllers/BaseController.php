@@ -126,4 +126,20 @@ abstract class BaseController extends Controller
         }
         return $id;
     }
+
+    protected function isError(string $title = 'Error'): void
+    {
+        $this->response->setStatusCode(404);
+        echo view('core/header', ['title' => $title]);
+        echo view('core/error');
+        echo view('core/footer');
+    }
+
+    protected function noRecord(string $title = 'No Record'): void
+    {
+        $this->response->setStatusCode(404);
+        echo view('core/header', ['title' => $title]);
+        echo view('core/norecord');
+        echo view('core/footer');
+    }
 }
