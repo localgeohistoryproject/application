@@ -122,10 +122,10 @@ class Statistics extends BaseController
             if ($dateRange !== '') {
                 $searchParameter['Year' . $dateRangePlural] = $dateRange;
             }
-    
+
             $jurisdiction = $this->request->getPost('governmentjurisdiction') ?? '';
             $fields[] = $jurisdiction;
-    
+
             $types = [
                 'createddissolved' => 'Government',
                 'eventtype' => 'Event',
@@ -133,7 +133,7 @@ class Statistics extends BaseController
             ];
             $model = $this->getModelNamespace($this, $types[$for] . 'Model');
             $type = 'getByStatistics' . ($jurisdiction === '' ? 'Nation' : 'State') . 'Whole';
-    
+
             $wholeQuery = $model->$type($fields);
             if ($wholeQuery[0]->datarow === '["x"]') {
                 $wholeQuery = [];
