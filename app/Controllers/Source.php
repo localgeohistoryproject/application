@@ -12,13 +12,6 @@ class Source extends BaseController
 {
     private string $title = 'Source';
 
-    public function noRecord(): void
-    {
-        echo view('core/header', ['title' => $this->title]);
-        echo view('core/norecord');
-        echo view('core/footer');
-    }
-
     public function redirect(int|string $id): RedirectResponse
     {
         return redirect()->to('/' . $this->request->getLocale() . '/source/' . $id . '/', 301);

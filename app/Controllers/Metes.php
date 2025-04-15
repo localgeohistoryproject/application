@@ -10,13 +10,6 @@ class Metes extends BaseController
 {
     private string $title = 'Metes and Bounds Description';
 
-    public function noRecord(): void
-    {
-        echo view('core/header', ['title' => $this->title]);
-        echo view('core/norecord');
-        echo view('core/footer');
-    }
-
     public function redirect(int|string $id): RedirectResponse
     {
         return redirect()->to('/' . $this->request->getLocale() . '/metes/' . $id . '/', 301);

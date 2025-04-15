@@ -86,13 +86,6 @@ class Search extends BaseController
         echo view('core/footer');
     }
 
-    public function noRecord(): void
-    {
-        echo view('core/header', ['title' => $this->title]);
-        echo view('core/norecord');
-        echo view('core/footer');
-    }
-
     public function redirect(): RedirectResponse
     {
         return redirect()->to('/' . $this->request->getLocale() . '/search/', 301);

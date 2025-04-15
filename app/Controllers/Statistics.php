@@ -39,13 +39,6 @@ class Statistics extends BaseController
         echo view('core/footer');
     }
 
-    public function noRecord(): void
-    {
-        echo view('core/header', ['title' => $this->title]);
-        echo view('core/norecord');
-        echo view('core/footer');
-    }
-
     public function redirect(): RedirectResponse
     {
         return redirect()->to('/' . $this->request->getLocale() . '/statistics/', 301);
@@ -53,8 +46,7 @@ class Statistics extends BaseController
 
     public function view(): void
     {
-        echo view('core/header', ['title' => $this->title]);
-
+        $isError = false;
         $by = $this->request->getPost('by');
         $for = $this->request->getPost('for');
         $for = explode('_', $for);
@@ -69,9 +61,7 @@ class Statistics extends BaseController
 
         $searchParameter = [];
         if (!isset($this->byType[$by])) {
-            echo view('core/error');
-            echo view('core/footer');
-            die();
+            $isError = true;
         } else {
             $searchParameter['byType'] = $this->byType[$by];
             $by .= $byExtra;
@@ -99,9 +89,7 @@ class Statistics extends BaseController
         }
 
         if (!isset($this->forType[$for])) {
-            echo view('core/error');
-            echo view('core/footer');
-            die();
+            $isError = true;
         } else {
             $searchParameter = [
                 'Metric' => $this->forType[$for . $byExtra],
@@ -115,12 +103,11 @@ class Statistics extends BaseController
             $EventTypeModel = new EventTypeModel();
             $query = $EventTypeModel->getOneByStatistics($eventType);
             if (count($query) !== 1) {
-                echo view('core/error');
-                echo view('core/footer');
-                die();
+                $isError = true;
+            } else {
+                array_unshift($fields, $eventType);
+                $searchParameter['Event Type'] = $query[0]->eventtypeshort;
             }
-            array_unshift($fields, $eventType);
-            $searchParameter['Event Type'] = $query[0]->eventtypeshort;
         } else {
             $eventType = '';
             array_unshift($fields, $for);
@@ -129,42 +116,47 @@ class Statistics extends BaseController
             }
         }
 
-        if ($dateRange !== '') {
-            $searchParameter['Year' . $dateRangePlural] = $dateRange;
-        }
-
-        $jurisdiction = $this->request->getPost('governmentjurisdiction') ?? '';
-        $fields[] = $jurisdiction;
-
-        $types = [
-            'createddissolved' => 'Government',
-            'eventtype' => 'Event',
-            'mapped' => 'GovernmentShape',
-        ];
-        $model = $this->getModelNamespace($this, $types[$for] . 'Model');
-        $type = 'getByStatistics' . ($jurisdiction === '' ? 'Nation' : 'State') . 'Whole';
-
-        $wholeQuery = $model->$type($fields);
-        if ($wholeQuery[0]->datarow === '["x"]') {
-            $wholeQuery = [];
-            $query = [];
+        if ($isError) {
+            $this->isError();
         } else {
-            $type = str_replace('Whole', 'Part', $type);
-            $query = $model->$type($fields);
-            foreach ($query as $key => $row) {
-                $query[$key] = '"' . $row->series . '":{"xrow":' . $row->xrow . ',"yrow":' . $row->yrow . ',"ysum":' . $row->ysum . '}';
+            if ($dateRange !== '') {
+                $searchParameter['Year' . $dateRangePlural] = $dateRange;
             }
-            $query = '{' . implode(',', $query) . '}';
+
+            $jurisdiction = $this->request->getPost('governmentjurisdiction') ?? '';
+            $fields[] = $jurisdiction;
+
+            $types = [
+                'createddissolved' => 'Government',
+                'eventtype' => 'Event',
+                'mapped' => 'GovernmentShape',
+            ];
+            $model = $this->getModelNamespace($this, $types[$for] . 'Model');
+            $type = 'getByStatistics' . ($jurisdiction === '' ? 'Nation' : 'State') . 'Whole';
+
+            $wholeQuery = $model->$type($fields);
+            if ($wholeQuery[0]->datarow === '["x"]') {
+                $wholeQuery = [];
+                $query = [];
+            } else {
+                $type = str_replace('Whole', 'Part', $type);
+                $query = $model->$type($fields);
+                foreach ($query as $key => $row) {
+                    $query[$key] = '"' . $row->series . '":{"xrow":' . $row->xrow . ',"yrow":' . $row->yrow . ',"ysum":' . $row->ysum . '}';
+                }
+                $query = '{' . implode(',', $query) . '}';
+            }
+            echo view('core/header', ['title' => $this->title]);
+            echo view('core/parameter', ['searchParameter' => $searchParameter]);
+            echo view('statistics/view', [
+                'wholeQuery' => $wholeQuery,
+                'isContemporaneous' => ($searchParameter['Grouped By'] === 'Contemporaneous Jurisdictions'),
+                'notEvent' => ($searchParameter['Metric'] === 'Events by Event Type'),
+                'query' => $query,
+                'jurisdiction' => $jurisdiction,
+            ]);
+            echo view('core/chartjs', ['query' => $wholeQuery, 'xLabel' => 'Year', 'yLabel' => ($for === 'createddissolved' ? 'Governments' : 'Events')]);
+            echo view('core/footer');
         }
-        echo view('core/parameter', ['searchParameter' => $searchParameter]);
-        echo view('statistics/view', [
-            'wholeQuery' => $wholeQuery,
-            'isContemporaneous' => ($searchParameter['Grouped By'] === 'Contemporaneous Jurisdictions'),
-            'notEvent' => ($searchParameter['Metric'] === 'Events by Event Type'),
-            'query' => $query,
-            'jurisdiction' => $jurisdiction,
-        ]);
-        echo view('core/chartjs', ['query' => $wholeQuery, 'xLabel' => 'Year', 'yLabel' => ($for === 'createddissolved' ? 'Governments' : 'Events')]);
-        echo view('core/footer');
     }
 }

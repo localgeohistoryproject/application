@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.1.1] - 2025-04-15
+
+### Fixed
+
+- Missing 404 status codes when error or no record.
+
 ## [3.1.0] - 2025-04-12
 
 ### Added
@@ -444,6 +450,7 @@
 
 - Public release of the Local Geohistory Project: Application repository.
 
+[3.1.1]: https://github.com/localgeohistoryproject/application/compare/v3.1.0...v3.1.1
 [3.1.0]: https://github.com/localgeohistoryproject/application/compare/v3.0.3...v3.1.0
 [3.0.3]: https://github.com/localgeohistoryproject/application/compare/v3.0.2...v3.0.3
 [3.0.2]: https://github.com/localgeohistoryproject/application/compare/v3.0.1...v3.0.2
