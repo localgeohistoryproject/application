@@ -9,11 +9,13 @@ services:
                 DOCKER_PHP_PERSONAL: ${DOCKER_PHP_PERSONAL}
         restart: always
         environment:
+            COMPOSER_CACHE_DIR: "/var/www/composer-cache"
             TZ: ${TZ}
         ports:
             - ${app_port}:${host_port}
         volumes:
             - ./app:/var/www/app
+            - ./composer-cache:/var/www/composer-cache
             - ./${DOCKER_COMPOSER}composer.json:/var/www/composer.json
             - ./${DOCKER_COMPOSER}composer.lock:/var/www/composer.lock
             - ./.env:/var/www/.env
