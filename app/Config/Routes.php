@@ -8,6 +8,9 @@ use CodeIgniter\Router\RouteCollection;
 
 if (mb_strpos(base_url(), $_ENV['app_baseLocalGeohistoryProjectUrl']) !== false) {
     $routes->get('robots.txt', 'Bot::robotsTxt');
+    $routes->get('{locale}/sitemap.txt', 'Sitemap::viewOther');
+    $routes->get('{locale}/sitemap.xml', 'Sitemap::index');
+    $routes->get('{locale}/(adjudication|area|event|government|governmentidentifier|governmentsource|law|metes|reporter|source)/sitemap.txt', 'Sitemap::view/$1');
 
     $controllerRegex = ['adjudication', 'area', 'event', 'government', 'governmentsource', 'law', 'metes', 'reporter', 'source'];
     $controllerRegexOverride = ['event', 'government', 'law', 'metes'];

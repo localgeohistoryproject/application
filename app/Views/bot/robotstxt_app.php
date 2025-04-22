@@ -14,3 +14,5 @@ Allow: /en/status/$
 
 # Do not scrape -- you can build the website yourself!
 # Visit https://opendata.localgeohistory.pro/
+
+Sitemap: https://www.localgeohistory.pro/en/sitemap.xml

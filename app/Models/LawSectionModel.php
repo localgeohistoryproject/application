@@ -225,6 +225,24 @@ class LawSectionModel extends BaseModel
         return $this->getObject($query);
     }
 
+
+
+    public function getSitemap(): array
+    {
+        $query = <<<QUERY
+                SELECT DISTINCT lawsection.lawsectionslug AS slug
+                FROM geohistory.lawsection
+                UNION DISTINCT
+                SELECT DISTINCT lawalternatesection.lawalternatesectionslug AS slug
+                FROM geohistory.lawalternatesection
+                ORDER BY 1
+            QUERY;
+
+        $query = $this->db->query($query);
+
+        return $this->getObject($query);
+    }
+
     private function getSlugId(string $id): int
     {
         $query = <<<QUERY

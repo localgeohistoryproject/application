@@ -132,4 +132,24 @@ class GovernmentIdentifierModel extends BaseModel
 
         return $this->getObject($query);
     }
+
+    public function getSitemap(): array
+    {
+        $query = <<<QUERY
+                SELECT DISTINCT lower(
+                    governmentidentifiertype.governmentidentifiertypeslug || '/' ||
+                    governmentidentifier.governmentidentifierprefix ||
+                    governmentidentifiertype.governmentidentifiertypeprefixdelimiter ||
+                    governmentidentifier.governmentidentifier
+                ) AS slug
+                FROM geohistory.governmentidentifier
+                JOIN geohistory.governmentidentifiertype
+                    ON governmentidentifier.governmentidentifiertype = governmentidentifiertype.governmentidentifiertypeid
+                ORDER BY 1
+            QUERY;
+
+        $query = $this->db->query($query);
+
+        return $this->getObject($query);
+    }
 }

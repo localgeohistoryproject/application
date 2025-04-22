@@ -109,6 +109,19 @@ class AdjudicationModel extends BaseModel
         return $this->getObject($query);
     }
 
+    public function getSitemap(): array
+    {
+        $query = <<<QUERY
+                SELECT DISTINCT adjudication.adjudicationslug AS slug
+                FROM geohistory.adjudication
+                ORDER BY 1
+            QUERY;
+
+        $query = $this->db->query($query);
+
+        return $this->getObject($query);
+    }
+
     private function getSlugId(string $id): int
     {
         $query = <<<QUERY

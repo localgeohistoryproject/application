@@ -63,6 +63,19 @@ class AdjudicationSourceCitationModel extends BaseModel
         return $this->getObject($query);
     }
 
+    public function getSitemap(): array
+    {
+        $query = <<<QUERY
+                SELECT DISTINCT adjudicationsourcecitation.adjudicationsourcecitationslug AS slug
+                FROM geohistory.adjudicationsourcecitation
+                ORDER BY 1
+            QUERY;
+
+        $query = $this->db->query($query);
+
+        return $this->getObject($query);
+    }
+
     private function getSlugId(string $id): int
     {
         $query = <<<QUERY

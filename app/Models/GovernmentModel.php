@@ -1516,6 +1516,20 @@ class GovernmentModel extends BaseModel
         return [];
     }
 
+    public function getSitemap(): array
+    {
+        $query = <<<QUERY
+                SELECT DISTINCT government.governmentslugsubstitute AS slug
+                FROM geohistory.government
+                WHERE government.governmentslugsubstitute IS NOT NULL
+                ORDER BY 1
+            QUERY;
+
+        $query = $this->db->query($query);
+
+        return $this->getObject($query);
+    }
+
     public function getSlug(int $id): string
     {
         $query = <<<QUERY
