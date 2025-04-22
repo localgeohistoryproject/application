@@ -18,8 +18,6 @@ class Sitemap extends BaseController
         'source' => 'SourceCitation',
     ];
 
-    private string $title = 'Sitemap';
-
     public function index(): void
     {
         $query = array_keys($this->model);
@@ -59,7 +57,7 @@ class Sitemap extends BaseController
             'status/',
         ];
 
-        foreach($this->getProductionJurisdictions() as $jurisdiction) {
+        foreach ($this->getProductionJurisdictions() as $jurisdiction) {
             $query[] = 'about/' . $jurisdiction . '/';
         }
 
