@@ -6,6 +6,10 @@
 
 - Persist files in COMPOSER_CACHE_DIR on host machine.
 
+### Fixed
+
+- Jurisdiction list for production environment.
+
 ## [3.1.1] - 2025-04-15
 
 ### Fixed
