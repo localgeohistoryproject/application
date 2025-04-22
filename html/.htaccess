@@ -10,6 +10,8 @@ RewriteRule ^.*$ - [L]
 
 RewriteCond %{REQUEST_URI} !(.*)/$
 RewriteCond %{REQUEST_URI} !(robots.txt)$
+RewriteCond %{REQUEST_URI} !(.*sitemap.txt)$
+RewriteCond %{REQUEST_URI} !(.*sitemap.xml)$
 # dont rewrite if there was posted here!
 RewriteCond %{REQUEST_METHOD} !POST 
 RewriteRule ^(.*[^/])$ $1/ [L,R=301]

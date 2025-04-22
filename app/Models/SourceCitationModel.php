@@ -97,6 +97,19 @@ class SourceCitationModel extends BaseModel
         return [];
     }
 
+    public function getSitemap(): array
+    {
+        $query = <<<QUERY
+                SELECT DISTINCT sourcecitation.sourcecitationslug AS slug
+                FROM geohistory.sourcecitation
+                ORDER BY 1
+            QUERY;
+
+        $query = $this->db->query($query);
+
+        return $this->getObject($query);
+    }
+
     private function getSlugId(string $id): int
     {
         $query = <<<QUERY

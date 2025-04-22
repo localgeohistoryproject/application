@@ -5,6 +5,8 @@ app/Config/**
 !app/Config/Paths.php
 !app/Config/Routes.php
 !app/Config/Services.php
+composer-cache/**
+!composer-cache/.gitkeep
 .env
 html/asset/*
 !html/asset/application**

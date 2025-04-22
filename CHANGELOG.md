@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.1.2] - 2025-04-21
+
+### Added
+
+- Sitemap for search engines.
+
+### Changed
+
+- Persist files in COMPOSER_CACHE_DIR on host machine.
+
+### Fixed
+
+- Jurisdiction list for production environment.
+- Robots.txt paths where pages moved.
+
 ## [3.1.1] - 2025-04-15
 
 ### Fixed
@@ -450,6 +465,7 @@
 
 - Public release of the Local Geohistory Project: Application repository.
 
+[3.1.2]: https://github.com/localgeohistoryproject/application/compare/v3.1.1...v3.1.2
 [3.1.1]: https://github.com/localgeohistoryproject/application/compare/v3.1.0...v3.1.1
 [3.1.0]: https://github.com/localgeohistoryproject/application/compare/v3.0.3...v3.1.0
 [3.0.3]: https://github.com/localgeohistoryproject/application/compare/v3.0.2...v3.0.3
