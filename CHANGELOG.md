@@ -9,6 +9,7 @@
 ### Fixed
 
 - Jurisdiction list for production environment.
+- Robots.txt paths where pages moved.
 
 ## [3.1.1] - 2025-04-15
 
