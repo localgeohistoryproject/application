@@ -6,6 +6,10 @@
 
 - Minor slug formatting issues.
 
+### Fixed
+
+- Slug refresh query for gis.governmentshape.
+
 ## [3.1.2] - 2025-04-21
 
 ### Added

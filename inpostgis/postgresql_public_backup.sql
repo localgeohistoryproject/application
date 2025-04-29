@@ -1415,7 +1415,7 @@ CREATE FUNCTION gis.refresh_view() RETURNS void
 BEGIN
 RAISE INFO '%', clock_timestamp();
     UPDATE gis.governmentshape
-    SET governmentshapetag = governmentshapetag || '';
+    SET governmentmunicipality = governmentmunicipality;
 RAISE INFO '%', clock_timestamp();
     TRUNCATE gis.deleted_affectedgovernmentgis;
 RAISE INFO '%', clock_timestamp();
