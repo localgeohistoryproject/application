@@ -6,7 +6,7 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
-if (mb_strpos(base_url(), $_ENV['app_baseEnvironmentProjectUrl']) !== false) {
+if (mb_strpos(base_url(), $_ENV['app_baseRouteProjectUrl']) !== false) {
     $routes->get('robots.txt', 'Bot::robotsTxt');
     $routes->get('{locale}/sitemap.txt', 'Sitemap::viewOther');
     $routes->get('{locale}/sitemap.xml', 'Sitemap::index');
@@ -83,7 +83,7 @@ if (mb_strpos(base_url(), $_ENV['app_baseEnvironmentProjectUrl']) !== false) {
  * needing to reload it.
  */
 
-if (mb_strpos(base_url(), $_ENV['app_baseEnvironmentProjectUrl']) !== false) {
+if (mb_strpos(base_url(), $_ENV['app_baseRouteProjectUrl']) !== false) {
     $routes->get('{locale}', 'Welcome');
     $routes->get('/', 'Welcome::language');
     $routes->set404Override(\App\Controllers\Fourofour::class);

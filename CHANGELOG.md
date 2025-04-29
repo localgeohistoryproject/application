@@ -11,7 +11,7 @@
 
 - Map overlay layer to always use current base URL.
 - Minor slug formatting issues.
-- Split .env variable app_baseLocalGeohistoryProjectUrl into app_baseEnvironmentProjectUrl and app_baseCanonicalProjectUrl.
+- Split .env variable app_baseLocalGeohistoryProjectUrl into app_baseCanonicalProjectUrl and app_baseRouteProjectUrl.
 
 ### Fixed
 
