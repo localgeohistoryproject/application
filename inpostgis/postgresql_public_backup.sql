@@ -1595,7 +1595,7 @@ CASE
         ELSE 1
     END)::double precision
 END)::integer) STORED,
-    eventslug text GENERATED ALWAYS AS (geohistory.array_to_slug((ARRAY[eventlong])::text[])) STORED,
+    eventslug text GENERATED ALWAYS AS (geohistory.array_to_slug(ARRAY[(eventlong)::text])) STORED,
     CONSTRAINT event_check CHECK (((eventfrom <= eventto) AND ((eventlong)::text <> ''::text) AND (((eventgranted = 17) AND (government IS NOT NULL)) OR ((eventgranted <> 17) AND (government IS NULL)))))
 );
 
@@ -1837,7 +1837,7 @@ END)) STORED,
 CASE
     WHEN ((governmentstatus)::text = 'placeholder'::text) THEN NULL::text
     WHEN ((governmentlevel < 3) AND ((governmentabbreviation)::text <> ''::text)) THEN geohistory.array_to_slug(ARRAY[(governmentabbreviation)::text])
-    ELSE geohistory.array_to_slug((ARRAY[geohistory.governmentcurrentleadstate(governmentid, 1), governmentarticle, governmentname, governmentnumber, (
+    ELSE geohistory.array_to_slug(ARRAY[(geohistory.governmentcurrentleadstate(governmentid, 1))::text, (governmentarticle)::text, (governmentname)::text, (governmentnumber)::text, ((
     CASE
         WHEN (governmentlevel > 1) THEN (
         CASE
@@ -1845,17 +1845,17 @@ CASE
             ELSE governmenttype
         END)::text
         ELSE ''::text
-    END)::character varying,
+    END)::character varying)::text, (
     CASE
         WHEN governmentnotecurrentleadparent THEN geohistory.governmentname(governmentcurrentleadparent)
         ELSE ''::character varying
-    END, (
+    END)::text, ((
     CASE
         WHEN (((governmentnotecreation)::text <> ''::text) AND ((governmentnotedissolution)::text <> ''::text)) THEN (((governmentnotecreation)::text || '-'::text) || (governmentnotedissolution)::text)
         WHEN ((governmentnotecreation)::text <> ''::text) THEN ('since-'::text || (governmentnotecreation)::text)
         WHEN ((governmentnotedissolution)::text <> ''::text) THEN ('thru-'::text || (governmentnotedissolution)::text)
         ELSE ''::text
-    END)::character varying, ((governmentstatus)::text)::character varying])::text[])
+    END)::character varying)::text, (((governmentstatus)::text)::character varying)::text])
 END) STORED,
     governmentslugsubstitute text GENERATED ALWAYS AS (geohistory.governmentslugsubstitute(governmentid, 1)) STORED,
     governmentshortshort text GENERATED ALWAYS AS (((
@@ -2077,7 +2077,7 @@ CREATE TABLE gis.governmentshape (
     governmentshapeplsstownship integer,
     governmentward integer,
     governmentschooldistrict integer,
-    governmentshapeslug text GENERATED ALWAYS AS (geohistory.array_to_slug((ARRAY[geohistory.governmentslug(COALESCE(governmentsubmunicipality, governmentmunicipality)), (public.st_geohash(public.st_pointonsurface(governmentshapegeometry), 9))::character varying])::text[])) STORED
+    governmentshapeslug text GENERATED ALWAYS AS (geohistory.array_to_slug(ARRAY[(geohistory.governmentslug(COALESCE(governmentsubmunicipality, governmentmunicipality)))::text, ((public.st_geohash(public.st_pointonsurface(governmentshapegeometry), 9))::character varying)::text])) STORED
 );
 ALTER TABLE ONLY gis.governmentshape ALTER COLUMN governmentshapegeometry SET STORAGE EXTERNAL;
 
@@ -2336,11 +2336,11 @@ CREATE TABLE geohistory.governmentsource (
     sourcecitationpagefrom character varying(5) DEFAULT ''::character varying NOT NULL,
     sourcecitationpageto character varying(5) DEFAULT ''::character varying NOT NULL,
     governmentsourcename text DEFAULT ''::text NOT NULL,
-    governmentsourceslug text GENERATED ALWAYS AS (geohistory.array_to_slug((ARRAY[geohistory.governmentslug(government), governmentsourcebody, governmentsourcetype, governmentsourcenumber, governmentsourceterm, (
+    governmentsourceslug text GENERATED ALWAYS AS (geohistory.array_to_slug(ARRAY[(geohistory.governmentslug(government))::text, (governmentsourcebody)::text, (governmentsourcetype)::text, (governmentsourcenumber)::text, (governmentsourceterm)::text, ((
 CASE
     WHEN ((governmentsourcevolume)::text <> ''::text) THEN ('v'::text || (governmentsourcevolume)::text)
     ELSE ''::text
-END)::character varying, (geohistory.rangeformat((governmentsourcepagefrom)::text, (governmentsourcepageto)::text))::character varying, (governmentsourcename)::character varying])::text[])) STORED,
+END)::character varying)::text, ((geohistory.rangeformat((governmentsourcepagefrom)::text, (governmentsourcepageto)::text))::character varying)::text, ((governmentsourcename)::character varying)::text])) STORED,
     hassource boolean GENERATED ALWAYS AS ((source IS NOT NULL)) STORED,
     governmentsourcepage text GENERATED ALWAYS AS (geohistory.rangeformat((governmentsourcepagefrom)::text, (governmentsourcepageto)::text)) STORED,
     sourcecitationpage text GENERATED ALWAYS AS (geohistory.rangeformat((sourcecitationpagefrom)::text, (sourcecitationpageto)::text)) STORED,
