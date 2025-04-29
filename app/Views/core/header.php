@@ -1,4 +1,5 @@
 <?php
+$mastodon = $_ENV['mastodon'] ?? '';
 $title ??= '';
 $url ??= '';
 ?>
@@ -19,8 +20,7 @@ $url ??= '';
 
             gtag('config', '<?= $_ENV['analytics_google'] ?>');
         </script>
-    <?php } ?>
-    <?php if (($title !== 'Welcome' && $url === '') || $_ENV['app_baseEnvironmentProjectUrl'] !== $_ENV['app_baseCanonicalProjectUrl']) { ?>
+    <?php } if (($title !== 'Welcome' && $url === '') || $_ENV['app_baseEnvironmentProjectUrl'] !== $_ENV['app_baseCanonicalProjectUrl']) { ?>
     <meta name="robots" content="noindex">
     <?php } ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -28,6 +28,8 @@ $url ??= '';
     <title><?= (isset($pageTitle) ? $pageTitle . ' | ' : '') . (isset($pageTitleType) ? $pageTitleType . ' | ' : '') . $title ?> | <?= lang('Template.projectName') ?></title>
     <?php if ($title === 'Welcome' || $url !== '') { ?>
     <link rel="canonical" href="<?= $_ENV['app_baseCanonicalProjectUrl'] ?>/<?= \Config\Services::request()->getLocale() ?>/<?= $url ?>">
+    <?php } if ($title === 'Welcome' && $mastodon !== '') { ?>
+    <link rel="me" href="<?= $mastodon ?>">
     <?php } ?>
     <link rel="preload" href="/asset/font/lora-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
     <link rel="preload" href="/asset/font/lora-semibold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
