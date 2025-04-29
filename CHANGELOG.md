@@ -5,6 +5,7 @@
 ### Changed
 
 - Minor slug formatting issues.
+- Split .env variable app_baseLocalGeohistoryProjectUrl into app_baseEnvironmentProjectUrl and app_baseCanonicalProjectUrl.
 
 ### Fixed
 

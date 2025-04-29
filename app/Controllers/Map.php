@@ -83,7 +83,7 @@ class Map extends BaseController
         $this->response->setHeader('Cache-Control', 'max-age=86400');
         $this->response->setHeader('Content-Type', 'application/json');
         $json = json_decode(file_get_contents(__DIR__ . '/../../html/asset/application/map/map_style_overlay.json'), true);
-        $json['sources']['localgeohistoryproject']['tiles'][0] = getenv('app_baseLocalGeohistoryProjectUrl') . '/' . \Config\Services::request()->getLocale() . $json['sources']['localgeohistoryproject']['tiles'][0];
+        $json['sources']['localgeohistoryproject']['tiles'][0] = getenv('app_baseEnvironmentProjectUrl') . '/' . \Config\Services::request()->getLocale() . $json['sources']['localgeohistoryproject']['tiles'][0];
         echo json_encode($json);
     }
 
