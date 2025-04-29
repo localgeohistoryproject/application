@@ -18,6 +18,7 @@ class Governmentsource extends BaseController
 
     public function view(int|string $id): void
     {
+        $url = 'governmentsource/' . $id . '/';
         $id = $this->getIdInt($id);
         $GovernmentSourceModel = new GovernmentSourceModel();
         $query = $GovernmentSourceModel->getDetail($id);
@@ -25,7 +26,7 @@ class Governmentsource extends BaseController
             $this->noRecord();
         } else {
             $id = $query[0]->governmentsourceid;
-            echo view('core/header', ['title' => $this->title]);
+            echo view('core/header', ['title' => $this->title, 'url' => $url]);
             echo view('governmentsource/table', ['query' => $query, 'type' => 'source']);
             echo view('source/table', ['query' => $query, 'hasLink' => $this->isLive()]);
             $SourceItemPartModel = new SourceItemPartModel();

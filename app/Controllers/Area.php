@@ -79,8 +79,11 @@ class Area extends BaseController
 
     public function view(int|string $id, float $y = 0, float $x = 0, string $addressText = ''): void
     {
+        $url = '';
         if (($this->isLive() || $y !== 0.0 || $x !== 0.0) && is_string($id) && preg_match('/^\d{1,9}$/', $id) === 1) {
             $id = (int) $id;
+        } else {
+            $url = 'area/' . $id . '/';
         }
         $GovernmentShapeModel = new GovernmentShapeModel();
         $currentQuery = $GovernmentShapeModel->getDetail($id);
@@ -104,7 +107,7 @@ class Area extends BaseController
                     break;
                 }
             }
-            echo view('core/header', ['title' => $this->title, 'pageTitle' => $pageTitle]);
+            echo view('core/header', ['title' => $this->title, 'pageTitle' => $pageTitle, 'url' => $url]);
             $searchParameter = [];
             if ($addressText !== '') {
                 $searchParameter['Address'] = $addressText;

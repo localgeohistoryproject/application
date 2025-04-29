@@ -20,6 +20,7 @@ class Adjudication extends BaseController
 
     public function view(int|string $id): void
     {
+        $url = 'adjudication/' . $id . '/';
         $id = $this->getIdInt($id);
         $AdjudicationModel = new AdjudicationModel();
         $query = $AdjudicationModel->getDetail($id);
@@ -27,7 +28,7 @@ class Adjudication extends BaseController
             $this->noRecord();
         } else {
             $id = $query[0]->adjudicationid;
-            echo view('core/header', ['title' => $this->title, 'pageTitle' => $query[0]->adjudicationtitle]);
+            echo view('core/header', ['title' => $this->title, 'pageTitle' => $query[0]->adjudicationtitle, 'url' => $url]);
             echo view('adjudication/view', ['query' => $query]);
             $AdjudicationLocationModel = new AdjudicationLocationModel();
             echo view('adjudication/location', ['query' => $AdjudicationLocationModel->getByAdjudication($id)]);

@@ -17,6 +17,7 @@ class Law extends BaseController
 
     public function view(int|string $id): void
     {
+        $url = 'law/' . $id . '/';
         if (is_string($id) && str_ends_with($id, '-alternate')) {
             $function = 'getByLawAlternateSection';
             $LawSectionModel = new \App\Models\LawAlternateSectionModel();
@@ -30,7 +31,7 @@ class Law extends BaseController
             $this->noRecord();
         } else {
             $id = $query[0]->lawsectionid;
-            echo view('core/header', ['title' => $this->title, 'pageTitle' => $query[0]->lawsectioncitation]);
+            echo view('core/header', ['title' => $this->title, 'pageTitle' => $query[0]->lawsectioncitation, 'url' => $url]);
             echo view('law/view', ['query' => $query]);
             echo view('source/table', ['query' => $query, 'hasLink' => false]);
             if ($query[0]->url !== '') {

@@ -25,6 +25,7 @@ class Event extends BaseController
 
     public function view(int|string $id): void
     {
+        $url = 'event/' . $id . '/';
         $id = $this->getIdInt($id);
         $EventModel = new EventModel();
         $query = $EventModel->getDetail($id);
@@ -33,7 +34,7 @@ class Event extends BaseController
         } else {
             $id = $query[0]->eventid;
             $eventIsMapped = ($query[0]->eventismapped === 't');
-            echo view('core/header', ['title' => $this->title, 'pageTitle' => $query[0]->eventlong, 'pageTitleType' => $query[0]->eventtypeshort]);
+            echo view('core/header', ['title' => $this->title, 'pageTitle' => $query[0]->eventlong, 'pageTitleType' => $query[0]->eventtypeshort, 'url' => $url]);
             echo view('event/view', ['query' => $query]);
             $AffectedGovernmentGroupModel = new AffectedGovernmentGroupModel();
             $affectedGovernment = $AffectedGovernmentGroupModel->getByEventGovernment($id);
