@@ -19,6 +19,7 @@ class Source extends BaseController
 
     public function view(int|string $id): void
     {
+        $url = 'source/' . $id . '/';
         $id = $this->getIdInt($id);
         $SourceCitationModel = new SourceCitationModel();
         $query = $SourceCitationModel->getDetail($id);
@@ -27,7 +28,7 @@ class Source extends BaseController
         } else {
             $id = $query[0]->sourcecitationid;
             $pageTitle = $query[0]->sourceabbreviation . ($query[0]->sourcecitationpage === '' ? '' : ' ' . $query[0]->sourcecitationpage);
-            echo view('core/header', ['title' => $this->title, 'pageTitle' => $pageTitle]);
+            echo view('core/header', ['title' => $this->title, 'pageTitle' => $pageTitle, 'url' => $url]);
             echo view('source/table_citation', ['query' => $query, 'hasColor' => false, 'hasLink' => false, 'title' => 'Detail']);
             echo view('source/table', ['query' => $query, 'hasLink' => $this->isLive()]);
             if ($query[0]->url !== '') {

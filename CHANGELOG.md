@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.1.3] - 2025-04-28
+
+### Added
+
+- Canonical link tags to page headers.
+- Noindex meta tags to page headers when not accessing the page via a canonical domain name.
+
+### Changed
+
+- Map overlay layer to always use current base URL.
+- Minor slug formatting issues.
+- Split .env variable app_baseLocalGeohistoryProjectUrl into app_baseCanonicalProjectUrl and app_baseRouteProjectUrl.
+
+### Fixed
+
+- Mastodon link.
+- Slug refresh query for gis.governmentshape.
+
 ## [3.1.2] - 2025-04-21
 
 ### Added
@@ -465,6 +483,7 @@
 
 - Public release of the Local Geohistory Project: Application repository.
 
+[3.1.3]: https://github.com/localgeohistoryproject/application/compare/v3.1.2...v3.1.3
 [3.1.2]: https://github.com/localgeohistoryproject/application/compare/v3.1.1...v3.1.2
 [3.1.1]: https://github.com/localgeohistoryproject/application/compare/v3.1.0...v3.1.1
 [3.1.0]: https://github.com/localgeohistoryproject/application/compare/v3.0.3...v3.1.0

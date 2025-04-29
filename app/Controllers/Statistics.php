@@ -28,7 +28,7 @@ class Statistics extends BaseController
 
     public function index(): void
     {
-        echo view('core/header', ['title' => $this->title]);
+        echo view('core/header', ['title' => $this->title, 'url' => 'statistics/']);
         echo view('core/ui');
         $EventTypeModel = new EventTypeModel();
         $GovernmentModel = new GovernmentModel();

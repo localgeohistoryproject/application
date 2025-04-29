@@ -23,6 +23,7 @@ class Government extends BaseController
 
     public function view(int|string $id, bool $isHistory = false): void
     {
+        $url = 'government/' . $id . '/';
         $id = $this->getIdInt($id);
         $GovernmentMapStatusModel = $this->getModelNamespace($this, 'GovernmentMapStatusModel');
         $GovernmentModel = $this->getModelNamespace($this, 'GovernmentModel');
@@ -40,7 +41,7 @@ class Government extends BaseController
             $id = $query[0]->governmentid;
             $isMultiple = ($query[0]->governmentsubstitutemultiple === 't');
             $allId = $GovernmentModel->getIdByGovernment($id);
-            echo view('core/header', ['title' => $this->title, 'pageTitle' => $query[0]->governmentlong]);
+            echo view('core/header', ['title' => $this->title, 'pageTitle' => $query[0]->governmentlong, 'url' => $url]);
             $isMunicipalityOrLower = ($query[0]->governmentlevel === 'municipality or lower');
             $isCountyOrLower = ($query[0]->governmentlevel === 'municipality or lower' || $query[0]->governmentlevel === 'county');
             $isCountyOrState = ($query[0]->governmentlevel === 'state' || $query[0]->governmentlevel === 'county');

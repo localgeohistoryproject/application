@@ -1,11 +1,7 @@
 <?php
 $icons ??= [];
-$mastodon = $_ENV['mastodon'] ?? '';
 $welcome ??= '';
 ?>
-<?php if ($mastodon !== '') { ?>
-<link rel="me" href="<?= $mastodon ?>" />
-<?php } ?>
 <div class="push">&nbsp;</div>
 <div id="welcomecontainer">
     <div id="welcometext" class="welcomecontent"><?= $welcome ?></div>

@@ -10,7 +10,7 @@ class Disclaimer extends BaseController
 
     public function index(): void
     {
-        echo view('core/header', ['title' => $this->title]);
+        echo view('core/header', ['title' => $this->title, 'url' => 'disclaimer/']);
         $DocumentationModel = new DocumentationModel();
         echo view('disclaimer/index', ['query' => $DocumentationModel->getDisclaimer()]);
         echo view('core/footer');

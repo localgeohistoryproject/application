@@ -19,6 +19,7 @@ class Reporter extends BaseController
 
     public function view(int|string $id): void
     {
+        $url = 'reporter/' . $id . '/';
         $id = $this->getIdInt($id);
         $AdjudicationSourceCitationModel = new AdjudicationSourceCitationModel();
         $query = $AdjudicationSourceCitationModel->getDetail($id);
@@ -26,7 +27,7 @@ class Reporter extends BaseController
             $this->noRecord();
         } else {
             $id = $query[0]->adjudicationsourcecitationid;
-            echo view('core/header', ['title' => $this->title]);
+            echo view('core/header', ['title' => $this->title, 'url' => $url]);
             echo view('reporter/table', ['query' => $query, 'hasLink' => false, 'title' => 'Detail']);
             echo view('source/table', ['query' => $query, 'hasLink' => false]);
             echo view('reporter/authorship', ['query' => $query]);

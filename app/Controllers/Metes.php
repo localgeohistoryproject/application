@@ -17,6 +17,7 @@ class Metes extends BaseController
 
     public function view(int|string $id): void
     {
+        $url = 'metes/' . $id . '/';
         $id = $this->getIdInt($id);
         $MetesDescriptionModel = new MetesDescriptionModel();
         $areaQuery = $MetesDescriptionModel->getDetail($id);
@@ -30,7 +31,7 @@ class Metes extends BaseController
                 $jurisdictions = $AffectedGovernmentGroupModel->getByEventGovernment($areaQuery[0]->eventid);
                 $jurisdictions = $jurisdictions['jurisdictions'];
             }
-            echo view('core/header', ['title' => $this->title, 'pageTitle' => $areaQuery[0]->metesdescriptionlong]);
+            echo view('core/header', ['title' => $this->title, 'pageTitle' => $areaQuery[0]->metesdescriptionlong, 'url' => $url]);
             echo view('metes/table', ['query' => $areaQuery, 'hasLink' => false, 'title' => 'Detail']);
             $hasMap = false;
             $hasMetes = false;

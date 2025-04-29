@@ -15,6 +15,7 @@ class Governmentidentifier extends BaseController
             $this->response->setStatusCode(301);
             return redirect()->to("/" . $this->request->getLocale() . '/governmentidentifier/' . $type . '/' . strtolower($id) . '/');
         }
+        $url = 'governmentidentifier/' . $type . '/' . $id . '/';
         $GovernmentIdentifierModel = $this->getModelNamespace($this, 'GovernmentIdentifierModel');
         $query = $GovernmentIdentifierModel->getDetail($type, $id);
         if (count($query) !== 1) {
@@ -22,7 +23,7 @@ class Governmentidentifier extends BaseController
         } else {
             $governmentidentifierids = $query[0]->governmentidentifierids;
             $governments = $query[0]->governments;
-            echo view('core/header', ['title' => $this->title]);
+            echo view('core/header', ['title' => $this->title, 'url' => $url]);
             echo view('governmentidentifier/table', ['query' => $query, 'title' => 'Detail']);
             $GovernmentModel = new GovernmentModel();
             echo view('government/table', ['query' => $GovernmentModel->getByGovernmentIdentifier($governmentidentifierids), 'title' => 'Government', 'type' => 'identifier']);

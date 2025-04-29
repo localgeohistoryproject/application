@@ -63,7 +63,7 @@ class Search extends BaseController
 
     public function index(): void
     {
-        echo view('core/header', ['title' => $this->title]);
+        echo view('core/header', ['title' => $this->title, 'url' => 'search/']);
         echo view('core/ui');
         $EventTypeModel = new EventTypeModel();
         $GovernmentIdentifierTypeModel = new GovernmentIdentifierTypeModel();
