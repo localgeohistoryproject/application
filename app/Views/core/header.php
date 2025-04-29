@@ -20,7 +20,7 @@ $url ??= '';
 
             gtag('config', '<?= $_ENV['analytics_google'] ?>');
         </script>
-    <?php } if (($title !== 'Welcome' && $url === '') || mb_strpos(base_url(), $_ENV['app_baseRouteProjectUrl']) === false) { ?>
+    <?php } if (($title !== 'Welcome' && $url === '') || mb_strpos(base_url(), $_ENV['app_baseCanonicalProjectUrl']) === false) { ?>
     <meta name="robots" content="noindex">
     <?php } ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">

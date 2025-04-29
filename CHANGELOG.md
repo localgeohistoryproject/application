@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.1.4] - 2025-04-29
+
+### Fixed
+
+- Noindex meta tag conditional to reference correct .env variable.
+
 ## [3.1.3] - 2025-04-28
 
 ### Added
@@ -483,6 +489,7 @@
 
 - Public release of the Local Geohistory Project: Application repository.
 
+[3.1.4]: https://github.com/localgeohistoryproject/application/compare/v3.1.3...v3.1.4
 [3.1.3]: https://github.com/localgeohistoryproject/application/compare/v3.1.2...v3.1.3
 [3.1.2]: https://github.com/localgeohistoryproject/application/compare/v3.1.1...v3.1.2
 [3.1.1]: https://github.com/localgeohistoryproject/application/compare/v3.1.0...v3.1.1
