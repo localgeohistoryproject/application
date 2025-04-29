@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Added
+
+- Canonical link tags to page headers.
+- Noindex meta tags to page headers when not accessing the page via a canonical domain name.
+
 ### Changed
 
 - Minor slug formatting issues.
