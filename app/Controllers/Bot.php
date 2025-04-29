@@ -8,7 +8,7 @@ class Bot extends BaseController
 
     public function index(): void
     {
-        echo view('core/header', ['title' => $this->title]);
+        echo view('core/header', ['title' => $this->title, 'url' => 'bot/']);
         echo view('bot/index');
         echo view('core/footer');
     }

@@ -10,7 +10,7 @@ class Status extends BaseController
 
     public function index(): void
     {
-        echo view('core/header', ['title' => $this->title]);
+        echo view('core/header', ['title' => $this->title, 'url' => 'status/']);
         echo view('core/ui');
         $DocumentationModel = new DocumentationModel();
         echo view('status/index', [

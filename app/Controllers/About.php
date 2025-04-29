@@ -11,8 +11,10 @@ class About extends BaseController
 
     public function index(string $jurisdiction = ''): void
     {
+        $url = 'about/';
         if ($jurisdiction !== '') {
             $this->title .= ' (' . strtoupper($jurisdiction) . ')';
+            $url .= $jurisdiction . '/';
         }
         $DocumentationModel = new DocumentationModel();
         $jurisdictions = [];
@@ -23,7 +25,7 @@ class About extends BaseController
         if ($query === []) {
             $this->noRecord();
         } else {
-            echo view('core/header', ['title' => $this->title]);
+            echo view('core/header', ['title' => $this->title, 'url' => $url]);
             echo view('about/index', ['query' => $query, 'jurisdictions' => $jurisdictions]);
             echo view('core/footer');
         }

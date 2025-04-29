@@ -10,7 +10,7 @@ class Key extends BaseController
 
     public function index(): void
     {
-        echo view('core/header', ['title' => $this->title]);
+        echo view('core/header', ['title' => $this->title, 'url' => 'key/']);
 
         $keyQueries = [];
 
