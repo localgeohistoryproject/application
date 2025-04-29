@@ -2,6 +2,10 @@
 
 ## [3.1.4] - 2025-04-29
 
+### Changed
+
+- Google Analytics tag omitted when not accessing the page via a canonical domain name.
+
 ### Fixed
 
 - Noindex meta tag conditional to reference correct .env variable.

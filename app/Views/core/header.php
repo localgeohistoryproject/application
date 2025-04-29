@@ -7,7 +7,7 @@ $url ??= '';
 <html lang="<?= \Config\Services::request()->getLocale() ?>">
 
 <head>
-    <?php if (\App\Controllers\BaseController::isLive() === false && ($_ENV['analytics_google'] ?? '') !== '') { ?>
+    <?php if (\App\Controllers\BaseController::isLive() === false && ($_ENV['analytics_google'] ?? '') !== '' && mb_strpos(base_url(), $_ENV['app_baseCanonicalProjectUrl']) !== false) { ?>
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=<?= $_ENV['analytics_google'] ?>"></script>
         <script>
