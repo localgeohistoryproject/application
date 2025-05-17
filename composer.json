@@ -8,15 +8,15 @@
         }
     ],
     "require": {
-        "codeigniter4/framework": "4.6.0"
+        "codeigniter4/framework": "4.6.1"
     },
     "require-dev": {
         "codeigniter/phpstan-codeigniter": "1.5.3",
-        "friendsofphp/php-cs-fixer": "3.73.1",
+        "friendsofphp/php-cs-fixer": "3.75.0",
         "phpstan/extension-installer": "1.4.3",
-        "phpstan/phpstan": "2.1.8",
+        "phpstan/phpstan": "2.1.16",
         "phpstan/phpstan-strict-rules": "2.0.4",
-        "rector/rector": "2.0.10"
+        "rector/rector": "2.0.16"
     },
     "config": {
         "allow-plugins": {
