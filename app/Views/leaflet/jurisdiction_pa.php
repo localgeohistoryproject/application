@@ -4,9 +4,9 @@ var stateImageryPaUrl = 'https://imagery.pasda.psu.edu/arcgis/services/pasda/PEM
 var stateImageryPaAtt = 'Base map: <a href="https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=5158">PASDA</a>.';
 
 var stateImageryPa = L.tileLayer.wms(stateImageryPaUrl, {
-layers: "1",
-attribution: stateImageryPaAtt,
-maxZoom: 20
+    layers: "1",
+    attribution: stateImageryPaAtt,
+    maxZoom: 20
 });
 
 stateBaseMaps["Imagery (PA)"] = stateImageryPa;
@@ -15,11 +15,11 @@ var stateParcelPaUrl = 'https://apps.pasda.psu.edu/arcgis/services/PA_Parcels_Ve
 var stateParcelPaAtt = 'Parcels: <a href="https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=1696">PASDA</a>.';
 
 var stateParcelPa = L.tileLayer.wms(stateParcelPaUrl, {
-layers: "1",
-transparent: true,
-format: "image/png",
-attribution: stateParcelPaAtt,
-minZoom: 12
+    layers: "1",
+    transparent: true,
+    format: "image/png",
+    attribution: stateParcelPaAtt,
+    minZoom: 12
 });
 
 stateOverlayMaps["Parcels (PA)"] = stateParcelPa;

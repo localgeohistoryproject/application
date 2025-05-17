@@ -7,6 +7,6 @@
 <script src="/<?= (\App\Controllers\BaseController::isOnline() ? '/' . getenv('dependency_pmtiles') : 'asset/application/dependency') ?>/pmtiles.js"></script>
 <script>
     let protocol = new pmtiles.Protocol();
-    maplibregl.addProtocol("pmtiles",protocol.tile);
+    maplibregl.addProtocol("pmtiles", protocol.tile);
 </script>
 <?php } ?>

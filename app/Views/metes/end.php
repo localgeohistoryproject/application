@@ -36,7 +36,7 @@ map.fitBounds(<?= ($includeMetes ? 'point' : 'area') ?>layer.getBounds());
     };
 
     Object.keys(stateOverlayMaps).forEach(function (element) {
-    overlayMaps[element] = stateOverlayMaps[element];
+        overlayMaps[element] = stateOverlayMaps[element];
     });
 
     L.control.layers(baseMaps, overlayMaps).addTo(map);
@@ -46,9 +46,9 @@ if ($includeMetes) { ?>
     var info = L.control({position: 'topright'});
 
     info.onAdd = function(map) {
-    this._div = L.DomUtil.create('div', 'info');
-    this.update();
-    return this._div;
+        this._div = L.DomUtil.create('div', 'info');
+        this.update();
+        return this._div;
     };
 
     info.update = function(props) {
