@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 17.4 (Debian 17.4-1.pgdg110+2)
--- Dumped by pg_dump version 17.4 (Ubuntu 17.4-1.pgdg24.04+2)
+-- Dumped from database version 17.5 (Debian 17.5-1.pgdg110+1)
+-- Dumped by pg_dump version 17.5 (Ubuntu 17.5-1.pgdg24.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -161,14 +161,14 @@ CREATE FUNCTION geohistory.array_to_slug(inputarray text[]) RETURNS text
         inputpart record;
         outputarray text[];
     BEGIN
-	    FOR inputpart IN
+        FOR inputpart IN
             SELECT *
             FROM unnest(inputarray)
             WITH ordinality AS t(textpart, keypart)
         LOOP
             inputpart.textpart := lower(public.unaccent(inputpart.textpart));
-			inputpart.textpart := replace(inputpart.textpart, '§', 's');
-			inputpart.textpart := replace(inputpart.textpart, '¶', 'p');
+            inputpart.textpart := replace(inputpart.textpart, '§', 's');
+            inputpart.textpart := replace(inputpart.textpart, '¶', 'p');
             inputpart.textpart := regexp_replace(inputpart.textpart, '[^a-z0-9]', '-', 'g');
             inputpart.textpart := regexp_replace(inputpart.textpart, '[-]+', '-', 'g');
             inputpart.textpart := trim(inputpart.textpart, '-');
@@ -680,7 +680,7 @@ BEGIN
         IF lawcount > 0 THEN
             RAISE EXCEPTION 'Must remove alternate law reference from alternate law sections before changing law reference.';
         END IF;
-	END IF;
+    END IF;
     RETURN NEW;
 END
 $$;
@@ -944,13 +944,13 @@ RAISE INFO '%', clock_timestamp();
     );
 RAISE INFO '%', clock_timestamp();
     DELETE FROM geohistory.affectedgovernmentpart
-	WHERE affectedgovernmentpartid IN (
+    WHERE affectedgovernmentpartid IN (
         SELECT DISTINCT affectedgovernmentpart.affectedgovernmentpartid
         FROM geohistory.affectedgovernmentpart
         LEFT JOIN geohistory.affectedgovernmentgrouppart
             ON affectedgovernmentpart.affectedgovernmentpartid = affectedgovernmentgrouppart.affectedgovernmentpart
         WHERE affectedgovernmentgrouppart.affectedgovernmentpart IS NULL
-	) AND affectedgovernmentpartid NOT IN (
+    ) AND affectedgovernmentpartid NOT IN (
         SELECT DISTINCT affectedgovernmentpart.affectedgovernmentpartid
         FROM geohistory.affectedgovernmentpart
         WHERE affectedgovernmentpart.governmentfrom IS NULL
@@ -971,10 +971,10 @@ RAISE INFO '%', clock_timestamp();
                 government.governmenttype,
                 government.governmentcurrentleadstateid
             FROM geohistory.government
-		    JOIN geohistory.government governmentparent
-		        ON government.governmentcurrentleadparent = governmentparent.governmentid
-		    JOIN geohistory.government governmentparentlead
-		        ON governmentparent.governmentslugsubstitute = governmentparentlead.governmentslug
+            JOIN geohistory.government governmentparent
+                ON government.governmentcurrentleadparent = governmentparent.governmentid
+            JOIN geohistory.government governmentparentlead
+                ON governmentparent.governmentslugsubstitute = governmentparentlead.governmentslug
             GROUP BY 1, 2, 3
             HAVING count(DISTINCT governmentparentlead.governmentid) > 1
         ) governmentgroup
@@ -995,10 +995,10 @@ RAISE INFO '%', clock_timestamp();
                     government.governmenttype,
                     government.governmentcurrentleadstateid
                 FROM geohistory.government
-		        JOIN geohistory.government governmentparent
-		            ON government.governmentcurrentleadparent = governmentparent.governmentid
-		        JOIN geohistory.government governmentparentlead
-		            ON governmentparent.governmentslugsubstitute = governmentparentlead.governmentslug
+                JOIN geohistory.government governmentparent
+                    ON government.governmentcurrentleadparent = governmentparent.governmentid
+                JOIN geohistory.government governmentparentlead
+                    ON governmentparent.governmentslugsubstitute = governmentparentlead.governmentslug
             GROUP BY 1, 2, 3
             HAVING count(DISTINCT governmentparentlead.governmentid) > 1
         ) governmentgroup
@@ -1392,9 +1392,9 @@ CREATE FUNCTION gis.refresh_sequence() RETURNS void
             tablename)
           INTO maxidvalue;
 
-		  EXECUTE 'SELECT pg_catalog.setval($1, $2, false)'
-		  USING columnsequence,
-		    maxidvalue;
+          EXECUTE 'SELECT pg_catalog.setval($1, $2, false)'
+          USING columnsequence,
+            maxidvalue;
 
         END LOOP;
 

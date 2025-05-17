@@ -5,12 +5,17 @@
 ### Changed
 
 - CodeIgniter from 4.6.0 to 4.6.1.
+- Database extract pg_dump and OS versions.
 - DataTables from 2.2.2 to 2.3.1.
 - MapLibre GL JS from 4.7.1 to 5.5.0.
 - MapLibre GL Leaflet from 0.0.22 to 0.1.0.
 - PHP CS Fixer from 3.73.1 to 3.75.0.
 - PHPStan from 2.1.8 to 2.1.16.
 - Rector from 2.0.10 to 2.0.16.
+
+### Fixed
+
+- Whitespace issues in database functions and PHP views.
 
 ## [3.1.4] - 2025-04-29
 
