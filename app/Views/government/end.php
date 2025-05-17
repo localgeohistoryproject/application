@@ -19,16 +19,16 @@ var overlayMaps = {
     "Approximate Current Boundaries": governmentOverlayMap,
     <?php
     $i = 0;
-    if (is_array($layers) && $layers !== []) {
-        foreach ($layers as $key => $layer) {
-            if ($i > 0) {
-                echo ",\n";
-            } else {
-                $i++;
-            }
-            echo "  ",'"', $layer, '": ', $key, 'layer';
+if (is_array($layers) && $layers !== []) {
+    foreach ($layers as $key => $layer) {
+        if ($i > 0) {
+            echo ",\n";
+        } else {
+            $i++;
         }
-    } ?>
+        echo "  ",'"', $layer, '": ', $key, 'layer';
+    }
+} ?>
 
 };
 
