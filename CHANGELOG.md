@@ -15,7 +15,7 @@
 
 ### Fixed
 
-- Whitespace issues in database functions and PHP views.
+- Whitespace issues in database functions, phpstan.neon.dist, and PHP views.
 
 ## [3.1.4] - 2025-04-29
 
