@@ -7,6 +7,7 @@
 - CodeIgniter from 4.6.0 to 4.6.1.
 - Database extract pg_dump and OS versions.
 - DataTables from 2.2.2 to 2.3.1.
+- In database table geohistory.sourcecitation, change column sourcecitationarchivecarton to sourcecitationcontainer, and column sourcecitationarchiveslotfilm to sourcecitationitemlocation.
 - MapLibre GL JS from 4.7.1 to 5.5.0.
 - MapLibre GL Leaflet from 0.0.22 to 0.1.0.
 - PHP CS Fixer from 3.73.1 to 3.75.0.
