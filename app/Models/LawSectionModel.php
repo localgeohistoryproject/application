@@ -113,7 +113,7 @@ class LawSectionModel extends BaseModel
                 UNION
                 SELECT DISTINCT NULL AS lawsectionslug,
                     law.lawapproved,
-                    law.lawcitation AS lawsectioncitation,
+                    replace(replace(law.lawcitation, '@SECTION@'), '@PAGE@') AS lawsectioncitation,
                     'Amended To Add ' || lawsection.lawsectionnewsymbol || CASE
                         WHEN lawsection.lawsectionnewfrom <> lawsection.lawsectionnewto THEN lawsection.lawsectionnewsymbol
                         ELSE ''
