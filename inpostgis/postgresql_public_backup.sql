@@ -2524,7 +2524,7 @@ CREATE TABLE geohistory.lawsectionevent (
     lawsection integer NOT NULL,
     event integer NOT NULL,
     eventrelationship integer NOT NULL,
-    lawsectioneventnotes text,
+    lawsectioneventnotes text DEFAULT ''::text NOT NULL,
     lawgroup integer,
     CONSTRAINT lawsectionevent_check CHECK ((eventrelationship <> ALL (ARRAY[6, 7, 9])))
 );
