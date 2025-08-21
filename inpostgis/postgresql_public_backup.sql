@@ -663,14 +663,16 @@ $$;
 ALTER FUNCTION geohistory.lawgroupsection_deleteupdate() OWNER TO postgres;
 
 --
--- Name: lawsection_update(); Type: FUNCTION; Schema: geohistory; Owner: postgres
+-- Name: lawsection_insertupdate(); Type: FUNCTION; Schema: geohistory; Owner: postgres
 --
 
-CREATE FUNCTION geohistory.lawsection_update() RETURNS trigger
+CREATE FUNCTION geohistory.lawsection_insertupdate() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 DECLARE
     lawcount bigint;
+    multiplesection boolean;
+    sectionsymbol text;
 BEGIN
     IF OLD.law <> NEW.law THEN
         SELECT count(*) INTO lawcount
@@ -680,13 +682,63 @@ BEGIN
         IF lawcount > 0 THEN
             RAISE EXCEPTION 'Must remove alternate law reference from alternate law sections before changing law reference.';
         END IF;
+
+        multiplesection := (NEW.lawsectionfrom = NEW.lawsectionto);
+        sectionsymbol := trim(reverse(split_part(reverse(NEW.lawsectionsymbol), ',', 1)));
+
+        IF multiplesection THEN
+            IF sectionsymbol = '§' THEN
+                NEW.lawsectionsymbol := NEW.lawsectionsymbol || '§';
+            ELSIF sectionsymbol = '¶' THEN
+                NEW.lawsectionsymbol := NEW.lawsectionsymbol || '¶';
+            ELSIF right(sectionsymbol, 1) = '.' AND right(sectionsymbol, 2) <> 's.' THEN
+                NEW.lawsectionsymbol := left(NEW.lawsectionsymbol, length(NEW.lawsectionsymbol) - 1) || 's.';
+            ELSIF sectionsymbol = '' THEN
+                NEW.lawsectionsymbol := '§§';
+            END IF;
+        ELSE
+            IF sectionsymbol = '§§' OR sectionsymbol = '¶¶' THEN
+                NEW.lawsectionsymbol := left(NEW.lawsectionsymbol, length(NEW.lawsectionsymbol) - 1);
+            ELSIF right(sectionsymbol, 2) <> 's.' THEN
+                NEW.lawsectionsymbol := left(NEW.lawsectionsymbol, length(NEW.lawsectionsymbol) - 2) || '.';
+            ELSIF sectionsymbol = '' THEN
+                NEW.lawsectionsymbol := '§';
+            END IF;
+        END IF;
+
+        IF NEW.lawsectionnewfrom <> '' OR NEW.lawsectionnewto <> '' THEN
+            multiplesection := (NEW.lawsectionnewfrom = NEW.lawsectionnewto);
+            sectionsymbol := trim(reverse(split_part(reverse(NEW.lawsectionnewsymbol), ',', 1)));
+
+            IF multiplesection THEN
+                IF sectionsymbol = '§' THEN
+                    NEW.lawsectionnewsymbol := NEW.lawsectionnewsymbol || '§';
+                ELSIF sectionsymbol = '¶' THEN
+                    NEW.lawsectionnewsymbol := NEW.lawsectionnewsymbol || '¶';
+                ELSIF right(sectionsymbol, 1) = '.' AND right(sectionsymbol, 2) <> 's.' THEN
+                    NEW.lawsectionnewsymbol := left(NEW.lawsectionnewsymbol, length(NEW.lawsectionnewsymbol) - 1) || 's.';
+                ELSIF sectionsymbol = '' THEN
+                    NEW.lawsectionnewsymbol := '§§';
+                END IF;
+            ELSE
+                IF sectionsymbol = '§§' OR sectionsymbol = '¶¶' THEN
+                    NEW.lawsectionnewsymbol := left(NEW.lawsectionnewsymbol, length(NEW.lawsectionnewsymbol) - 1);
+                ELSIF right(sectionsymbol, 2) <> 's.' THEN
+                    NEW.lawsectionnewsymbol := left(NEW.lawsectionnewsymbol, length(NEW.lawsectionnewsymbol) - 2) || '.';
+                ELSIF sectionsymbol = '' THEN
+                    NEW.lawsectionnewsymbol := '§';
+                END IF;
+            END IF;
+        ELSE
+            NEW.lawsectionnewsymbol := '';
+        END IF;
     END IF;
     RETURN NEW;
 END
 $$;
 
 
-ALTER FUNCTION geohistory.lawsection_update() OWNER TO postgres;
+ALTER FUNCTION geohistory.lawsection_insertupdate() OWNER TO postgres;
 
 --
 -- Name: lawsectionevent_insertupdate(); Type: FUNCTION; Schema: geohistory; Owner: postgres
@@ -2546,7 +2598,7 @@ CREATE TABLE geohistory.lawsection (
     lawsectionnewfrom character varying(45) DEFAULT ''::character varying NOT NULL,
     lawsectionnewto character varying(45) DEFAULT ''::character varying NOT NULL,
     lawsectionnewlaw integer,
-    lawsectionsymbol character varying(20) DEFAULT '§'::character varying NOT NULL,
+    lawsectionsymbol character varying(20) NOT NULL,
     lawsectionnewsymbol character varying(20) DEFAULT ''::character varying NOT NULL,
     lawsectioncitation text GENERATED ALWAYS AS (replace(replace(geohistory.lawcitation(law), '@SECTION@'::text, ((((lawsectionsymbol)::text ||
 CASE
@@ -8425,10 +8477,10 @@ CREATE TRIGGER lawgroupsection_deleteupdate_trigger BEFORE DELETE OR UPDATE OF l
 
 
 --
--- Name: lawsection lawsection_update_trigger; Type: TRIGGER; Schema: geohistory; Owner: postgres
+-- Name: lawsection lawsection_insertupdate_trigger; Type: TRIGGER; Schema: geohistory; Owner: postgres
 --
 
-CREATE TRIGGER lawsection_update_trigger BEFORE UPDATE OF law ON geohistory.lawsection FOR EACH ROW EXECUTE FUNCTION geohistory.lawsection_update();
+CREATE TRIGGER lawsection_insertupdate_trigger BEFORE UPDATE OF law, lawsectionfrom, lawsectionto, lawsectionsymbol, lawsectionnewfrom, lawsectionnewto, lawsectionnewsymbol ON geohistory.lawsection FOR EACH ROW EXECUTE FUNCTION geohistory.lawsection_insertupdate();
 
 
 --
@@ -9591,10 +9643,10 @@ REVOKE ALL ON FUNCTION geohistory.lawgroupsection_deleteupdate() FROM PUBLIC;
 
 
 --
--- Name: FUNCTION lawsection_update(); Type: ACL; Schema: geohistory; Owner: postgres
+-- Name: FUNCTION lawsection_insertupdate(); Type: ACL; Schema: geohistory; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION geohistory.lawsection_update() FROM PUBLIC;
+GRANT ALL ON FUNCTION geohistory.lawsection_insertupdate() TO readonly;
 
 
 --
