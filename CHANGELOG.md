@@ -2,10 +2,17 @@
 
 ## [Unreleased]
 
+### Added
+
+- Database functions geohistory.lawsectionnewfrom, lawsectionnewsymbol, and lawsectionnewto.
+- Table law, column lawpagetextbefore.
+- Table lawsection, constraint lawsection_check.
+
 ### Changed
 
 - CodeIgniter from 4.6.0 to 4.6.1.
 - Database extract pg_dump and OS versions.
+- Database function geohistory.sourcelawisbynumber to sourcelawnumbertype.
 - DataTables from 2.2.2 to 2.3.1.
 - In database table geohistory.sourcecitation, change column sourcecitationarchivecarton to sourcecitationcontainer, and column sourcecitationarchiveslotfilm to sourcecitationitemlocation.
 - MapLibre GL JS from 4.7.1 to 5.5.0.
@@ -13,6 +20,11 @@
 - PHP CS Fixer from 3.73.1 to 3.75.0.
 - PHPStan from 2.1.8 to 2.1.16.
 - Rector from 2.0.10 to 2.0.16.
+- Table law, generated column lawcitation to align with Bluebook formatting.
+- Table lawalternate, generated column lawalternatecitation to align with Bluebook formatting.
+- Table lawalternatesection, generated columns lawalternatesectioncitation and lawalternatesectionslug to align with Bluebook formatting.
+- Table lawsection, generated columns lawsectioncitation and lawsectionslug to align with Bluebook formatting.
+- Table source, column sourcelawisbynumber to sourcelawnumbertype.
 
 ### Fixed
 
