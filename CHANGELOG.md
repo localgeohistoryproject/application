@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [3.2.0] - Unreleased
 
 ### Added
 
@@ -523,7 +523,7 @@
 
 - Public release of the Local Geohistory Project: Application repository.
 
-[Unreleased]: https://github.com/localgeohistoryproject/application/compare/v3.1.4...develop
+[3.2.0]: https://github.com/localgeohistoryproject/application/compare/v3.1.4...develop
 [3.1.4]: https://github.com/localgeohistoryproject/application/compare/v3.1.3...v3.1.4
 [3.1.3]: https://github.com/localgeohistoryproject/application/compare/v3.1.2...v3.1.3
 [3.1.2]: https://github.com/localgeohistoryproject/application/compare/v3.1.1...v3.1.2
