@@ -9,7 +9,6 @@
                 <?php } ?>
                 <th>Citation <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#law" aria-label="Law Key" title="Law Key"><span class="keyiconfill">vpn_key</span></a></th>
                 <th>Title</th>
-                <th>Page Begin</th>
             </tr>
         </thead>
         <tbody>
@@ -19,7 +18,6 @@
                 <?php } ?>
                 <td><?= $query[0]->lawsectioncitation ?></td>
                 <td><?= $query[0]->lawtitle ?></td>
-                <td><?= $query[0]->lawsectionpagefrom ?></td>
             </tr>
         </tbody>
     </table>

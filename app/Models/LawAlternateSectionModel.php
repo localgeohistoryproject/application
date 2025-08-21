@@ -14,7 +14,6 @@ class LawAlternateSectionModel extends BaseModel
 
         $query = <<<QUERY
                 SELECT DISTINCT lawalternatesection.lawalternatesectionid AS lawsectionid,
-                    lawalternatesection.lawalternatesectionpagefrom AS lawsectionpagefrom,
                     lawalternatesection.lawalternatesectioncitation AS lawsectioncitation,
                     CASE
                         WHEN (NOT ?) AND left(law.lawtitle, 1) = '~' THEN ''
