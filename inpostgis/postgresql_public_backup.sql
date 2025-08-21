@@ -4795,7 +4795,7 @@ CASE
     WHEN (lawalternatesectionpagefrom = 0) THEN '___'::text
     WHEN ((lawalternatesectionpagefrom = lawalternatesectionpageto) OR (lawalternatesectionpageto = 0)) THEN (lawalternatesectionpagefrom)::text
     ELSE (((lawalternatesectionpagefrom)::text || '–'::text) || (lawalternatesectionpageto)::text)
-END))])) STORED
+END)), 'alternate'::text])) STORED
 );
 
 
