@@ -682,56 +682,58 @@ BEGIN
         IF lawcount > 0 THEN
             RAISE EXCEPTION 'Must remove alternate law reference from alternate law sections before changing law reference.';
         END IF;
+    END IF;
 
-        multiplesection := (NEW.lawsectionfrom = NEW.lawsectionto);
-        sectionsymbol := trim(reverse(split_part(reverse(NEW.lawsectionsymbol), ',', 1)));
+	NEW.lawsectionsymbol := coalesce(NEW.lawsectionsymbol, '');
+    multiplesection := (NEW.lawsectionfrom <> NEW.lawsectionto);
+    sectionsymbol := trim(reverse(split_part(reverse(NEW.lawsectionsymbol), ',', 1)));
+
+    IF multiplesection THEN
+        IF sectionsymbol = '§' THEN
+            NEW.lawsectionsymbol := NEW.lawsectionsymbol || '§';
+        ELSIF sectionsymbol = '¶' THEN
+            NEW.lawsectionsymbol := NEW.lawsectionsymbol || '¶';
+        ELSIF right(sectionsymbol, 1) = '.' AND right(sectionsymbol, 2) <> 's.' THEN
+            NEW.lawsectionsymbol := left(NEW.lawsectionsymbol, length(NEW.lawsectionsymbol) - 1) || 's.';
+        ELSIF NEW.lawsectionsymbol = '' THEN
+            NEW.lawsectionsymbol := '§§';
+        END IF;
+    ELSE
+        IF sectionsymbol = '§§' OR sectionsymbol = '¶¶' THEN
+            NEW.lawsectionsymbol := left(NEW.lawsectionsymbol, length(NEW.lawsectionsymbol) - 1);
+        ELSIF right(sectionsymbol, 2) <> 's.' THEN
+            NEW.lawsectionsymbol := left(NEW.lawsectionsymbol, length(NEW.lawsectionsymbol) - 2) || '.';
+        ELSIF NEW.lawsectionsymbol = '' THEN
+            NEW.lawsectionsymbol := '§';
+        END IF;
+    END IF;
+
+	NEW.lawsectionnewsymbol := coalesce(NEW.lawsectionnewsymbol, '');
+    IF NEW.lawsectionnewfrom <> '' OR NEW.lawsectionnewto <> '' THEN
+        multiplesection := (NEW.lawsectionnewfrom <> NEW.lawsectionnewto);
+        sectionsymbol := trim(reverse(split_part(reverse(NEW.lawsectionnewsymbol), ',', 1)));
 
         IF multiplesection THEN
             IF sectionsymbol = '§' THEN
-                NEW.lawsectionsymbol := NEW.lawsectionsymbol || '§';
+                NEW.lawsectionnewsymbol := NEW.lawsectionnewsymbol || '§';
             ELSIF sectionsymbol = '¶' THEN
-                NEW.lawsectionsymbol := NEW.lawsectionsymbol || '¶';
+                NEW.lawsectionnewsymbol := NEW.lawsectionnewsymbol || '¶';
             ELSIF right(sectionsymbol, 1) = '.' AND right(sectionsymbol, 2) <> 's.' THEN
-                NEW.lawsectionsymbol := left(NEW.lawsectionsymbol, length(NEW.lawsectionsymbol) - 1) || 's.';
-            ELSIF sectionsymbol = '' THEN
-                NEW.lawsectionsymbol := '§§';
+                NEW.lawsectionnewsymbol := left(NEW.lawsectionnewsymbol, length(NEW.lawsectionnewsymbol) - 1) || 's.';
+            ELSIF NEW.lawsectionnewsymbol IS NULL OR NEW.lawsectionnewsymbol = '' THEN
+                NEW.lawsectionnewsymbol := '§§';
             END IF;
         ELSE
             IF sectionsymbol = '§§' OR sectionsymbol = '¶¶' THEN
-                NEW.lawsectionsymbol := left(NEW.lawsectionsymbol, length(NEW.lawsectionsymbol) - 1);
+                NEW.lawsectionnewsymbol := left(NEW.lawsectionnewsymbol, length(NEW.lawsectionnewsymbol) - 1);
             ELSIF right(sectionsymbol, 2) <> 's.' THEN
-                NEW.lawsectionsymbol := left(NEW.lawsectionsymbol, length(NEW.lawsectionsymbol) - 2) || '.';
-            ELSIF sectionsymbol = '' THEN
-                NEW.lawsectionsymbol := '§';
+                NEW.lawsectionnewsymbol := left(NEW.lawsectionnewsymbol, length(NEW.lawsectionnewsymbol) - 2) || '.';
+            ELSIF NEW.lawsectionnewsymbol IS NULL OR NEW.lawsectionnewsymbol = '' THEN
+                NEW.lawsectionnewsymbol := '§';
             END IF;
         END IF;
-
-        IF NEW.lawsectionnewfrom <> '' OR NEW.lawsectionnewto <> '' THEN
-            multiplesection := (NEW.lawsectionnewfrom = NEW.lawsectionnewto);
-            sectionsymbol := trim(reverse(split_part(reverse(NEW.lawsectionnewsymbol), ',', 1)));
-
-            IF multiplesection THEN
-                IF sectionsymbol = '§' THEN
-                    NEW.lawsectionnewsymbol := NEW.lawsectionnewsymbol || '§';
-                ELSIF sectionsymbol = '¶' THEN
-                    NEW.lawsectionnewsymbol := NEW.lawsectionnewsymbol || '¶';
-                ELSIF right(sectionsymbol, 1) = '.' AND right(sectionsymbol, 2) <> 's.' THEN
-                    NEW.lawsectionnewsymbol := left(NEW.lawsectionnewsymbol, length(NEW.lawsectionnewsymbol) - 1) || 's.';
-                ELSIF sectionsymbol = '' THEN
-                    NEW.lawsectionnewsymbol := '§§';
-                END IF;
-            ELSE
-                IF sectionsymbol = '§§' OR sectionsymbol = '¶¶' THEN
-                    NEW.lawsectionnewsymbol := left(NEW.lawsectionnewsymbol, length(NEW.lawsectionnewsymbol) - 1);
-                ELSIF right(sectionsymbol, 2) <> 's.' THEN
-                    NEW.lawsectionnewsymbol := left(NEW.lawsectionnewsymbol, length(NEW.lawsectionnewsymbol) - 2) || '.';
-                ELSIF sectionsymbol = '' THEN
-                    NEW.lawsectionnewsymbol := '§';
-                END IF;
-            END IF;
-        ELSE
-            NEW.lawsectionnewsymbol := '';
-        END IF;
+    ELSE
+        NEW.lawsectionnewsymbol := '';
     END IF;
     RETURN NEW;
 END
@@ -8480,7 +8482,7 @@ CREATE TRIGGER lawgroupsection_deleteupdate_trigger BEFORE DELETE OR UPDATE OF l
 -- Name: lawsection lawsection_insertupdate_trigger; Type: TRIGGER; Schema: geohistory; Owner: postgres
 --
 
-CREATE TRIGGER lawsection_insertupdate_trigger BEFORE UPDATE OF law, lawsectionfrom, lawsectionto, lawsectionsymbol, lawsectionnewfrom, lawsectionnewto, lawsectionnewsymbol ON geohistory.lawsection FOR EACH ROW EXECUTE FUNCTION geohistory.lawsection_insertupdate();
+CREATE TRIGGER lawsection_insertupdate_trigger BEFORE INSERT OR UPDATE OF law, lawsectionfrom, lawsectionto, lawsectionnewfrom, lawsectionnewto, lawsectionsymbol, lawsectionnewsymbol ON geohistory.lawsection FOR EACH ROW EXECUTE FUNCTION geohistory.lawsection_insertupdate();
 
 
 --
