@@ -30,6 +30,10 @@
 
 - Whitespace issues in database functions, phpstan.neon.dist, and PHP views.
 
+### Removed
+
+- Law page, Summary table, Page Begin column (pincite now included in Citation column).
+
 ## [3.1.4] - 2025-04-29
 
 ### Changed
