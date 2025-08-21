@@ -8,15 +8,15 @@
         }
     ],
     "require": {
-        "codeigniter4/framework": "4.6.1"
+        "codeigniter4/framework": "4.6.3"
     },
     "require-dev": {
-        "codeigniter/phpstan-codeigniter": "1.5.3",
-        "friendsofphp/php-cs-fixer": "3.75.0",
+        "codeigniter/phpstan-codeigniter": "1.5.4",
+        "friendsofphp/php-cs-fixer": "3.86.0",
         "phpstan/extension-installer": "1.4.3",
-        "phpstan/phpstan": "2.1.16",
-        "phpstan/phpstan-strict-rules": "2.0.4",
-        "rector/rector": "2.0.16"
+        "phpstan/phpstan": "2.1.22",
+        "phpstan/phpstan-strict-rules": "2.0.6",
+        "rector/rector": "2.1.4"
     },
     "config": {
         "allow-plugins": {

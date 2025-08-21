@@ -10,7 +10,7 @@
 
 ### Changed
 
-- CodeIgniter from 4.6.0 to 4.6.1.
+- CodeIgniter from 4.6.0 to 4.6.3.
 - Database extract pg_dump and OS versions.
 - Database function geohistory.sourcelawisbynumber to sourcelawnumbertype.
 - DataTables from 2.2.2 to 2.3.1.
@@ -23,9 +23,11 @@
 - In database table geohistory.sourcecitation, change column sourcecitationarchivecarton to sourcecitationcontainer, and column sourcecitationarchiveslotfilm to sourcecitationitemlocation.
 - MapLibre GL JS from 4.7.1 to 5.5.0.
 - MapLibre GL Leaflet from 0.0.22 to 0.1.0.
-- PHP CS Fixer from 3.73.1 to 3.75.0.
-- PHPStan from 2.1.8 to 2.1.16.
-- Rector from 2.0.10 to 2.0.16.
+- PHP CS Fixer from 3.73.1 to 3.86.0.
+- PHPStan from 2.1.8 to 2.1.22.
+- PHPStan CodeIgniter from 1.5.3 to 1.5.4.
+- PHPStan Strict Rules from 2.0.4 to 2.0.6.
+- Rector from 2.0.10 to 2.1.4.
 
 ### Fixed
 
