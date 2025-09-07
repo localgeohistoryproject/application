@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 17.5 (Debian 17.5-1.pgdg110+1)
--- Dumped by pg_dump version 17.5 (Ubuntu 17.5-1.pgdg24.04+1)
+-- Dumped by pg_dump version 17.6 (Ubuntu 17.6-1.pgdg24.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -701,7 +701,7 @@ BEGIN
     ELSE
         IF sectionsymbol = '§§' OR sectionsymbol = '¶¶' THEN
             NEW.lawsectionsymbol := left(NEW.lawsectionsymbol, length(NEW.lawsectionsymbol) - 1);
-        ELSIF right(sectionsymbol, 2) <> 's.' THEN
+        ELSIF right(sectionsymbol, 2) = 's.' THEN
             NEW.lawsectionsymbol := left(NEW.lawsectionsymbol, length(NEW.lawsectionsymbol) - 2) || '.';
         ELSIF NEW.lawsectionsymbol = '' THEN
             NEW.lawsectionsymbol := '§';
@@ -726,7 +726,7 @@ BEGIN
         ELSE
             IF sectionsymbol = '§§' OR sectionsymbol = '¶¶' THEN
                 NEW.lawsectionnewsymbol := left(NEW.lawsectionnewsymbol, length(NEW.lawsectionnewsymbol) - 1);
-            ELSIF right(sectionsymbol, 2) <> 's.' THEN
+            ELSIF right(sectionsymbol, 2) = 's.' THEN
                 NEW.lawsectionnewsymbol := left(NEW.lawsectionnewsymbol, length(NEW.lawsectionnewsymbol) - 2) || '.';
             ELSIF NEW.lawsectionnewsymbol IS NULL OR NEW.lawsectionnewsymbol = '' THEN
                 NEW.lawsectionnewsymbol := '§';
