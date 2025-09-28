@@ -4,7 +4,6 @@
 
 ### Added
 
-- Additional volume in docker-compose.yaml and Sample.env for development.
 - Database functions geohistory.lawsectionnewfrom, lawsectionnewsymbol, and lawsectionnewto.
 - In database table geohistory.law, column lawpagetextbefore.
 - In database table geohistory.lawsection, constraint lawsection_check.
@@ -28,6 +27,7 @@
 - PHPStan from 2.1.8 to 2.1.22.
 - PHPStan CodeIgniter from 1.5.3 to 1.5.4.
 - PHPStan Strict Rules from 2.0.4 to 2.0.6.
+- README to expand Build command.
 - Rector from 2.0.10 to 2.1.4.
 
 ### Fixed
@@ -36,7 +36,9 @@
 
 ### Removed
 
+- Inphp and outpostgis folders.
 - Law page, Summary table, Page Begin column (pincite now included in Citation column).
+- Volume references in docker-compose.yaml and Sample.env that were only used in development.
 
 ## [3.1.4] - 2025-04-29
 

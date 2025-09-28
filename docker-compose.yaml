@@ -20,14 +20,6 @@ services:
             - ./${DOCKER_COMPOSER}composer.lock:/var/www/composer.lock
             - ./.env:/var/www/.env
             - ./html:/var/www/html
-            - ${INPHP_E}:/inphp/e:ro
-            - ${INPHP_G}:/inphp/g:ro
-            - ${INPHP_L}:/inphp/l:ro
-            - ${INPHP_LW}:/inphp/lw:ro
-            - ${INPHP_M}:/inphp/m:ro
-            - ${INPHP_P}:/inphp/p:ro
-            - ${INPHP_PROJECT}:/inphp/project:ro
-            - ${INPHP_S}:/inphp/s:ro
             - ./license:/var/www/license
             - ./module:/var/www/module
             - ./.php-cs-fixer.dist.php:/var/www/.php-cs-fixer.dist.php
@@ -58,5 +50,4 @@ services:
             - ${database_default_port}:5432
         volumes:
             - ./inpostgis:/inpostgis
-            - ${OUTPOSTGIS}:/outpostgis
             - ./pgdata:/var/lib/postgresql/data
