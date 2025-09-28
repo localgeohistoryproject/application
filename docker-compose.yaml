@@ -23,6 +23,7 @@ services:
             - ${INPHP_E}:/inphp/e:ro
             - ${INPHP_G}:/inphp/g:ro
             - ${INPHP_L}:/inphp/l:ro
+            - ${INPHP_LW}:/inphp/lw:ro
             - ${INPHP_M}:/inphp/m:ro
             - ${INPHP_P}:/inphp/p:ro
             - ${INPHP_PROJECT}:/inphp/project:ro

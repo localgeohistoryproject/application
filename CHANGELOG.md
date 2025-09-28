@@ -4,6 +4,7 @@
 
 ### Added
 
+- Additional volume in docker-compose.yaml and Sample.env for development.
 - Database functions geohistory.lawsectionnewfrom, lawsectionnewsymbol, and lawsectionnewto.
 - In database table geohistory.law, column lawpagetextbefore.
 - In database table geohistory.lawsection, constraint lawsection_check.
