@@ -23,12 +23,12 @@
 - In database table geohistory.sourcecitation, change column sourcecitationarchivecarton to sourcecitationcontainer, and column sourcecitationarchiveslotfilm to sourcecitationitemlocation.
 - MapLibre GL JS from 4.7.1 to 5.9.0.
 - MapLibre GL Leaflet from 0.0.22 to 0.1.3.
-- PHP CS Fixer from 3.73.1 to 3.86.0.
-- PHPStan from 2.1.8 to 2.1.22.
+- PHP CS Fixer from 3.73.1 to 3.89.1.
+- PHPStan from 2.1.8 to 2.1.31.
 - PHPStan CodeIgniter from 1.5.3 to 1.5.4.
-- PHPStan Strict Rules from 2.0.4 to 2.0.6.
+- PHPStan Strict Rules from 2.0.4 to 2.0.7.
 - README to expand Build command.
-- Rector from 2.0.10 to 2.1.4.
+- Rector from 2.0.10 to 2.2.5.
 
 ### Fixed
 
