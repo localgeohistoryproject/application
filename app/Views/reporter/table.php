@@ -21,8 +21,8 @@
                     <?php if ($hasLink) { ?>
                         <td><a href="/<?= \Config\Services::request()->getLocale() ?>/reporter/<?= $row->adjudicationsourcecitationslug ?>/">View</a></td>
                     <?php } ?>
-                    <td><?= $row->adjudicationsourcecitationvolume . ' ' . $row->sourceshort . ' ' . $row->adjudicationsourcecitationpage .
-                    ($row->adjudicationsourcecitationyear !== '' ? ' (' . $row->adjudicationsourcecitationyear . ')' : '') ?></td>
+                    <td><?= $row->adjudicationsourcecitationvolume . ' ' . $row->sourceshort . ' ' . $row->adjudicationsourcecitationpage
+                    . ($row->adjudicationsourcecitationyear !== '' ? ' (' . $row->adjudicationsourcecitationyear . ')' : '') ?></td>
                     <td data-sort="<?= $row->adjudicationsourcecitationdatesort ?>"><?= $row->adjudicationsourcecitationdate ?></td>
                     <td><?= $row->adjudicationsourcecitationtitle ?></td>
                 </tr>

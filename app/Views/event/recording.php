@@ -25,12 +25,12 @@
                     <td><?= $row->recordingtype . ($row->hasbothtype === 't' ? '<br>' : '') . $row->recordingnumbertype ?></td>
                     <td><?= $row->recordinglocation . ($row->hasbothtype === 't' ? '<br>' : '') . $row->recordingnumberlocation ?></td>
                     <td><?=
-                        $row->recordingrepositoryshort .
-                                        ($row->recordingrepositoryseries === '' ? '' : ', series ' . $row->recordingrepositoryseries) .
-                                        ($row->recordingrepositorycontainer === '' ? '' : ', container ' . $row->recordingrepositorycontainer) .
-                                        ($row->recordingrepositoryitemlocation === '' ? '' : ', location ' . $row->recordingrepositoryitemlocation) .
-                                        ($row->recordingrepositoryitemnumber === '' ? '' : ', folder ' . $row->recordingrepositoryitemnumber) .
-                                        ($row->recordingrepositoryitemrange === '' ? '' : ', part ' . $row->recordingrepositoryitemrange)
+                        $row->recordingrepositoryshort
+                                        . ($row->recordingrepositoryseries === '' ? '' : ', series ' . $row->recordingrepositoryseries)
+                                        . ($row->recordingrepositorycontainer === '' ? '' : ', container ' . $row->recordingrepositorycontainer)
+                                        . ($row->recordingrepositoryitemlocation === '' ? '' : ', location ' . $row->recordingrepositoryitemlocation)
+                                        . ($row->recordingrepositoryitemnumber === '' ? '' : ', folder ' . $row->recordingrepositoryitemnumber)
+                                        . ($row->recordingrepositoryitemrange === '' ? '' : ', part ' . $row->recordingrepositoryitemrange)
                 ?></td>
                     <td data-sort="<?= $row->recordingdatesort ?>"><?= $row->recordingdate ?></td>
                     <td><?= $row->recordingeventrelationship ?></td>

@@ -14,9 +14,9 @@
         <tbody>
             <?php foreach ($query as $row) { ?>
                 <tr<?= ($row->filingnotpresent === 't' ? ' style="color: red;"' : '') ?>>
-                    <td><span class="b"><?= $row->filingtypelong . ($row->filingspecific !== '' ?
-                                            ':</span> ' . $row->filingspecific :
-                                            '</span>') ?></td>
+                    <td><span class="b"><?= $row->filingtypelong . ($row->filingspecific !== ''
+                                            ? ':</span> ' . $row->filingspecific
+                                            : '</span>') ?></td>
                     <td data-sort="<?= $row->filingdatesort ?>"><?= $row->filingdate ?></td>
                     <td data-sort="<?= $row->filingfiledsort ?>"><?= $row->filingfiled ?></td>
                     <td data-sort="<?= $row->filingothersort ?>"><?= $row->filingothertype . ' ' . $row->filingother ?></td>

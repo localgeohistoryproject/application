@@ -20,13 +20,13 @@
                         <td><?= $row->governmentlong ?></td>
                     <?php } ?>
                     <td>
-                        <span class="b"><?= $row->researchlogtypelong . ($row->researchlognotes === '' ? '</span>' :
-                                            ':</span> ' . $row->researchlognotes) ?>
+                        <span class="b"><?= $row->researchlogtypelong . ($row->researchlognotes === '' ? '</span>'
+                                            : ':</span> ' . $row->researchlognotes) ?>
                     </td>
                     <td data-sort="<?= $row->researchlogdatesort ?>"><?= $row->researchlogdate ?></td>
                     <td data-sort="<?= $row->researchlogyear ?>">
-                        <?= ($row->researchlogvolume === '' ? '' : 'bk. ') . $row->researchlogvolume .
-                            ($row->researchlogyear === '' ? '' : ' (' . $row->researchlogyear . ')') ?>
+                        <?= ($row->researchlogvolume === '' ? '' : 'bk. ') . $row->researchlogvolume
+                            . ($row->researchlogyear === '' ? '' : ' (' . $row->researchlogyear . ')') ?>
                     </td>
                 </tr>
             <?php } ?>

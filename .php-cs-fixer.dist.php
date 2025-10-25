@@ -16,7 +16,7 @@ $finder = (new PhpCsFixer\Finder())
 return (new PhpCsFixer\Config())
     ->setRules([
         '@PER-CS' => true,
-        '@PHP83Migration' => true,
+        '@PHP8x5Migration' => true,
     ])
     ->setFinder($finder)
 ;

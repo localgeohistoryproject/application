@@ -9,7 +9,7 @@ class Governmentidentifier extends BaseController
 {
     private string $title = 'Government Identifier';
 
-    public function view(string $type, string $id): null|RedirectResponse
+    public function view(string $type, string $id): ?RedirectResponse
     {
         if ($id !== strtolower($id)) {
             $this->response->setStatusCode(301);
