@@ -49,11 +49,14 @@ curl -s -S -o ${asset_folder}/css/selectize.css "https:/${dependency_selectize}/
 curl -s -S -o ${asset_folder}/js/standalone/selectize.min.js "https:/${dependency_selectize}/js/standalone/selectize.min.js"
 curl -s -S -o "${license_folder}/Selectize.txt" "https:/${dependency_selectize}/../LICENSE"
 
-app_folder=/var/www/app/Config/
-vendor_folder=/var/www/vendor/codeigniter4/framework/app/Config/
+app_folder=/var/www/app/
+vendor_folder=/var/www/vendor/codeigniter4/framework/app/
+sub_folders=(Config Views\/errors\/cli Views\/errors\/html)
 
-for fileName in ${vendor_folder}*.php; do
-    if [ ! -f "${app_folder}$(basename $fileName .php).php" ]; then
-        cp "${vendor_folder}$(basename $fileName .php).php" "${app_folder}";
-    fi;
+for subFolder in "${sub_folders[@]}"; do
+    for fileName in ${vendor_folder}${subFolder}/*.{css,js,php}; do
+        if [ ! -f "${app_folder}${subFolder}/$(basename $fileName)" ]; then
+            cp "${vendor_folder}${subFolder}/$(basename $fileName)" "${app_folder}${subFolder}";
+        fi;
+    done
 done
