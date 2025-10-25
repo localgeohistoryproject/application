@@ -5,6 +5,10 @@ app/Config/**
 !app/Config/Paths.php
 !app/Config/Routes.php
 !app/Config/Services.php
+app/Views/errors/cli/**
+!app/Views/errors/cli/.gitkeep
+app/Views/errors/html/**
+!app/Views/errors/html/.gitkeep
 composer-cache/**
 !composer-cache/.gitkeep
 .env
