@@ -37,6 +37,7 @@
 
 ### Removed
 
+- app/View/errors files that match CodeIgniter defaults from repository.
 - Inphp and outpostgis folders.
 - Law page, Summary table, Page Begin column (pincite now included in Citation column).
 - Volume references in docker-compose.yaml, .gitignore, and Sample.env that were only used in development.
