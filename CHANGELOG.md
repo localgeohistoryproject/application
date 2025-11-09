@@ -21,6 +21,7 @@
 - In database table geohistory.lawsection, change trigger lawsection_update_trigger to lawsection_insertupdate_trigger; trigger function lawsection_update to lawsection_insertupdate; and update logic to handle default values and singular/plural symbols for lawsectionsymbol and lawsectionnewsymbol.
 - In database table geohistory.source, change column sourcelawisbynumber to sourcelawnumbertype.
 - In database table geohistory.sourcecitation, change column sourcecitationarchivecarton to sourcecitationcontainer, and column sourcecitationarchiveslotfilm to sourcecitationitemlocation.
+- Locale settings to prepare for future French translation.
 - MapLibre GL JS from 4.7.1 to 5.9.0.
 - MapLibre GL Leaflet from 0.0.22 to 0.1.3.
 - PHP coding style to PER-CS 3.0.
