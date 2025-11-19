@@ -14,6 +14,7 @@
 - Database extract pg_dump and OS versions.
 - Database function geohistory.sourcelawisbynumber to sourcelawnumbertype.
 - DataTables from 2.2.2 to 2.3.4.
+- In database schema gis, all items moved to schema geohistory.
 - In database table geohistory.law, change generated column lawcitation to align with Bluebook formatting.
 - In database table geohistory.lawalternate, change generated column lawalternatecitation to align with Bluebook formatting.
 - In database table geohistory.lawalternatesection, change generated columns lawalternatesectioncitation and lawalternatesectionslug to align with Bluebook formatting.
@@ -39,6 +40,7 @@
 ### Removed
 
 - app/Views/errors files that match CodeIgniter defaults from repository.
+- Database schema gis.
 - Inphp and outpostgis folders.
 - Law page, Summary table, Page Begin column (pincite now included in Citation column).
 - Volume references in docker-compose.yaml, .gitignore, and Sample.env that were only used in development.

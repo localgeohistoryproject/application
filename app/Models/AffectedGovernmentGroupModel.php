@@ -40,10 +40,10 @@ class AffectedGovernmentGroupModel extends BaseModel
                     public.st_asgeojson(public.st_buffer(public.st_collect(governmentshape.governmentshapegeometry), 0)) AS geometry,
                     lower(array_to_string(array_agg(DISTINCT government.governmentabbreviation ORDER BY government.governmentabbreviation), ',')) AS jurisdictions
                 FROM geohistory.affectedgovernmentgroup
-                JOIN gis.affectedgovernmentgis
+                JOIN geohistory.affectedgovernmentgis
                     ON affectedgovernmentgroup.affectedgovernmentgroupid = affectedgovernmentgis.affectedgovernment
                     AND affectedgovernmentgroup.event = ?
-                JOIN gis.governmentshape
+                JOIN geohistory.governmentshape
                     ON affectedgovernmentgis.governmentshape = governmentshape.governmentshapeid
                 JOIN geohistory.government
                     ON governmentshape.governmentstate = government.governmentid
@@ -322,7 +322,7 @@ class AffectedGovernmentGroupModel extends BaseModel
                     event.eventslug,
                     event.eventdatetext,
                     event.eventsort
-                FROM gis.affectedgovernmentgis
+                FROM geohistory.affectedgovernmentgis
                 JOIN geohistory.affectedgovernmentgroup
                     ON affectedgovernmentgis.affectedgovernment = affectedgovernmentgroup.affectedgovernmentgroupid
                     AND affectedgovernmentgis.governmentshape = ?

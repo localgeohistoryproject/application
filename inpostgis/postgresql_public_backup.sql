@@ -29,15 +29,6 @@ CREATE SCHEMA geohistory;
 ALTER SCHEMA geohistory OWNER TO postgres;
 
 --
--- Name: gis; Type: SCHEMA; Schema: -; Owner: postgres
---
-
-CREATE SCHEMA gis;
-
-
-ALTER SCHEMA gis OWNER TO postgres;
-
---
 -- Name: adjudicationtypegovernmentshort(integer); Type: FUNCTION; Schema: geohistory; Owner: postgres
 --
 
@@ -414,6 +405,106 @@ $$;
 
 
 ALTER FUNCTION geohistory.governmentothercurrentparent_insertupdate() OWNER TO postgres;
+
+--
+-- Name: governmentshape_delete(); Type: FUNCTION; Schema: geohistory; Owner: postgres
+--
+
+CREATE FUNCTION geohistory.governmentshape_delete() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+
+BEGIN
+   INSERT INTO geohistory.deleted_affectedgovernmentgis (
+     affectedgovernment,
+     governmentshape
+   )
+   SELECT
+   affectedgovernment,
+   OLD.governmentshapereference AS governmentshape
+   FROM geohistory.affectedgovernmentgis
+   WHERE governmentshape = OLD.governmentshapeid;
+
+   DELETE FROM geohistory.affectedgovernmentgis
+   WHERE governmentshape = OLD.governmentshapeid;
+
+   INSERT INTO geohistory.deleted_metesdescriptiongis (
+     metesdescription,
+     governmentshape
+   )
+   SELECT
+   metesdescription,
+   OLD.governmentshapereference AS governmentshape
+   FROM geohistory.metesdescriptiongis
+   WHERE governmentshape = OLD.governmentshapeid;
+
+   DELETE FROM geohistory.metesdescriptiongis
+   WHERE governmentshape = OLD.governmentshapeid;
+
+   RETURN OLD;
+END;
+$$;
+
+
+ALTER FUNCTION geohistory.governmentshape_delete() OWNER TO postgres;
+
+--
+-- Name: governmentshape_insert(); Type: FUNCTION; Schema: geohistory; Owner: postgres
+--
+
+CREATE FUNCTION geohistory.governmentshape_insert() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+
+BEGIN
+
+   IF NEW.governmentshapereference IS NOT NULL THEN
+      INSERT INTO geohistory.affectedgovernmentgis (
+         affectedgovernment,
+         governmentshape
+      )
+      SELECT DISTINCT
+      affectedgovernment,
+      NEW.governmentshapeid AS governmentshape
+      FROM geohistory.deleted_affectedgovernmentgis
+      WHERE governmentshape = NEW.governmentshapereference
+      AND (now() - deletedat) < '3 seconds'::interval
+      UNION DISTINCT
+      SELECT DISTINCT
+      affectedgovernment,
+      NEW.governmentshapeid AS governmentshape
+      FROM geohistory.affectedgovernmentgis
+      WHERE governmentshape = NEW.governmentshapereference;
+
+      INSERT INTO geohistory.metesdescriptiongis (
+         metesdescription,
+         governmentshape
+      )
+      SELECT DISTINCT
+      metesdescription,
+      NEW.governmentshapeid AS governmentshape
+      FROM geohistory.deleted_metesdescriptiongis
+      WHERE governmentshape = NEW.governmentshapereference
+      AND (now() - deletedat) < '3 seconds'::interval
+      UNION DISTINCT
+      SELECT DISTINCT
+      metesdescription,
+      NEW.governmentshapeid AS governmentshape
+      FROM geohistory.metesdescriptiongis
+      WHERE governmentshape = NEW.governmentshapereference;
+
+   END IF;
+     
+   UPDATE geohistory.governmentshape
+   SET governmentshapereference = governmentshapeid
+   WHERE governmentshapeid = NEW.governmentshapeid; 
+
+   RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION geohistory.governmentshape_insert() OWNER TO postgres;
 
 --
 -- Name: governmentslug(integer); Type: FUNCTION; Schema: geohistory; Owner: postgres
@@ -1043,6 +1134,63 @@ $_$;
 ALTER FUNCTION geohistory.rangeformat(text, text) OWNER TO postgres;
 
 --
+-- Name: refresh_sequence(); Type: FUNCTION; Schema: geohistory; Owner: postgres
+--
+
+CREATE FUNCTION geohistory.refresh_sequence() RETURNS void
+    LANGUAGE plpgsql STABLE
+    AS $_$
+
+    DECLARE
+
+        columncursor refcursor;
+        tableschema text;
+        tablename text;
+        columnname text;
+        columnsequence text;
+        maxidvalue bigint;
+
+    BEGIN
+
+        OPEN columncursor FOR
+        SELECT columns.table_schema::text,
+           columns.table_name::text,
+           columns.column_name::text,
+           split_part(columns.column_default::text, '''', 2) AS column_sequence
+          FROM information_schema.columns
+         WHERE columns.table_schema::text = ANY (ARRAY['geohistory'::text])
+           AND columns.column_default ~~ 'nextval(%'
+         ORDER BY 1, 2;
+
+        LOOP
+        
+          FETCH columncursor INTO tableschema, tablename, columnname, columnsequence;
+
+          IF NOT FOUND THEN
+            EXIT;
+          END IF;
+
+          EXECUTE format('SELECT COALESCE(max(%I.%I) + 1, 1) FROM %I.%I',
+            tablename,
+            columnname,
+            tableschema,
+            tablename)
+          INTO maxidvalue;
+
+          EXECUTE 'SELECT pg_catalog.setval($1, $2, false)'
+          USING columnsequence,
+            maxidvalue;
+
+        END LOOP;
+
+    END;
+
+$_$;
+
+
+ALTER FUNCTION geohistory.refresh_sequence() OWNER TO postgres;
+
+--
 -- Name: refresh_view(); Type: FUNCTION; Schema: geohistory; Owner: postgres
 --
 
@@ -1184,6 +1332,22 @@ RAISE INFO '%', clock_timestamp();
     UPDATE geohistory.lastrefresh
     SET lastrefreshdate = current_date
     WHERE lastrefreshversion = 'LIVE';
+RAISE INFO '%', clock_timestamp();
+    UPDATE geohistory.governmentshape
+    SET governmentmunicipality = governmentmunicipality;
+RAISE INFO '%', clock_timestamp();
+    TRUNCATE geohistory.deleted_affectedgovernmentgis;
+RAISE INFO '%', clock_timestamp();
+    TRUNCATE geohistory.deleted_metesdescriptiongis;
+RAISE INFO '%', clock_timestamp();
+    UPDATE geohistory.governmentshape
+    SET governmentshapereference = governmentshapeid
+    WHERE governmentshapereference IS NULL OR (
+        governmentshapereference IS NOT NULL
+        AND governmentshapereference <> governmentshapeid
+    );
+RAISE INFO '%', clock_timestamp();
+    REFRESH MATERIALIZED VIEW geohistory.governmentshapecache;
 RAISE INFO '%', clock_timestamp();
 END
 $$;
@@ -1366,194 +1530,6 @@ $$;
 
 
 ALTER FUNCTION geohistory.sourcetype_update() OWNER TO postgres;
-
---
--- Name: governmentshape_delete(); Type: FUNCTION; Schema: gis; Owner: postgres
---
-
-CREATE FUNCTION gis.governmentshape_delete() RETURNS trigger
-    LANGUAGE plpgsql
-    AS $$
-
-BEGIN
-   INSERT INTO gis.deleted_affectedgovernmentgis (
-     affectedgovernment,
-     governmentshape
-   )
-   SELECT
-   affectedgovernment,
-   OLD.governmentshapereference AS governmentshape
-   FROM gis.affectedgovernmentgis
-   WHERE governmentshape = OLD.governmentshapeid;
-
-   DELETE FROM gis.affectedgovernmentgis
-   WHERE governmentshape = OLD.governmentshapeid;
-
-   INSERT INTO gis.deleted_metesdescriptiongis (
-     metesdescription,
-     governmentshape
-   )
-   SELECT
-   metesdescription,
-   OLD.governmentshapereference AS governmentshape
-   FROM gis.metesdescriptiongis
-   WHERE governmentshape = OLD.governmentshapeid;
-
-   DELETE FROM gis.metesdescriptiongis
-   WHERE governmentshape = OLD.governmentshapeid;
-
-   RETURN OLD;
-END;
-$$;
-
-
-ALTER FUNCTION gis.governmentshape_delete() OWNER TO postgres;
-
---
--- Name: governmentshape_insert(); Type: FUNCTION; Schema: gis; Owner: postgres
---
-
-CREATE FUNCTION gis.governmentshape_insert() RETURNS trigger
-    LANGUAGE plpgsql
-    AS $$
-
-BEGIN
-
-   IF NEW.governmentshapereference IS NOT NULL THEN
-      INSERT INTO gis.affectedgovernmentgis (
-         affectedgovernment,
-         governmentshape
-      )
-      SELECT DISTINCT
-      affectedgovernment,
-      NEW.governmentshapeid AS governmentshape
-      FROM gis.deleted_affectedgovernmentgis
-      WHERE governmentshape = NEW.governmentshapereference
-      AND (now() - deletedat) < '3 seconds'::interval
-      UNION DISTINCT
-      SELECT DISTINCT
-      affectedgovernment,
-      NEW.governmentshapeid AS governmentshape
-      FROM gis.affectedgovernmentgis
-      WHERE governmentshape = NEW.governmentshapereference;
-
-      INSERT INTO gis.metesdescriptiongis (
-         metesdescription,
-         governmentshape
-      )
-      SELECT DISTINCT
-      metesdescription,
-      NEW.governmentshapeid AS governmentshape
-      FROM gis.deleted_metesdescriptiongis
-      WHERE governmentshape = NEW.governmentshapereference
-      AND (now() - deletedat) < '3 seconds'::interval
-      UNION DISTINCT
-      SELECT DISTINCT
-      metesdescription,
-      NEW.governmentshapeid AS governmentshape
-      FROM gis.metesdescriptiongis
-      WHERE governmentshape = NEW.governmentshapereference;
-
-   END IF;
-     
-   UPDATE gis.governmentshape
-   SET governmentshapereference = governmentshapeid
-   WHERE governmentshapeid = NEW.governmentshapeid; 
-
-   RETURN NEW;
-END;
-$$;
-
-
-ALTER FUNCTION gis.governmentshape_insert() OWNER TO postgres;
-
---
--- Name: refresh_sequence(); Type: FUNCTION; Schema: gis; Owner: postgres
---
-
-CREATE FUNCTION gis.refresh_sequence() RETURNS void
-    LANGUAGE plpgsql STABLE
-    AS $_$
-
-    DECLARE
-
-        columncursor refcursor;
-        tableschema text;
-        tablename text;
-        columnname text;
-        columnsequence text;
-        maxidvalue bigint;
-
-    BEGIN
-
-        OPEN columncursor FOR
-        SELECT columns.table_schema::text,
-           columns.table_name::text,
-           columns.column_name::text,
-           split_part(columns.column_default::text, '''', 2) AS column_sequence
-          FROM information_schema.columns
-         WHERE columns.table_schema::text = ANY (ARRAY['geohistory'::text, 'gis'::text])
-           AND columns.column_default ~~ 'nextval(%'
-         ORDER BY 1, 2;
-
-        LOOP
-        
-          FETCH columncursor INTO tableschema, tablename, columnname, columnsequence;
-
-          IF NOT FOUND THEN
-            EXIT;
-          END IF;
-
-          EXECUTE format('SELECT COALESCE(max(%I.%I) + 1, 1) FROM %I.%I',
-            tablename,
-            columnname,
-            tableschema,
-            tablename)
-          INTO maxidvalue;
-
-          EXECUTE 'SELECT pg_catalog.setval($1, $2, false)'
-          USING columnsequence,
-            maxidvalue;
-
-        END LOOP;
-
-    END;
-
-$_$;
-
-
-ALTER FUNCTION gis.refresh_sequence() OWNER TO postgres;
-
---
--- Name: refresh_view(); Type: FUNCTION; Schema: gis; Owner: postgres
---
-
-CREATE FUNCTION gis.refresh_view() RETURNS void
-    LANGUAGE plpgsql
-    AS $$
-BEGIN
-RAISE INFO '%', clock_timestamp();
-    UPDATE gis.governmentshape
-    SET governmentmunicipality = governmentmunicipality;
-RAISE INFO '%', clock_timestamp();
-    TRUNCATE gis.deleted_affectedgovernmentgis;
-RAISE INFO '%', clock_timestamp();
-    TRUNCATE gis.deleted_metesdescriptiongis;
-RAISE INFO '%', clock_timestamp();
-    UPDATE gis.governmentshape
-    SET governmentshapereference = governmentshapeid
-    WHERE governmentshapereference IS NULL OR (
-        governmentshapereference IS NOT NULL
-        AND governmentshapereference <> governmentshapeid
-    );
-RAISE INFO '%', clock_timestamp();
-    REFRESH MATERIALIZED VIEW gis.governmentshapecache;
-RAISE INFO '%', clock_timestamp();
-END
-$$;
-
-
-ALTER FUNCTION gis.refresh_view() OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -2135,6 +2111,19 @@ COMMENT ON COLUMN geohistory.governmentform.governmentformextended IS 'This fiel
 
 
 --
+-- Name: affectedgovernmentgis; Type: TABLE; Schema: geohistory; Owner: postgres
+--
+
+CREATE TABLE geohistory.affectedgovernmentgis (
+    affectedgovernmentgisid integer NOT NULL,
+    affectedgovernment integer NOT NULL,
+    governmentshape integer
+);
+
+
+ALTER TABLE geohistory.affectedgovernmentgis OWNER TO postgres;
+
+--
 -- Name: governmentmapstatus; Type: TABLE; Schema: geohistory; Owner: postgres
 --
 
@@ -2167,23 +2156,10 @@ COMMENT ON COLUMN geohistory.governmentmapstatus.governmentmapstatusfurtherresea
 
 
 --
--- Name: affectedgovernmentgis; Type: TABLE; Schema: gis; Owner: postgres
+-- Name: governmentshape; Type: TABLE; Schema: geohistory; Owner: postgres
 --
 
-CREATE TABLE gis.affectedgovernmentgis (
-    affectedgovernmentgisid integer NOT NULL,
-    affectedgovernment integer NOT NULL,
-    governmentshape integer
-);
-
-
-ALTER TABLE gis.affectedgovernmentgis OWNER TO postgres;
-
---
--- Name: governmentshape; Type: TABLE; Schema: gis; Owner: postgres
---
-
-CREATE TABLE gis.governmentshape (
+CREATE TABLE geohistory.governmentshape (
     governmentshapeid integer NOT NULL,
     governmentsubmunicipality integer,
     governmentmunicipality integer NOT NULL,
@@ -2198,65 +2174,65 @@ CREATE TABLE gis.governmentshape (
     governmentschooldistrict integer,
     governmentshapeslug text GENERATED ALWAYS AS (geohistory.array_to_slug(ARRAY[(geohistory.governmentslug(COALESCE(governmentsubmunicipality, governmentmunicipality)))::text, ((public.st_geohash(public.st_pointonsurface(governmentshapegeometry), 9))::character varying)::text])) STORED
 );
-ALTER TABLE ONLY gis.governmentshape ALTER COLUMN governmentshapegeometry SET STORAGE EXTERNAL;
+ALTER TABLE ONLY geohistory.governmentshape ALTER COLUMN governmentshapegeometry SET STORAGE EXTERNAL;
 
 
-ALTER TABLE gis.governmentshape OWNER TO postgres;
-
---
--- Name: COLUMN governmentshape.governmentshapereference; Type: COMMENT; Schema: gis; Owner: postgres
---
-
-COMMENT ON COLUMN gis.governmentshape.governmentshapereference IS 'This column should always match governmentshapeid, and is used for tracking purposes in order to aid in inserting, updating, and deleting records in associative entities when splitting or merging records.';
-
+ALTER TABLE geohistory.governmentshape OWNER TO postgres;
 
 --
--- Name: COLUMN governmentshape.governmentshapetag; Type: COMMENT; Schema: gis; Owner: postgres
+-- Name: COLUMN governmentshape.governmentshapereference; Type: COMMENT; Schema: geohistory; Owner: postgres
 --
 
-COMMENT ON COLUMN gis.governmentshape.governmentshapetag IS 'This field is used for internal tracking purposes, and is not included in open data.';
+COMMENT ON COLUMN geohistory.governmentshape.governmentshapereference IS 'This column should always match governmentshapeid, and is used for tracking purposes in order to aid in inserting, updating, and deleting records in associative entities when splitting or merging records.';
 
 
 --
--- Name: governmentshapecache; Type: MATERIALIZED VIEW; Schema: gis; Owner: postgres
+-- Name: COLUMN governmentshape.governmentshapetag; Type: COMMENT; Schema: geohistory; Owner: postgres
 --
 
-CREATE MATERIALIZED VIEW gis.governmentshapecache AS
+COMMENT ON COLUMN geohistory.governmentshape.governmentshapetag IS 'This field is used for internal tracking purposes, and is not included in open data.';
+
+
+--
+-- Name: governmentshapecache; Type: MATERIALIZED VIEW; Schema: geohistory; Owner: postgres
+--
+
+CREATE MATERIALIZED VIEW geohistory.governmentshapecache AS
  SELECT governmentshape2.governmentlayer,
     governmentshape2.government,
     public.st_buffer(public.st_collect(governmentshape2.governmentshapegeometry), (0)::double precision) AS geometry
    FROM (( SELECT governmentshape.governmentcounty AS government,
             'county'::text AS governmentlayer,
             governmentshape.governmentshapegeometry
-           FROM gis.governmentshape
+           FROM geohistory.governmentshape
         UNION
          SELECT governmentshape.governmentmunicipality AS government,
             'municipality'::text AS governmentlayer,
             governmentshape.governmentshapegeometry
-           FROM gis.governmentshape
+           FROM geohistory.governmentshape
         UNION
          SELECT governmentshape.governmentschooldistrict AS government,
             'schooldistrict'::text AS governmentlayer,
             governmentshape.governmentshapegeometry
-           FROM gis.governmentshape
+           FROM geohistory.governmentshape
           WHERE (governmentshape.governmentschooldistrict IS NOT NULL)
         UNION
          SELECT governmentshape.governmentshapeplsstownship AS government,
             'shapeplsstownship'::text AS governmentlayer,
             governmentshape.governmentshapegeometry
-           FROM gis.governmentshape
+           FROM geohistory.governmentshape
           WHERE (governmentshape.governmentshapeplsstownship IS NOT NULL)
         UNION
          SELECT governmentshape.governmentsubmunicipality AS government,
             'submunicipality'::text AS governmentlayer,
             governmentshape.governmentshapegeometry
-           FROM gis.governmentshape
+           FROM geohistory.governmentshape
           WHERE (governmentshape.governmentsubmunicipality IS NOT NULL)
         UNION
          SELECT governmentshape.governmentward AS government,
             'ward'::text AS governmentlayer,
             governmentshape.governmentshapegeometry
-           FROM gis.governmentshape
+           FROM geohistory.governmentshape
           WHERE (governmentshape.governmentward IS NOT NULL)) governmentshape2
      JOIN geohistory.government ON (((governmentshape2.government = government.governmentid) AND ((government.governmentstatus)::text <> 'placeholder'::text))))
   GROUP BY governmentshape2.governmentlayer, governmentshape2.government
@@ -2264,7 +2240,7 @@ CREATE MATERIALIZED VIEW gis.governmentshapecache AS
   WITH NO DATA;
 
 
-ALTER MATERIALIZED VIEW gis.governmentshapecache OWNER TO postgres;
+ALTER MATERIALIZED VIEW geohistory.governmentshapecache OWNER TO postgres;
 
 --
 -- Name: adjudication; Type: TABLE; Schema: geohistory; Owner: postgres
@@ -2712,6 +2688,19 @@ COMMENT ON COLUMN geohistory.metesdescription.metesdescriptionquality IS 'This f
 
 
 --
+-- Name: metesdescriptiongis; Type: TABLE; Schema: geohistory; Owner: postgres
+--
+
+CREATE TABLE geohistory.metesdescriptiongis (
+    metesdescriptiongisid integer NOT NULL,
+    metesdescription integer NOT NULL,
+    governmentshape integer
+);
+
+
+ALTER TABLE geohistory.metesdescriptiongis OWNER TO postgres;
+
+--
 -- Name: sourcegovernment; Type: TABLE; Schema: geohistory; Owner: postgres
 --
 
@@ -2739,19 +2728,6 @@ CREATE TABLE geohistory.tribunal (
 
 
 ALTER TABLE geohistory.tribunal OWNER TO postgres;
-
---
--- Name: metesdescriptiongis; Type: TABLE; Schema: gis; Owner: postgres
---
-
-CREATE TABLE gis.metesdescriptiongis (
-    metesdescriptiongisid integer NOT NULL,
-    metesdescription integer NOT NULL,
-    governmentshape integer
-);
-
-
-ALTER TABLE gis.metesdescriptiongis OWNER TO postgres;
 
 --
 -- Name: source; Type: TABLE; Schema: geohistory; Owner: postgres
@@ -3956,6 +3932,27 @@ ALTER SEQUENCE geohistory.adjudicationtype_adjudicationtypeid_seq OWNED BY geohi
 
 
 --
+-- Name: affectedgovernmentgis_affectedgovernmentgisid_seq; Type: SEQUENCE; Schema: geohistory; Owner: postgres
+--
+
+CREATE SEQUENCE geohistory.affectedgovernmentgis_affectedgovernmentgisid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE geohistory.affectedgovernmentgis_affectedgovernmentgisid_seq OWNER TO postgres;
+
+--
+-- Name: affectedgovernmentgis_affectedgovernmentgisid_seq; Type: SEQUENCE OWNED BY; Schema: geohistory; Owner: postgres
+--
+
+ALTER SEQUENCE geohistory.affectedgovernmentgis_affectedgovernmentgisid_seq OWNED BY geohistory.affectedgovernmentgis.affectedgovernmentgisid;
+
+
+--
 -- Name: affectedgovernmentgroup_affectedgovernmentgroupid_seq; Type: SEQUENCE; Schema: geohistory; Owner: postgres
 --
 
@@ -4152,6 +4149,92 @@ ALTER SEQUENCE geohistory.currentgovernment_currentgovernmentid_seq OWNER TO pos
 --
 
 ALTER SEQUENCE geohistory.currentgovernment_currentgovernmentid_seq OWNED BY geohistory.currentgovernment.currentgovernmentid;
+
+
+--
+-- Name: deleted_affectedgovernmentgis; Type: TABLE; Schema: geohistory; Owner: postgres
+--
+
+CREATE TABLE geohistory.deleted_affectedgovernmentgis (
+    deleted_affectedgovernmentgisid integer NOT NULL,
+    affectedgovernment integer NOT NULL,
+    governmentshape integer,
+    deletedat timestamp with time zone DEFAULT now()
+);
+
+
+ALTER TABLE geohistory.deleted_affectedgovernmentgis OWNER TO postgres;
+
+--
+-- Name: TABLE deleted_affectedgovernmentgis; Type: COMMENT; Schema: geohistory; Owner: postgres
+--
+
+COMMENT ON TABLE geohistory.deleted_affectedgovernmentgis IS 'This table is only a temporary data store, and will have no data to export to open data.';
+
+
+--
+-- Name: deleted_affectedgovernmentgis_deleted_affectedgovernmentgis_seq; Type: SEQUENCE; Schema: geohistory; Owner: postgres
+--
+
+CREATE SEQUENCE geohistory.deleted_affectedgovernmentgis_deleted_affectedgovernmentgis_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE geohistory.deleted_affectedgovernmentgis_deleted_affectedgovernmentgis_seq OWNER TO postgres;
+
+--
+-- Name: deleted_affectedgovernmentgis_deleted_affectedgovernmentgis_seq; Type: SEQUENCE OWNED BY; Schema: geohistory; Owner: postgres
+--
+
+ALTER SEQUENCE geohistory.deleted_affectedgovernmentgis_deleted_affectedgovernmentgis_seq OWNED BY geohistory.deleted_affectedgovernmentgis.deleted_affectedgovernmentgisid;
+
+
+--
+-- Name: deleted_metesdescriptiongis; Type: TABLE; Schema: geohistory; Owner: postgres
+--
+
+CREATE TABLE geohistory.deleted_metesdescriptiongis (
+    deleted_metesdescriptiongisid integer NOT NULL,
+    metesdescription integer NOT NULL,
+    governmentshape integer,
+    deletedat timestamp with time zone DEFAULT now()
+);
+
+
+ALTER TABLE geohistory.deleted_metesdescriptiongis OWNER TO postgres;
+
+--
+-- Name: TABLE deleted_metesdescriptiongis; Type: COMMENT; Schema: geohistory; Owner: postgres
+--
+
+COMMENT ON TABLE geohistory.deleted_metesdescriptiongis IS 'This table is only a temporary data store, and will have no data to export to open data.';
+
+
+--
+-- Name: deleted_metesdescriptiongis_deleted_metesdescriptiongisid_seq; Type: SEQUENCE; Schema: geohistory; Owner: postgres
+--
+
+CREATE SEQUENCE geohistory.deleted_metesdescriptiongis_deleted_metesdescriptiongisid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE geohistory.deleted_metesdescriptiongis_deleted_metesdescriptiongisid_seq OWNER TO postgres;
+
+--
+-- Name: deleted_metesdescriptiongis_deleted_metesdescriptiongisid_seq; Type: SEQUENCE OWNED BY; Schema: geohistory; Owner: postgres
+--
+
+ALTER SEQUENCE geohistory.deleted_metesdescriptiongis_deleted_metesdescriptiongisid_seq OWNED BY geohistory.deleted_metesdescriptiongis.deleted_metesdescriptiongisid;
 
 
 --
@@ -4656,6 +4739,27 @@ ALTER SEQUENCE geohistory.governmentothercurrentparent_governmentothercurrentpar
 
 
 --
+-- Name: governmentshape_governmentshapeid_seq; Type: SEQUENCE; Schema: geohistory; Owner: postgres
+--
+
+CREATE SEQUENCE geohistory.governmentshape_governmentshapeid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE geohistory.governmentshape_governmentshapeid_seq OWNER TO postgres;
+
+--
+-- Name: governmentshape_governmentshapeid_seq; Type: SEQUENCE OWNED BY; Schema: geohistory; Owner: postgres
+--
+
+ALTER SEQUENCE geohistory.governmentshape_governmentshapeid_seq OWNED BY geohistory.governmentshape.governmentshapeid;
+
+
+--
 -- Name: governmentsource_governmentsourceid_seq; Type: SEQUENCE; Schema: geohistory; Owner: postgres
 --
 
@@ -5052,6 +5156,27 @@ ALTER SEQUENCE geohistory.metesdescription_metesdescriptionid_seq OWNER TO postg
 --
 
 ALTER SEQUENCE geohistory.metesdescription_metesdescriptionid_seq OWNED BY geohistory.metesdescription.metesdescriptionid;
+
+
+--
+-- Name: metesdescriptiongis_metesdescriptiongisid_seq; Type: SEQUENCE; Schema: geohistory; Owner: postgres
+--
+
+CREATE SEQUENCE geohistory.metesdescriptiongis_metesdescriptiongisid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE geohistory.metesdescriptiongis_metesdescriptiongisid_seq OWNER TO postgres;
+
+--
+-- Name: metesdescriptiongis_metesdescriptiongisid_seq; Type: SEQUENCE OWNED BY; Schema: geohistory; Owner: postgres
+--
+
+ALTER SEQUENCE geohistory.metesdescriptiongis_metesdescriptiongisid_seq OWNED BY geohistory.metesdescriptiongis.metesdescriptiongisid;
 
 
 --
@@ -6166,155 +6291,6 @@ ALTER SEQUENCE geohistory.tribunaltype_tribunaltypeid_seq OWNED BY geohistory.tr
 
 
 --
--- Name: affectedgovernmentgis_affectedgovernmentgisid_seq; Type: SEQUENCE; Schema: gis; Owner: postgres
---
-
-CREATE SEQUENCE gis.affectedgovernmentgis_affectedgovernmentgisid_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE gis.affectedgovernmentgis_affectedgovernmentgisid_seq OWNER TO postgres;
-
---
--- Name: affectedgovernmentgis_affectedgovernmentgisid_seq; Type: SEQUENCE OWNED BY; Schema: gis; Owner: postgres
---
-
-ALTER SEQUENCE gis.affectedgovernmentgis_affectedgovernmentgisid_seq OWNED BY gis.affectedgovernmentgis.affectedgovernmentgisid;
-
-
---
--- Name: deleted_affectedgovernmentgis; Type: TABLE; Schema: gis; Owner: postgres
---
-
-CREATE TABLE gis.deleted_affectedgovernmentgis (
-    deleted_affectedgovernmentgisid integer NOT NULL,
-    affectedgovernment integer NOT NULL,
-    governmentshape integer,
-    deletedat timestamp with time zone DEFAULT now()
-);
-
-
-ALTER TABLE gis.deleted_affectedgovernmentgis OWNER TO postgres;
-
---
--- Name: TABLE deleted_affectedgovernmentgis; Type: COMMENT; Schema: gis; Owner: postgres
---
-
-COMMENT ON TABLE gis.deleted_affectedgovernmentgis IS 'This table is only a temporary data store, and will have no data to export to open data.';
-
-
---
--- Name: deleted_affectedgovernmentgis_deleted_affectedgovernmentgis_seq; Type: SEQUENCE; Schema: gis; Owner: postgres
---
-
-CREATE SEQUENCE gis.deleted_affectedgovernmentgis_deleted_affectedgovernmentgis_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE gis.deleted_affectedgovernmentgis_deleted_affectedgovernmentgis_seq OWNER TO postgres;
-
---
--- Name: deleted_affectedgovernmentgis_deleted_affectedgovernmentgis_seq; Type: SEQUENCE OWNED BY; Schema: gis; Owner: postgres
---
-
-ALTER SEQUENCE gis.deleted_affectedgovernmentgis_deleted_affectedgovernmentgis_seq OWNED BY gis.deleted_affectedgovernmentgis.deleted_affectedgovernmentgisid;
-
-
---
--- Name: deleted_metesdescriptiongis; Type: TABLE; Schema: gis; Owner: postgres
---
-
-CREATE TABLE gis.deleted_metesdescriptiongis (
-    deleted_metesdescriptiongisid integer NOT NULL,
-    metesdescription integer NOT NULL,
-    governmentshape integer,
-    deletedat timestamp with time zone DEFAULT now()
-);
-
-
-ALTER TABLE gis.deleted_metesdescriptiongis OWNER TO postgres;
-
---
--- Name: TABLE deleted_metesdescriptiongis; Type: COMMENT; Schema: gis; Owner: postgres
---
-
-COMMENT ON TABLE gis.deleted_metesdescriptiongis IS 'This table is only a temporary data store, and will have no data to export to open data.';
-
-
---
--- Name: deleted_metesdescriptiongis_deleted_metesdescriptiongisid_seq; Type: SEQUENCE; Schema: gis; Owner: postgres
---
-
-CREATE SEQUENCE gis.deleted_metesdescriptiongis_deleted_metesdescriptiongisid_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE gis.deleted_metesdescriptiongis_deleted_metesdescriptiongisid_seq OWNER TO postgres;
-
---
--- Name: deleted_metesdescriptiongis_deleted_metesdescriptiongisid_seq; Type: SEQUENCE OWNED BY; Schema: gis; Owner: postgres
---
-
-ALTER SEQUENCE gis.deleted_metesdescriptiongis_deleted_metesdescriptiongisid_seq OWNED BY gis.deleted_metesdescriptiongis.deleted_metesdescriptiongisid;
-
-
---
--- Name: governmentshape_governmentshapeid_seq; Type: SEQUENCE; Schema: gis; Owner: postgres
---
-
-CREATE SEQUENCE gis.governmentshape_governmentshapeid_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE gis.governmentshape_governmentshapeid_seq OWNER TO postgres;
-
---
--- Name: governmentshape_governmentshapeid_seq; Type: SEQUENCE OWNED BY; Schema: gis; Owner: postgres
---
-
-ALTER SEQUENCE gis.governmentshape_governmentshapeid_seq OWNED BY gis.governmentshape.governmentshapeid;
-
-
---
--- Name: metesdescriptiongis_metesdescriptiongisid_seq; Type: SEQUENCE; Schema: gis; Owner: postgres
---
-
-CREATE SEQUENCE gis.metesdescriptiongis_metesdescriptiongisid_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE gis.metesdescriptiongis_metesdescriptiongisid_seq OWNER TO postgres;
-
---
--- Name: metesdescriptiongis_metesdescriptiongisid_seq; Type: SEQUENCE OWNED BY; Schema: gis; Owner: postgres
---
-
-ALTER SEQUENCE gis.metesdescriptiongis_metesdescriptiongisid_seq OWNED BY gis.metesdescriptiongis.metesdescriptiongisid;
-
-
---
 -- Name: adjudication adjudicationid; Type: DEFAULT; Schema: geohistory; Owner: postgres
 --
 
@@ -6354,6 +6330,13 @@ ALTER TABLE ONLY geohistory.adjudicationsourcecitation ALTER COLUMN adjudication
 --
 
 ALTER TABLE ONLY geohistory.adjudicationtype ALTER COLUMN adjudicationtypeid SET DEFAULT nextval('geohistory.adjudicationtype_adjudicationtypeid_seq'::regclass);
+
+
+--
+-- Name: affectedgovernmentgis affectedgovernmentgisid; Type: DEFAULT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.affectedgovernmentgis ALTER COLUMN affectedgovernmentgisid SET DEFAULT nextval('geohistory.affectedgovernmentgis_affectedgovernmentgisid_seq'::regclass);
 
 
 --
@@ -6403,6 +6386,20 @@ ALTER TABLE ONLY geohistory.censusmap ALTER COLUMN censusmapid SET DEFAULT nextv
 --
 
 ALTER TABLE ONLY geohistory.currentgovernment ALTER COLUMN currentgovernmentid SET DEFAULT nextval('geohistory.currentgovernment_currentgovernmentid_seq'::regclass);
+
+
+--
+-- Name: deleted_affectedgovernmentgis deleted_affectedgovernmentgisid; Type: DEFAULT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.deleted_affectedgovernmentgis ALTER COLUMN deleted_affectedgovernmentgisid SET DEFAULT nextval('geohistory.deleted_affectedgovernmentgis_deleted_affectedgovernmentgis_seq'::regclass);
+
+
+--
+-- Name: deleted_metesdescriptiongis deleted_metesdescriptiongisid; Type: DEFAULT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.deleted_metesdescriptiongis ALTER COLUMN deleted_metesdescriptiongisid SET DEFAULT nextval('geohistory.deleted_metesdescriptiongis_deleted_metesdescriptiongisid_seq'::regclass);
 
 
 --
@@ -6525,6 +6522,13 @@ ALTER TABLE ONLY geohistory.governmentothercurrentparent ALTER COLUMN government
 
 
 --
+-- Name: governmentshape governmentshapeid; Type: DEFAULT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.governmentshape ALTER COLUMN governmentshapeid SET DEFAULT nextval('geohistory.governmentshape_governmentshapeid_seq'::regclass);
+
+
+--
 -- Name: governmentsource governmentsourceid; Type: DEFAULT; Schema: geohistory; Owner: postgres
 --
 
@@ -6606,6 +6610,13 @@ ALTER TABLE ONLY geohistory.lawsectionevent ALTER COLUMN lawsectioneventid SET D
 --
 
 ALTER TABLE ONLY geohistory.metesdescription ALTER COLUMN metesdescriptionid SET DEFAULT nextval('geohistory.metesdescription_metesdescriptionid_seq'::regclass);
+
+
+--
+-- Name: metesdescriptiongis metesdescriptiongisid; Type: DEFAULT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.metesdescriptiongis ALTER COLUMN metesdescriptiongisid SET DEFAULT nextval('geohistory.metesdescriptiongis_metesdescriptiongisid_seq'::regclass);
 
 
 --
@@ -6812,41 +6823,6 @@ ALTER TABLE ONLY geohistory.tribunaltype ALTER COLUMN tribunaltypeid SET DEFAULT
 
 
 --
--- Name: affectedgovernmentgis affectedgovernmentgisid; Type: DEFAULT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.affectedgovernmentgis ALTER COLUMN affectedgovernmentgisid SET DEFAULT nextval('gis.affectedgovernmentgis_affectedgovernmentgisid_seq'::regclass);
-
-
---
--- Name: deleted_affectedgovernmentgis deleted_affectedgovernmentgisid; Type: DEFAULT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.deleted_affectedgovernmentgis ALTER COLUMN deleted_affectedgovernmentgisid SET DEFAULT nextval('gis.deleted_affectedgovernmentgis_deleted_affectedgovernmentgis_seq'::regclass);
-
-
---
--- Name: deleted_metesdescriptiongis deleted_metesdescriptiongisid; Type: DEFAULT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.deleted_metesdescriptiongis ALTER COLUMN deleted_metesdescriptiongisid SET DEFAULT nextval('gis.deleted_metesdescriptiongis_deleted_metesdescriptiongisid_seq'::regclass);
-
-
---
--- Name: governmentshape governmentshapeid; Type: DEFAULT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.governmentshape ALTER COLUMN governmentshapeid SET DEFAULT nextval('gis.governmentshape_governmentshapeid_seq'::regclass);
-
-
---
--- Name: metesdescriptiongis metesdescriptiongisid; Type: DEFAULT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.metesdescriptiongis ALTER COLUMN metesdescriptiongisid SET DEFAULT nextval('gis.metesdescriptiongis_metesdescriptiongisid_seq'::regclass);
-
-
---
 -- Name: adjudication adjudication_pk; Type: CONSTRAINT; Schema: geohistory; Owner: postgres
 --
 
@@ -6900,6 +6876,14 @@ ALTER TABLE ONLY geohistory.adjudicationsourcecitation
 
 ALTER TABLE ONLY geohistory.adjudicationtype
     ADD CONSTRAINT adjudicationtype_pk PRIMARY KEY (adjudicationtypeid);
+
+
+--
+-- Name: affectedgovernmentgis affectedgovernmentgis_pk; Type: CONSTRAINT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.affectedgovernmentgis
+    ADD CONSTRAINT affectedgovernmentgis_pk PRIMARY KEY (affectedgovernmentgisid);
 
 
 --
@@ -6980,6 +6964,22 @@ ALTER TABLE ONLY geohistory.censusmap
 
 ALTER TABLE ONLY geohistory.currentgovernment
     ADD CONSTRAINT currentgovernment_pk PRIMARY KEY (currentgovernmentid);
+
+
+--
+-- Name: deleted_affectedgovernmentgis deleted_affectedgovernmentgis_pk; Type: CONSTRAINT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.deleted_affectedgovernmentgis
+    ADD CONSTRAINT deleted_affectedgovernmentgis_pk PRIMARY KEY (deleted_affectedgovernmentgisid);
+
+
+--
+-- Name: deleted_metesdescriptiongis deleted_metesdescriptiongis_pk; Type: CONSTRAINT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.deleted_metesdescriptiongis
+    ADD CONSTRAINT deleted_metesdescriptiongis_pk PRIMARY KEY (deleted_metesdescriptiongisid);
 
 
 --
@@ -7183,6 +7183,14 @@ ALTER TABLE ONLY geohistory.governmentothercurrentparent
 
 
 --
+-- Name: governmentshape governmentshape_pk; Type: CONSTRAINT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.governmentshape
+    ADD CONSTRAINT governmentshape_pk PRIMARY KEY (governmentshapeid);
+
+
+--
 -- Name: governmentsource governmentsource_pk; Type: CONSTRAINT; Schema: geohistory; Owner: postgres
 --
 
@@ -7348,6 +7356,14 @@ ALTER TABLE ONLY geohistory.metesdescription
 
 ALTER TABLE ONLY geohistory.metesdescription
     ADD CONSTRAINT metesdescription_unique UNIQUE (metesdescriptionname, event);
+
+
+--
+-- Name: metesdescriptiongis metesdescriptiongis_pk; Type: CONSTRAINT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.metesdescriptiongis
+    ADD CONSTRAINT metesdescriptiongis_pk PRIMARY KEY (metesdescriptiongisid);
 
 
 --
@@ -7671,46 +7687,6 @@ ALTER TABLE ONLY geohistory.tribunaltype
 
 
 --
--- Name: affectedgovernmentgis affectedgovernmentgis_pk; Type: CONSTRAINT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.affectedgovernmentgis
-    ADD CONSTRAINT affectedgovernmentgis_pk PRIMARY KEY (affectedgovernmentgisid);
-
-
---
--- Name: deleted_affectedgovernmentgis deleted_affectedgovernmentgis_pk; Type: CONSTRAINT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.deleted_affectedgovernmentgis
-    ADD CONSTRAINT deleted_affectedgovernmentgis_pk PRIMARY KEY (deleted_affectedgovernmentgisid);
-
-
---
--- Name: deleted_metesdescriptiongis deleted_metesdescriptiongis_pk; Type: CONSTRAINT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.deleted_metesdescriptiongis
-    ADD CONSTRAINT deleted_metesdescriptiongis_pk PRIMARY KEY (deleted_metesdescriptiongisid);
-
-
---
--- Name: governmentshape governmentshape_pk; Type: CONSTRAINT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.governmentshape
-    ADD CONSTRAINT governmentshape_pk PRIMARY KEY (governmentshapeid);
-
-
---
--- Name: metesdescriptiongis metesdescriptiongis_pk; Type: CONSTRAINT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.metesdescriptiongis
-    ADD CONSTRAINT metesdescriptiongis_pk PRIMARY KEY (metesdescriptiongisid);
-
-
---
 -- Name: adjudication_adjudicationslug_idx; Type: INDEX; Schema: geohistory; Owner: postgres
 --
 
@@ -7956,6 +7932,13 @@ CREATE INDEX fki_government_locale_fk ON geohistory.government USING btree (loca
 
 
 --
+-- Name: fki_governmentshape_governmentshapeplsstownship_fk; Type: INDEX; Schema: geohistory; Owner: postgres
+--
+
+CREATE INDEX fki_governmentshape_governmentshapeplsstownship_fk ON geohistory.governmentshape USING btree (governmentshapeplsstownship);
+
+
+--
 -- Name: fki_plss_plsstownship_fk; Type: INDEX; Schema: geohistory; Owner: postgres
 --
 
@@ -8065,6 +8048,34 @@ CREATE INDEX governmentothercurrentparent_government_idx ON geohistory.governmen
 --
 
 CREATE INDEX governmentothercurrentparent_governmentothercurrentparent_idx ON geohistory.governmentothercurrentparent USING btree (governmentothercurrentparent);
+
+
+--
+-- Name: governmentshape_governmentshapeslug_idx; Type: INDEX; Schema: geohistory; Owner: postgres
+--
+
+CREATE INDEX governmentshape_governmentshapeslug_idx ON geohistory.governmentshape USING btree (governmentshapeslug) WITH (deduplicate_items='true');
+
+
+--
+-- Name: governmentshape_idx; Type: INDEX; Schema: geohistory; Owner: postgres
+--
+
+CREATE INDEX governmentshape_idx ON geohistory.governmentshape USING gist (governmentshapegeometry);
+
+
+--
+-- Name: governmentshape_municipality_idx; Type: INDEX; Schema: geohistory; Owner: postgres
+--
+
+CREATE INDEX governmentshape_municipality_idx ON geohistory.governmentshape USING btree (governmentsubmunicipality, governmentmunicipality);
+
+
+--
+-- Name: governmentshapecache_geometry_idx; Type: INDEX; Schema: geohistory; Owner: postgres
+--
+
+CREATE INDEX governmentshapecache_geometry_idx ON geohistory.governmentshapecache USING gist (geometry);
 
 
 --
@@ -8404,41 +8415,6 @@ CREATE INDEX tribunal_tribunaltype_idx ON geohistory.tribunal USING btree (tribu
 
 
 --
--- Name: fki_governmentshape_governmentshapeplsstownship_fk; Type: INDEX; Schema: gis; Owner: postgres
---
-
-CREATE INDEX fki_governmentshape_governmentshapeplsstownship_fk ON gis.governmentshape USING btree (governmentshapeplsstownship);
-
-
---
--- Name: governmentshape_governmentshapeslug_idx; Type: INDEX; Schema: gis; Owner: postgres
---
-
-CREATE INDEX governmentshape_governmentshapeslug_idx ON gis.governmentshape USING btree (governmentshapeslug) WITH (deduplicate_items='true');
-
-
---
--- Name: governmentshape_idx; Type: INDEX; Schema: gis; Owner: postgres
---
-
-CREATE INDEX governmentshape_idx ON gis.governmentshape USING gist (governmentshapegeometry);
-
-
---
--- Name: governmentshape_municipality_idx; Type: INDEX; Schema: gis; Owner: postgres
---
-
-CREATE INDEX governmentshape_municipality_idx ON gis.governmentshape USING btree (governmentsubmunicipality, governmentmunicipality);
-
-
---
--- Name: governmentshapecache_geometry_idx; Type: INDEX; Schema: gis; Owner: postgres
---
-
-CREATE INDEX governmentshapecache_geometry_idx ON gis.governmentshapecache USING gist (geometry);
-
-
---
 -- Name: government government_insertupdate_trigger; Type: TRIGGER; Schema: geohistory; Owner: postgres
 --
 
@@ -8450,6 +8426,20 @@ CREATE TRIGGER government_insertupdate_trigger BEFORE INSERT OR UPDATE OF govern
 --
 
 CREATE TRIGGER governmentothercurrentparent_insertupdate_trigger BEFORE INSERT OR UPDATE ON geohistory.governmentothercurrentparent FOR EACH ROW EXECUTE FUNCTION geohistory.governmentothercurrentparent_insertupdate();
+
+
+--
+-- Name: governmentshape governmentshape_delete_trigger; Type: TRIGGER; Schema: geohistory; Owner: postgres
+--
+
+CREATE TRIGGER governmentshape_delete_trigger BEFORE DELETE ON geohistory.governmentshape FOR EACH ROW EXECUTE FUNCTION geohistory.governmentshape_delete();
+
+
+--
+-- Name: governmentshape governmentshape_insert_trigger; Type: TRIGGER; Schema: geohistory; Owner: postgres
+--
+
+CREATE TRIGGER governmentshape_insert_trigger AFTER INSERT ON geohistory.governmentshape FOR EACH ROW EXECUTE FUNCTION geohistory.governmentshape_insert();
 
 
 --
@@ -8520,20 +8510,6 @@ CREATE TRIGGER source_update_trigger BEFORE UPDATE OF sourcetype ON geohistory.s
 --
 
 CREATE TRIGGER sourcetype_update_trigger BEFORE UPDATE OF sourcetypeislaw ON geohistory.sourcetype FOR EACH ROW EXECUTE FUNCTION geohistory.sourcetype_update();
-
-
---
--- Name: governmentshape governmentshape_delete_trigger; Type: TRIGGER; Schema: gis; Owner: postgres
---
-
-CREATE TRIGGER governmentshape_delete_trigger BEFORE DELETE ON gis.governmentshape FOR EACH ROW EXECUTE FUNCTION gis.governmentshape_delete();
-
-
---
--- Name: governmentshape governmentshape_insert_trigger; Type: TRIGGER; Schema: gis; Owner: postgres
---
-
-CREATE TRIGGER governmentshape_insert_trigger AFTER INSERT ON gis.governmentshape FOR EACH ROW EXECUTE FUNCTION gis.governmentshape_insert();
 
 
 --
@@ -8614,6 +8590,22 @@ ALTER TABLE ONLY geohistory.adjudicationsourcecitation
 
 ALTER TABLE ONLY geohistory.adjudicationtype
     ADD CONSTRAINT adjudicationtype_tribunal_fk FOREIGN KEY (tribunal) REFERENCES geohistory.tribunal(tribunalid) DEFERRABLE;
+
+
+--
+-- Name: affectedgovernmentgis affectedgovernmentgis_affectedgovernment_fk; Type: FK CONSTRAINT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.affectedgovernmentgis
+    ADD CONSTRAINT affectedgovernmentgis_affectedgovernment_fk FOREIGN KEY (affectedgovernment) REFERENCES geohistory.affectedgovernmentgroup(affectedgovernmentgroupid) DEFERRABLE;
+
+
+--
+-- Name: affectedgovernmentgis affectedgovernmentgis_governmentshape_fk; Type: FK CONSTRAINT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.affectedgovernmentgis
+    ADD CONSTRAINT affectedgovernmentgis_governmentshape_fk FOREIGN KEY (governmentshape) REFERENCES geohistory.governmentshape(governmentshapeid) DEFERRABLE;
 
 
 --
@@ -8881,6 +8873,62 @@ ALTER TABLE ONLY geohistory.governmentothercurrentparent
 
 
 --
+-- Name: governmentshape governmentshape_governmentcounty_fk; Type: FK CONSTRAINT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.governmentshape
+    ADD CONSTRAINT governmentshape_governmentcounty_fk FOREIGN KEY (governmentcounty) REFERENCES geohistory.government(governmentid) DEFERRABLE;
+
+
+--
+-- Name: governmentshape governmentshape_governmentmunicipality_fk; Type: FK CONSTRAINT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.governmentshape
+    ADD CONSTRAINT governmentshape_governmentmunicipality_fk FOREIGN KEY (governmentmunicipality) REFERENCES geohistory.government(governmentid) DEFERRABLE;
+
+
+--
+-- Name: governmentshape governmentshape_governmentschooldistrict_fk; Type: FK CONSTRAINT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.governmentshape
+    ADD CONSTRAINT governmentshape_governmentschooldistrict_fk FOREIGN KEY (governmentschooldistrict) REFERENCES geohistory.government(governmentid) DEFERRABLE;
+
+
+--
+-- Name: governmentshape governmentshape_governmentshapeplsstownship_fk; Type: FK CONSTRAINT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.governmentshape
+    ADD CONSTRAINT governmentshape_governmentshapeplsstownship_fk FOREIGN KEY (governmentshapeplsstownship) REFERENCES geohistory.government(governmentid) DEFERRABLE;
+
+
+--
+-- Name: governmentshape governmentshape_governmentstate_fk; Type: FK CONSTRAINT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.governmentshape
+    ADD CONSTRAINT governmentshape_governmentstate_fk FOREIGN KEY (governmentstate) REFERENCES geohistory.government(governmentid) DEFERRABLE;
+
+
+--
+-- Name: governmentshape governmentshape_governmentsubmunicipality_fk; Type: FK CONSTRAINT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.governmentshape
+    ADD CONSTRAINT governmentshape_governmentsubmunicipality_fk FOREIGN KEY (governmentsubmunicipality) REFERENCES geohistory.government(governmentid) DEFERRABLE;
+
+
+--
+-- Name: governmentshape governmentshape_governmentward_fk; Type: FK CONSTRAINT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.governmentshape
+    ADD CONSTRAINT governmentshape_governmentward_fk FOREIGN KEY (governmentward) REFERENCES geohistory.government(governmentid) DEFERRABLE;
+
+
+--
 -- Name: governmentsource governmentsource_government_fk; Type: FK CONSTRAINT; Schema: geohistory; Owner: postgres
 --
 
@@ -9086,6 +9134,22 @@ ALTER TABLE ONLY geohistory.lawsectionevent
 
 ALTER TABLE ONLY geohistory.metesdescription
     ADD CONSTRAINT metesdescription_event_fk FOREIGN KEY (event) REFERENCES geohistory.event(eventid) DEFERRABLE;
+
+
+--
+-- Name: metesdescriptiongis metesdescriptiongis_governmentshape_fk; Type: FK CONSTRAINT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.metesdescriptiongis
+    ADD CONSTRAINT metesdescriptiongis_governmentshape_fk FOREIGN KEY (governmentshape) REFERENCES geohistory.governmentshape(governmentshapeid) DEFERRABLE;
+
+
+--
+-- Name: metesdescriptiongis metesdescriptiongis_metesdescription_fk; Type: FK CONSTRAINT; Schema: geohistory; Owner: postgres
+--
+
+ALTER TABLE ONLY geohistory.metesdescriptiongis
+    ADD CONSTRAINT metesdescriptiongis_metesdescription_fk FOREIGN KEY (metesdescription) REFERENCES geohistory.metesdescription(metesdescriptionid) DEFERRABLE;
 
 
 --
@@ -9369,105 +9433,10 @@ ALTER TABLE ONLY geohistory.tribunal
 
 
 --
--- Name: affectedgovernmentgis affectedgovernmentgis_affectedgovernment_fk; Type: FK CONSTRAINT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.affectedgovernmentgis
-    ADD CONSTRAINT affectedgovernmentgis_affectedgovernment_fk FOREIGN KEY (affectedgovernment) REFERENCES geohistory.affectedgovernmentgroup(affectedgovernmentgroupid) DEFERRABLE;
-
-
---
--- Name: affectedgovernmentgis affectedgovernmentgis_governmentshape_fk; Type: FK CONSTRAINT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.affectedgovernmentgis
-    ADD CONSTRAINT affectedgovernmentgis_governmentshape_fk FOREIGN KEY (governmentshape) REFERENCES gis.governmentshape(governmentshapeid) DEFERRABLE;
-
-
---
--- Name: governmentshape governmentshape_governmentcounty_fk; Type: FK CONSTRAINT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.governmentshape
-    ADD CONSTRAINT governmentshape_governmentcounty_fk FOREIGN KEY (governmentcounty) REFERENCES geohistory.government(governmentid) DEFERRABLE;
-
-
---
--- Name: governmentshape governmentshape_governmentmunicipality_fk; Type: FK CONSTRAINT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.governmentshape
-    ADD CONSTRAINT governmentshape_governmentmunicipality_fk FOREIGN KEY (governmentmunicipality) REFERENCES geohistory.government(governmentid) DEFERRABLE;
-
-
---
--- Name: governmentshape governmentshape_governmentschooldistrict_fk; Type: FK CONSTRAINT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.governmentshape
-    ADD CONSTRAINT governmentshape_governmentschooldistrict_fk FOREIGN KEY (governmentschooldistrict) REFERENCES geohistory.government(governmentid) DEFERRABLE;
-
-
---
--- Name: governmentshape governmentshape_governmentshapeplsstownship_fk; Type: FK CONSTRAINT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.governmentshape
-    ADD CONSTRAINT governmentshape_governmentshapeplsstownship_fk FOREIGN KEY (governmentshapeplsstownship) REFERENCES geohistory.government(governmentid) DEFERRABLE;
-
-
---
--- Name: governmentshape governmentshape_governmentstate_fk; Type: FK CONSTRAINT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.governmentshape
-    ADD CONSTRAINT governmentshape_governmentstate_fk FOREIGN KEY (governmentstate) REFERENCES geohistory.government(governmentid) DEFERRABLE;
-
-
---
--- Name: governmentshape governmentshape_governmentsubmunicipality_fk; Type: FK CONSTRAINT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.governmentshape
-    ADD CONSTRAINT governmentshape_governmentsubmunicipality_fk FOREIGN KEY (governmentsubmunicipality) REFERENCES geohistory.government(governmentid) DEFERRABLE;
-
-
---
--- Name: governmentshape governmentshape_governmentward_fk; Type: FK CONSTRAINT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.governmentshape
-    ADD CONSTRAINT governmentshape_governmentward_fk FOREIGN KEY (governmentward) REFERENCES geohistory.government(governmentid) DEFERRABLE;
-
-
---
--- Name: metesdescriptiongis metesdescriptiongis_governmentshape_fk; Type: FK CONSTRAINT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.metesdescriptiongis
-    ADD CONSTRAINT metesdescriptiongis_governmentshape_fk FOREIGN KEY (governmentshape) REFERENCES gis.governmentshape(governmentshapeid) DEFERRABLE;
-
-
---
--- Name: metesdescriptiongis metesdescriptiongis_metesdescription_fk; Type: FK CONSTRAINT; Schema: gis; Owner: postgres
---
-
-ALTER TABLE ONLY gis.metesdescriptiongis
-    ADD CONSTRAINT metesdescriptiongis_metesdescription_fk FOREIGN KEY (metesdescription) REFERENCES geohistory.metesdescription(metesdescriptionid) DEFERRABLE;
-
-
---
 -- Name: SCHEMA geohistory; Type: ACL; Schema: -; Owner: postgres
 --
 
 GRANT USAGE ON SCHEMA geohistory TO readonly;
-
-
---
--- Name: SCHEMA gis; Type: ACL; Schema: -; Owner: postgres
---
-
-GRANT USAGE ON SCHEMA gis TO readonly;
 
 
 --
@@ -9574,6 +9543,20 @@ REVOKE ALL ON FUNCTION geohistory.governmentname(i_id integer) FROM PUBLIC;
 --
 
 REVOKE ALL ON FUNCTION geohistory.governmentothercurrentparent_insertupdate() FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION governmentshape_delete(); Type: ACL; Schema: geohistory; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION geohistory.governmentshape_delete() FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION governmentshape_insert(); Type: ACL; Schema: geohistory; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION geohistory.governmentshape_insert() FROM PUBLIC;
 
 
 --
@@ -9749,6 +9732,13 @@ REVOKE ALL ON FUNCTION geohistory.rangeformat(text, text) FROM PUBLIC;
 
 
 --
+-- Name: FUNCTION refresh_sequence(); Type: ACL; Schema: geohistory; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION geohistory.refresh_sequence() FROM PUBLIC;
+
+
+--
 -- Name: FUNCTION refresh_view(); Type: ACL; Schema: geohistory; Owner: postgres
 --
 
@@ -9803,34 +9793,6 @@ REVOKE ALL ON FUNCTION geohistory.sourceshort(i_id integer) FROM PUBLIC;
 --
 
 REVOKE ALL ON FUNCTION geohistory.sourcetype_update() FROM PUBLIC;
-
-
---
--- Name: FUNCTION governmentshape_delete(); Type: ACL; Schema: gis; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION gis.governmentshape_delete() FROM PUBLIC;
-
-
---
--- Name: FUNCTION governmentshape_insert(); Type: ACL; Schema: gis; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION gis.governmentshape_insert() FROM PUBLIC;
-
-
---
--- Name: FUNCTION refresh_sequence(); Type: ACL; Schema: gis; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION gis.refresh_sequence() FROM PUBLIC;
-
-
---
--- Name: FUNCTION refresh_view(); Type: ACL; Schema: gis; Owner: postgres
---
-
-REVOKE ALL ON FUNCTION gis.refresh_view() FROM PUBLIC;
 
 
 --
@@ -9911,6 +9873,13 @@ GRANT SELECT ON TABLE geohistory.governmentform TO readonly;
 
 
 --
+-- Name: TABLE affectedgovernmentgis; Type: ACL; Schema: geohistory; Owner: postgres
+--
+
+GRANT SELECT ON TABLE geohistory.affectedgovernmentgis TO readonly;
+
+
+--
 -- Name: TABLE governmentmapstatus; Type: ACL; Schema: geohistory; Owner: postgres
 --
 
@@ -9918,24 +9887,17 @@ GRANT SELECT ON TABLE geohistory.governmentmapstatus TO readonly;
 
 
 --
--- Name: TABLE affectedgovernmentgis; Type: ACL; Schema: gis; Owner: postgres
+-- Name: TABLE governmentshape; Type: ACL; Schema: geohistory; Owner: postgres
 --
 
-GRANT SELECT ON TABLE gis.affectedgovernmentgis TO readonly;
-
-
---
--- Name: TABLE governmentshape; Type: ACL; Schema: gis; Owner: postgres
---
-
-GRANT SELECT ON TABLE gis.governmentshape TO readonly;
+GRANT SELECT ON TABLE geohistory.governmentshape TO readonly;
 
 
 --
--- Name: TABLE governmentshapecache; Type: ACL; Schema: gis; Owner: postgres
+-- Name: TABLE governmentshapecache; Type: ACL; Schema: geohistory; Owner: postgres
 --
 
-GRANT SELECT ON TABLE gis.governmentshapecache TO readonly;
+GRANT SELECT ON TABLE geohistory.governmentshapecache TO readonly;
 
 
 --
@@ -10023,6 +9985,13 @@ GRANT SELECT ON TABLE geohistory.metesdescription TO readonly;
 
 
 --
+-- Name: TABLE metesdescriptiongis; Type: ACL; Schema: geohistory; Owner: postgres
+--
+
+GRANT SELECT ON TABLE geohistory.metesdescriptiongis TO readonly;
+
+
+--
 -- Name: TABLE sourcegovernment; Type: ACL; Schema: geohistory; Owner: postgres
 --
 
@@ -10034,13 +10003,6 @@ GRANT SELECT ON TABLE geohistory.sourcegovernment TO readonly;
 --
 
 GRANT SELECT ON TABLE geohistory.tribunal TO readonly;
-
-
---
--- Name: TABLE metesdescriptiongis; Type: ACL; Schema: gis; Owner: postgres
---
-
-GRANT SELECT ON TABLE gis.metesdescriptiongis TO readonly;
 
 
 --
@@ -10209,6 +10171,20 @@ GRANT SELECT ON TABLE geohistory.adjudicationsourcecitation TO readonly;
 --
 
 GRANT SELECT ON TABLE geohistory.censusmap TO readonly;
+
+
+--
+-- Name: TABLE deleted_affectedgovernmentgis; Type: ACL; Schema: geohistory; Owner: postgres
+--
+
+GRANT SELECT ON TABLE geohistory.deleted_affectedgovernmentgis TO readonly;
+
+
+--
+-- Name: TABLE deleted_metesdescriptiongis; Type: ACL; Schema: geohistory; Owner: postgres
+--
+
+GRANT SELECT ON TABLE geohistory.deleted_metesdescriptiongis TO readonly;
 
 
 --
@@ -10401,20 +10377,6 @@ GRANT SELECT ON TABLE geohistory.tribunaltype TO readonly;
 
 
 --
--- Name: TABLE deleted_affectedgovernmentgis; Type: ACL; Schema: gis; Owner: postgres
---
-
-GRANT SELECT ON TABLE gis.deleted_affectedgovernmentgis TO readonly;
-
-
---
--- Name: TABLE deleted_metesdescriptiongis; Type: ACL; Schema: gis; Owner: postgres
---
-
-GRANT SELECT ON TABLE gis.deleted_metesdescriptiongis TO readonly;
-
-
---
 -- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: geohistory; Owner: postgres
 --
 
@@ -10426,20 +10388,6 @@ ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA geohistory GRANT ALL ON FUN
 --
 
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA geohistory GRANT SELECT ON TABLES TO readonly;
-
-
---
--- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: gis; Owner: postgres
---
-
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA gis GRANT ALL ON FUNCTIONS TO readonly;
-
-
---
--- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: gis; Owner: postgres
---
-
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA gis GRANT SELECT ON TABLES TO readonly;
 
 
 --

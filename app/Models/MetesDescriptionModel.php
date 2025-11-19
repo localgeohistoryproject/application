@@ -45,9 +45,9 @@ class MetesDescriptionModel extends BaseModel
                     public.st_asgeojson(public.st_buffer(public.st_collect(governmentshape.governmentshapegeometry), 0)) AS geometry,
                     lower(array_to_string(array_agg(DISTINCT government.governmentabbreviation ORDER BY government.governmentabbreviation), ',')) AS jurisdictions
                 FROM metesdescriptionpart
-                LEFT JOIN gis.metesdescriptiongis
+                LEFT JOIN geohistory.metesdescriptiongis
                     ON metesdescriptionpart.metesdescriptionid = metesdescriptiongis.metesdescription
-                LEFT JOIN gis.governmentshape
+                LEFT JOIN geohistory.governmentshape
                     ON metesdescriptiongis.governmentshape = governmentshape.governmentshapeid
                 LEFT JOIN geohistory.government
                     ON governmentshape.governmentstate = government.governmentid
@@ -94,7 +94,7 @@ class MetesDescriptionModel extends BaseModel
                     metesdescription.event,
                     event.eventslug
                 FROM geohistory.metesdescription
-                JOIN gis.metesdescriptiongis
+                JOIN geohistory.metesdescriptiongis
                     ON metesdescription.metesdescriptionid = metesdescriptiongis.metesdescription
                 JOIN geohistory.event
                     ON metesdescription.event = event.eventid

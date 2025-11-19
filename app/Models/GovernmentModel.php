@@ -73,7 +73,7 @@ class GovernmentModel extends BaseModel
                     AND governmentchangecountcache.dissolutionevent[1] = dissolutionevent.eventid
                 LEFT OUTER JOIN (
                     SELECT DISTINCT true AS hasmap
-                    FROM gis.governmentshapecache
+                    FROM geohistory.governmentshapecache
                     JOIN geohistory.government
                         ON governmentshapecache.government = government.governmentid
                         AND government.governmentlevel > 2
@@ -83,7 +83,7 @@ class GovernmentModel extends BaseModel
                     UNION
                     SELECT DISTINCT true AS hasmap
                     FROM geohistory.affectedgovernmentgrouppart
-                    JOIN gis.affectedgovernmentgis
+                    JOIN geohistory.affectedgovernmentgis
                         ON affectedgovernmentgrouppart.affectedgovernmentgroup = affectedgovernmentgis.affectedgovernment
                     JOIN geohistory.affectedgovernmentpart
                         ON affectedgovernmentgrouppart.affectedgovernmentpart = affectedgovernmentpart.affectedgovernmentpartid
@@ -95,7 +95,7 @@ class GovernmentModel extends BaseModel
                     UNION
                     SELECT DISTINCT true AS hasmap
                     FROM geohistory.affectedgovernmentgrouppart
-                    JOIN gis.affectedgovernmentgis
+                    JOIN geohistory.affectedgovernmentgis
                         ON affectedgovernmentgrouppart.affectedgovernmentgroup = affectedgovernmentgis.affectedgovernment
                     JOIN geohistory.affectedgovernmentpart
                         ON affectedgovernmentgrouppart.affectedgovernmentpart = affectedgovernmentpart.affectedgovernmentpartid

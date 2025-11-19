@@ -24,7 +24,7 @@ class GovernmentShapeModel extends BaseModel
                     governmentstate.governmentabbreviation AS governmentstateabbreviation,
                     governmentshape.governmentshapeid AS id,
                     public.st_asgeojson(governmentshape.governmentshapegeometry) AS geometry
-                FROM gis.governmentshape
+                FROM geohistory.governmentshape
                 JOIN geohistory.government governmentmunicipality
                     ON governmentshape.governmentmunicipality = governmentmunicipality.governmentid
                 JOIN geohistory.government governmentcounty
@@ -48,7 +48,7 @@ class GovernmentShapeModel extends BaseModel
     {
         $query = <<<QUERY
                 SELECT DISTINCT governmentshape.governmentshapeid
-                    FROM gis.governmentshape
+                    FROM geohistory.governmentshape
                 WHERE ST_Contains(governmentshape.governmentshapegeometry, ST_SetSRID(ST_Point(?,?),4326))
                 ORDER BY 1
             QUERY;
@@ -66,7 +66,7 @@ class GovernmentShapeModel extends BaseModel
         $query = <<<QUERY
                 SELECT governmentshapecache.government AS id,
                     public.st_asgeojson(public.st_boundary(public.st_union(governmentshapecache.geometry)), 5) AS geometry
-                FROM gis.governmentshapecache
+                FROM geohistory.governmentshapecache
                 WHERE governmentshapecache.government = ?
                 GROUP BY 1
             QUERY;
@@ -139,7 +139,7 @@ class GovernmentShapeModel extends BaseModel
                     FROM affectedgovernmentsummary
                     JOIN geohistory.affectedtype
                         ON affectedgovernmentsummary.affectedtypeid = affectedtype.affectedtypeid
-                    JOIN gis.affectedgovernmentgis
+                    JOIN geohistory.affectedgovernmentgis
                         ON affectedgovernmentsummary.affectedgovernmentid = affectedgovernmentgis.affectedgovernment
                     JOIN geohistory.event
                         ON affectedgovernmentsummary.eventid = event.eventid
@@ -218,7 +218,7 @@ class GovernmentShapeModel extends BaseModel
                         WHEN governmentshapeevent.eventjson IS NULL THEN '[]'::json
                         ELSE governmentshapeevent.eventjson
                     END AS eventjson
-                FROM gis.governmentshape
+                FROM geohistory.governmentshape
                 JOIN geohistory.government governmentmunicipality
                     ON governmentshape.governmentmunicipality = governmentmunicipality.governmentid
                 JOIN geohistory.government governmentcounty
@@ -263,7 +263,7 @@ class GovernmentShapeModel extends BaseModel
     {
         $query = <<<QUERY
                 SELECT DISTINCT governmentshape.governmentshapeslug AS slug
-                FROM gis.governmentshape
+                FROM geohistory.governmentshape
                 ORDER BY 1
             QUERY;
 
@@ -276,7 +276,7 @@ class GovernmentShapeModel extends BaseModel
     {
         $query = <<<QUERY
                 SELECT governmentshape.governmentshapeid AS id
-                    FROM gis.governmentshape
+                    FROM geohistory.governmentshape
                 WHERE governmentshape.governmentshapeslug = ?
             QUERY;
 
@@ -303,7 +303,7 @@ class GovernmentShapeModel extends BaseModel
                         government.governmentid AS name,
                         government.governmentshort AS description,
                         governmentshapecache.governmentlayer
-                    FROM gis.governmentshapecache
+                    FROM geohistory.governmentshapecache
                     JOIN geohistory.government
                         ON governmentshapecache.government = government.governmentid
                     WHERE (

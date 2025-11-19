@@ -9,9 +9,9 @@ if [ "$CI_ENVIRONMENT" = "production" ]; then
     tableString="BEGIN;
     SET CONSTRAINTS ALL DEFERRED;
     "
-    ## Geohistory
-    geohistoryTables=(adjudication adjudicationevent adjudicationlocation adjudicationlocationtype adjudicationsourcecitation adjudicationtype affectedgovernmentgroup affectedgovernmentgrouppart affectedgovernmentlevel affectedgovernmentpart affectedtype censusmap currentgovernment documentation event eventeffectivetype eventgranted eventmethod eventrelationship eventslugretired eventtype filing filingtype government governmentform governmentformgovernment governmentidentifier governmentidentifiertype governmentmapstatus governmentothercurrentparent governmentsource governmentsourceevent lastrefresh law lawalternate lawalternatesection lawgroup lawgroupeventtype lawgroupgovernmenttype lawgroupsection lawsection lawsectionevent locale metesdescription metesdescriptionline nationalarchives plss plssfirstdivision plssfirstdivisionpart plssmeridian plssseconddivision plssspecialsurvey plsstownship recording recordingevent recordingoffice recordingofficetype recordingtype researchlog researchlogtype shorttype source sourcecitation sourcecitationevent sourcecitationnote sourcecitationnotetype sourcegovernment sourceitem sourceitemcategory sourceitempart sourcetype tribunal tribunaltype)
-    for tableName in "${geohistoryTables[@]}"
+    ## Tables (except Governmentshape)
+    tableList=(adjudication adjudicationevent adjudicationlocation adjudicationlocationtype adjudicationsourcecitation adjudicationtype affectedgovernmentgis affectedgovernmentgroup affectedgovernmentgrouppart affectedgovernmentlevel affectedgovernmentpart affectedtype censusmap currentgovernment documentation event eventeffectivetype eventgranted eventmethod eventrelationship eventslugretired eventtype filing filingtype government governmentform governmentformgovernment governmentidentifier governmentidentifiertype governmentmapstatus governmentothercurrentparent governmentsource governmentsourceevent lastrefresh law lawalternate lawalternatesection lawgroup lawgroupeventtype lawgroupgovernmenttype lawgroupsection lawsection lawsectionevent locale metesdescription metesdescriptiongis metesdescriptionline nationalarchives plss plssfirstdivision plssfirstdivisionpart plssmeridian plssseconddivision plssspecialsurvey plsstownship recording recordingevent recordingoffice recordingofficetype recordingtype researchlog researchlogtype shorttype source sourcecitation sourcecitationevent sourcecitationnote sourcecitationnotetype sourcegovernment sourceitem sourceitemcategory sourceitempart sourcetype tribunal tribunaltype)
+    for tableName in "${tableList[@]}"
     do
         if [ -f "/inpostgis/${tableName,,}.tsv" ]; then
             tsvHeader=$(head -n +1 "/inpostgis/${tableName,,}.tsv" | sed "s/\t/,/g")
@@ -22,40 +22,26 @@ if [ "$CI_ENVIRONMENT" = "production" ]; then
             echo "ERROR: ${tableName,,} data file missing"
         fi
     done
-    ## GIS (Governmentshape)
-    tableString+="ALTER TABLE gis.governmentshape DISABLE TRIGGER governmentshape_insert_trigger;
+    ## Governmentshape
+    tableString+="ALTER TABLE geohistory.governmentshape DISABLE TRIGGER governmentshape_insert_trigger;
     "
     fileNameCount=$((0))
     for fileName in /inpostgis/governmentshape*.tsv
     do
         tsvHeader=$(head -n +1 "${fileName}" | sed "s/\t/,/g")
         tail -n +2 "${fileName}" > "/tmp${fileName}"
-        tableString+="\COPY gis.governmentshape ($tsvHeader) FROM '/tmp${fileName}';
+        tableString+="\COPY geohistory.governmentshape ($tsvHeader) FROM '/tmp${fileName}';
         "
         fileNameCount=$(($fileNameCount + 1))
     done
     if [[ $fileNameCount -eq 0 ]]; then
         echo "ERROR: governmentshape data file(s) missing"
     fi
-    ## GIS (Remaining)
-    gisTables=(affectedgovernmentgis metesdescriptiongis)
-    for tableName in "${gisTables[@]}"
-    do
-        if [ -f "/inpostgis/${tableName,,}.tsv" ]; then
-            tsvHeader=$(head -n +1 "/inpostgis/${tableName,,}.tsv" | sed "s/\t/,/g")
-            tail -n +2 "/inpostgis/${tableName,,}.tsv" > "/tmp/inpostgis/${tableName,,}.tsv"
-            tableString+="\COPY gis.${tableName,,} ($tsvHeader) FROM '/tmp/inpostgis/${tableName,,}.tsv';
-            "
-        else
-            echo "ERROR: ${tableName,,} data file missing"
-        fi
-    done
     ## Reinstate foreign key checks and refresh views
     tableString+="COMMIT;
-    ALTER TABLE gis.governmentshape ENABLE TRIGGER governmentshape_insert_trigger;
+    ALTER TABLE geohistory.governmentshape ENABLE TRIGGER governmentshape_insert_trigger;
     SELECT geohistory.refresh_view();
-    SELECT gis.refresh_view();
-    SELECT gis.refresh_sequence();
+    SELECT geohistory.refresh_sequence();
     "
     ## Save combined commands
     echo "${tableString}" > /tmp/inpostgis/import.sql

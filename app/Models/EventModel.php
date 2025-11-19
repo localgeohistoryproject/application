@@ -203,7 +203,7 @@ class EventModel extends BaseModel
                 WHERE (event.eventid IN ( SELECT event_1.eventid
                         FROM geohistory.event event_1,
                             geohistory.affectedgovernmentgroup,
-                            gis.affectedgovernmentgis
+                            geohistory.affectedgovernmentgis
                         WHERE event_1.eventid = affectedgovernmentgroup.event
                             AND affectedgovernmentgroup.affectedgovernmentgroupid = affectedgovernmentgis.affectedgovernment
                             AND affectedgovernmentgis.governmentshape = ?
@@ -211,7 +211,7 @@ class EventModel extends BaseModel
                         SELECT event_1.eventid
                         FROM geohistory.event event_1,
                             geohistory.metesdescription,
-                            gis.metesdescriptiongis
+                            geohistory.metesdescriptiongis
                         WHERE event_1.eventid = metesdescription.event
                             AND metesdescription.metesdescriptionid = metesdescriptiongis.metesdescription
                             AND metesdescriptiongis.governmentshape = ?))
@@ -785,9 +785,9 @@ class EventModel extends BaseModel
                 UNION
                 SELECT DISTINCT affectedgovernmentgroup.event AS eventid
                 FROM geohistory.affectedgovernmentgroup
-                JOIN gis.affectedgovernmentgis
+                JOIN geohistory.affectedgovernmentgis
                     ON affectedgovernmentgroup.affectedgovernmentgroupid = affectedgovernmentgis.affectedgovernment
-                JOIN gis.governmentshape
+                JOIN geohistory.governmentshape
                     ON affectedgovernmentgis.governmentshape = governmentshape.governmentshapeid
                 JOIN governments
                     ON (
@@ -836,9 +836,9 @@ class EventModel extends BaseModel
                 UNION
                 SELECT DISTINCT metesdescription.event AS eventid
                 FROM geohistory.metesdescription
-                JOIN gis.metesdescriptiongis
+                JOIN geohistory.metesdescriptiongis
                     ON metesdescription.metesdescriptionid = metesdescriptiongis.metesdescription
-                JOIN gis.governmentshape
+                JOIN geohistory.governmentshape
                     ON metesdescriptiongis.governmentshape = governmentshape.governmentshapeid
                 JOIN governments
                     ON (
