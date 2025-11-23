@@ -5,7 +5,6 @@ return [
     'data' => 'Données',
     'disclaimers' => 'Avis',
     'license' => 'licence',
-    'opendata' => 'Données ouvertes',
     'originalContent' => 'Contenu original',
     'projectName' => getenv('app_title_fr'),
 ];
