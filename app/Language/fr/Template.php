@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'projectName' => getenv('app_title_fr'),
-    'originalContent' => 'Contenu original',
     'code' => 'Code',
     'data' => 'Données',
-    'license' => 'licence',
     'disclaimers' => 'Avis',
+    'license' => 'licence',
     'opendata' => 'Données ouvertes',
+    'originalContent' => 'Contenu original',
+    'projectName' => getenv('app_title_fr'),
 ];
