@@ -25,7 +25,7 @@ $url ??= '';
     <?php } ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
-    <title><?= (isset($pageTitle) ? $pageTitle . ' | ' : '') . (isset($pageTitleType) ? $pageTitleType . ' | ' : '') . $title ?> | <?= lang('Template.projectName') ?></title>
+    <title><?= (isset($pageTitle) ? $pageTitle . ' | ' : '') . (isset($pageTitleType) ? $pageTitleType . ' | ' : '') . $title ?> | <?= lang('Application.projectName') ?></title>
     <?php if ($title === 'Welcome' || $url !== '') { ?>
     <link rel="canonical" href="<?= $_ENV['app_baseCanonicalProjectUrl'] ?>/<?= \Config\Services::request()->getLocale() ?>/<?= $url ?>">
     <?php } if ($title === 'Welcome' && $mastodon !== '') { ?>
@@ -55,7 +55,7 @@ $url ??= '';
     <div class="wrapper" <?= ($title === 'Welcome' ? ' id="welcomewrapper"' : '') ?>>
         <header class="headerfooter">
             <div id="headertext">
-                <div id="headertitle"><a href="/<?= \Config\Services::request()->getLocale() ?>/"><?= lang('Template.projectName') ?></a></div>
+                <div id="headertitle"><a href="/<?= \Config\Services::request()->getLocale() ?>/"><?= lang('Application.projectName') ?></a></div>
                 <?php if ($title !== 'Welcome') { ?>
                     <nav id="headernavigation">
                             <div id="headernavigationpart">
