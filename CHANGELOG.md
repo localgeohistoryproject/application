@@ -34,6 +34,7 @@
 - PHPStan Strict Rules from 2.0.4 to 2.0.7.
 - README to expand Build command.
 - Rector from 2.0.10 to 2.2.8.
+- Robots.txt to add Crawl-delay.
 
 ### Fixed
 

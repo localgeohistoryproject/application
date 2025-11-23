@@ -3,6 +3,7 @@
 
 User-agent: *
 Allow: /asset/application/
+Crawl-delay: 1
 
 # Allowed bots
 
@@ -18,6 +19,7 @@ User-agent: InternetArchiveBot
 User-agent: msnbot
 User-agent: Slurp
 Disallow:
+Crawl-delay: 1
 
 # Block bots not whitelisted
 
