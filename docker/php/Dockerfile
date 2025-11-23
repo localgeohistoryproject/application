@@ -1,4 +1,4 @@
-FROM php:8.5.0-apache-bookworm
+FROM php:8.5.0-apache-trixie
 # Create writable dictory for CodeIgniter
 RUN mkdir /writable
 RUN mkdir /writable/cache
