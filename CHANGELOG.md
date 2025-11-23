@@ -27,13 +27,13 @@
 - MapLibre GL JS from 4.7.1 to 5.9.0.
 - MapLibre GL Leaflet from 0.0.22 to 0.1.3.
 - PHP coding style to PER-CS 3.0.
-- PHP CS Fixer from 3.73.1 to 3.89.1.
+- PHP CS Fixer from 3.73.1 to 3.90.0.
 - PHP docker image from 8.4.3-apache-bookworm to 8.5.0-apache-trixie.
-- PHPStan from 2.1.8 to 2.1.31.
+- PHPStan from 2.1.8 to 2.1.32.
 - PHPStan CodeIgniter from 1.5.3 to 1.5.4.
 - PHPStan Strict Rules from 2.0.4 to 2.0.7.
 - README to expand Build command.
-- Rector from 2.0.10 to 2.2.5.
+- Rector from 2.0.10 to 2.2.8.
 
 ### Fixed
 
