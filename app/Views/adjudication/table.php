@@ -1,16 +1,16 @@
 <?php if (is_array($query ?? '') && $query !== []) { ?>
 <section>
-    <h2>Adjudication</h2>
+    <h2><?= lang('Application.adjudication') ?></h2>
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
-                <th>Detail</th>
-                <th>Tribunal</th>
-                <th>Type</th>
-                <th>No.</th>
-                <th>Term</th>
+                <th><?= lang('Application.detail') ?></th>
+                <th><?= lang('Application.tribunal') ?></th>
+                <th><?= lang('Application.type') ?></th>
+                <th><?= lang('Application.no') ?></th>
+                <th><?= lang('Application.term') ?></th>
                 <?php if (isset($eventRelationship)) { ?>
-                    <th>Relationship <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#eventrelationship" aria-label="Relationship Key" title="Relationship Key"><span class="keyiconfill">vpn_key</span></a></th>
+                    <th><?= lang('Application.relationship') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#eventrelationship" aria-label="<?= lang('Application.relationshipKey') ?>" title="<?= lang('Application.relationshipKey') ?>"><span class="keyiconfill">vpn_key</span></a></th>
                 <?php } ?>
             </tr>
         </thead>

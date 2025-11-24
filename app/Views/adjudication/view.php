@@ -1,15 +1,15 @@
 <?php if (is_array($query ?? '') && $query !== []) {
     $row = $query[0]; ?>
 <section>
-    <h2>Tribunal</h2>
+    <h2><?= lang('Application.tribunal') ?></h2>
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
                 <?php if (\App\Controllers\BaseController::isLive()) { ?>
-                    <th>ID</th>
+                    <th><?= lang('Application.id') ?></th>
                 <?php } ?>
-                <th>Tribunal</th>
-                <th>Current Filing Office</th>
+                <th><?= lang('Application.tribunal') ?></th>
+                <th><?= lang('Application.currentFilingOffice') ?></th>
             </tr>
         </thead>
         <tbody>
@@ -24,13 +24,13 @@
     </table>
 </section>
 <section>
-    <h2>Summary</h2>
+    <h2><?= lang('Application.summary') ?></h2>
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
-                <th>Type</th>
-                <th>No.</th>
-                <th>Term</th>
+                <th><?= lang('Application.type') ?></th>
+                <th><?= lang('Application.no') ?></th>
+                <th><?= lang('Application.term') ?></th>
             </tr>
         </thead>
         <tbody>
@@ -44,13 +44,13 @@
 </section>
 <?php if ($row->textflag === 't') { ?>
     <section>
-        <h2>Detail</h2>
+        <h2><?= lang('Application.detail') ?></h2>
         <table class="normal cell-border compact stripe">
             <thead>
                 <tr>
-                    <th>Long Caption</th>
-                    <th>Short Description</th>
-                    <th>Notes</th>
+                    <th><?= lang('Application.longCaption') ?></th>
+                    <th><?= lang('Application.shortDescription') ?></th>
+                    <th><?= lang('Application.notes') ?></th>
                 </tr>
             </thead>
             <tbody>

@@ -6,6 +6,7 @@ return [
     'acres' => 'Acres',
     'action' => 'Action',
     'address' => 'Address',
+    'adjudication' => 'Adjudication',
     'adverseGovernment' => 'Adverse Government',
     'affectedGovernment' => 'Affected Government',
     'affectedGovernmentForm' => 'Affected Government Form',

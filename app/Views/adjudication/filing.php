@@ -1,14 +1,14 @@
 <?php if (is_array($query ?? '') && $query !== []) { ?>
 <section>
-    <h2>Filings</h2>
+    <h2><?= lang('Application.filings') ?></h2>
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
-                <th>Type/Detail</th>
-                <th>Date</th>
-                <th>Filed</th>
-                <th>Other</th>
-                <th>Notes</th>
+                <th><?= lang('Application.type') ?>/<?= lang('Application.detail') ?></th>
+                <th><?= lang('Application.date') ?></th>
+                <th><?= lang('Application.filed') ?></th>
+                <th><?= lang('Application.other') ?></th>
+                <th><?= lang('Application.notes') ?></th>
             </tr>
         </thead>
         <tbody>
