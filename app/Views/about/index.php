@@ -2,7 +2,7 @@
     $jurisdictions ??= [];
     ?>
 <section id="table-of-contents">
-    <h2>Table of Contents</h2>
+    <h2><?= lang('Application.tableOfContents') ?></h2>
     <?php foreach ($query as $row) { ?>
         <a href="#<?= $row->keysort ?>"><?= $row->keyshort ?></a><br>
     <?php } ?>
