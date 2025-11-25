@@ -17,7 +17,7 @@
         <tbody>
             <?php foreach ($query as $row) { ?>
                 <tr>
-                    <td><a href="/<?= \Config\Services::request()->getLocale() ?>/adjudication/<?= $row->adjudicationslug ?>/">View</a></td>
+                    <td><a href="/<?= \Config\Services::request()->getLocale() ?>/adjudication/<?= $row->adjudicationslug ?>/"><?= lang('Application.view') ?></a></td>
                     <td><?= $row->tribunallong ?></td>
                     <td><?= $row->adjudicationtypelong ?></td>
                     <td><?= $row->adjudicationnumber ?></td>
