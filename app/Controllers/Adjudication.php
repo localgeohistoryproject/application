@@ -11,7 +11,11 @@ use CodeIgniter\HTTP\RedirectResponse;
 
 class Adjudication extends BaseController
 {
-    private string $title = 'Adjudication';
+    private string $title;
+
+    public function __construct() {
+        $this->title = lang('Application.adjudication');
+    }
 
     public function redirect(int|string $id): RedirectResponse
     {

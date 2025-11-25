@@ -6,7 +6,11 @@ use App\Models\DocumentationModel;
 
 class Bot extends BaseController
 {
-    private string $title = 'Bot';
+    private string $title;
+
+    public function __construct() {
+        $this->title = lang('Application.bot');
+    }
 
     public function index(): void
     {

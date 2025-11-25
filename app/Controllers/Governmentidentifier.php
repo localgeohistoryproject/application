@@ -7,7 +7,11 @@ use CodeIgniter\HTTP\RedirectResponse;
 
 class Governmentidentifier extends BaseController
 {
-    private string $title = 'Government Identifier';
+    private string $title;
+
+    public function __construct() {
+        $this->title = lang('Application.governmentIdentifier');
+    }
 
     public function view(string $type, string $id): ?RedirectResponse
     {

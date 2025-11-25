@@ -14,7 +14,11 @@ use CodeIgniter\HTTP\RedirectResponse;
 
 class Government extends BaseController
 {
-    private string $title = 'Government';
+    private string $title;
+
+    public function __construct() {
+        $this->title = lang('Application.government');
+    }
 
     public function redirect(int|string $id): RedirectResponse
     {

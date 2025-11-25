@@ -10,7 +10,11 @@ use CodeIgniter\HTTP\RedirectResponse;
 
 class Search extends BaseController
 {
-    private string $title = 'Search';
+    private string $title;
+
+    public function __construct() {
+        $this->title = lang('Application.search');
+    }
 
     private array $categoryType = [
         'event' => 'Event',

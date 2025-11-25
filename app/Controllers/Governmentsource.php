@@ -9,7 +9,11 @@ use CodeIgniter\HTTP\RedirectResponse;
 
 class Governmentsource extends BaseController
 {
-    private string $title = 'Government Source';
+    private string $title;
+
+    public function __construct() {
+        $this->title = lang('Application.governmentSource');
+    }
 
     public function redirect(int|string $id): RedirectResponse
     {

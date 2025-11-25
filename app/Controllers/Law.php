@@ -8,7 +8,11 @@ use CodeIgniter\HTTP\RedirectResponse;
 
 class Law extends BaseController
 {
-    private string $title = 'Law';
+    private string $title;
+
+    public function __construct() {
+        $this->title = lang('Application.law');
+    }
 
     public function redirect(int|string $id): RedirectResponse
     {

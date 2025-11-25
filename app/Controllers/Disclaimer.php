@@ -6,7 +6,11 @@ use App\Models\DocumentationModel;
 
 class Disclaimer extends BaseController
 {
-    private string $title = 'Disclaimers';
+    private string $title;
+
+    public function __construct() {
+        $this->title = lang('Application.disclaimers');
+    }
 
     public function index(): void
     {

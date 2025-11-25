@@ -12,7 +12,11 @@ class Area extends BaseController
 {
     private string $extraAttribution = '';
 
-    private string $title = 'Area';
+    private string $title;
+
+    public function __construct() {
+        $this->title = lang('Application.area');
+    }
 
     public function address(): void
     {

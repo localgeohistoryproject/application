@@ -6,7 +6,11 @@ use App\Models\DocumentationModel;
 
 class Key extends BaseController
 {
-    private string $title = 'Key';
+    private string $title;
+
+    public function __construct() {
+        $this->title = lang('Application.key');
+    }
 
     public function index(): void
     {

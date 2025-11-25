@@ -6,7 +6,11 @@ use App\Models\DocumentationModel;
 
 class Status extends BaseController
 {
-    private string $title = 'Status';
+    private string $title;
+
+    public function __construct() {
+        $this->title = lang('Application.status');
+    }
 
     public function index(): void
     {

@@ -16,7 +16,11 @@ use CodeIgniter\HTTP\RedirectResponse;
 
 class Event extends BaseController
 {
-    private string $title = 'Event';
+    private string $title;
+
+    public function __construct() {
+        $this->title = lang('Application.event');
+    }
 
     public function redirect(int|string $id): RedirectResponse
     {

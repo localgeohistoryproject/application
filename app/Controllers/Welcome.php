@@ -7,7 +7,11 @@ use CodeIgniter\HTTP\RedirectResponse;
 
 class Welcome extends BaseController
 {
-    private string $title = 'Welcome';
+    private string $title;
+
+    public function __construct() {
+        $this->title = lang('Application.welcome');
+    }
 
     public function index(): void
     {

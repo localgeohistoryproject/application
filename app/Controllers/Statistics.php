@@ -8,7 +8,11 @@ use CodeIgniter\HTTP\RedirectResponse;
 
 class Statistics extends BaseController
 {
-    private string $title = 'Statistics';
+    private string $title;
+
+    public function __construct() {
+        $this->title = lang('Application.statistics');
+    }
 
     private array $byType = [
         'current' => 'Modern-Day Jurisdictions',
