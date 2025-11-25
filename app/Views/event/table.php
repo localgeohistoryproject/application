@@ -4,22 +4,22 @@
     <table id="<?= ($tableId ?? 'event') ?>" class="normal cell-border compact stripe">
         <thead>
             <tr>
-                <th>Detail</th>
-                <th>Type <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#eventtype" aria-label="Type Key" title="Type Key"><span class="keyiconfill">vpn_key</span></a></th>
-                <th>Description</th>
-                <th>Successful? <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#eventgranted" aria-label="Successful? Key" title="Successful? Key"><span class="keyiconfill">vpn_key</span></a></th>
-                <th>Date <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#date" aria-label="Date Key" title="Date Key"><span class="keyiconfill">vpn_key</span></a></th>
+                <th><?= lang('Application.detail') ?></th>
+                <th><?= lang('Application.type') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#eventtype" aria-label="<?= lang('Application.typeKey') ?>" title="<?= lang('Application.typeKey') ?>"><span class="keyiconfill">vpn_key</span></a></th>
+                <th><?= lang('Application.description') ?></th>
+                <th><?= lang('Application.successful') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#eventgranted" aria-label="<?= lang('Application.successfulKey') ?>" title="<?= lang('Application.successfulKey') ?>"><span class="keyiconfill">vpn_key</span></a></th>
+                <th><?= lang('Application.date') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#date" aria-label="<?= lang('Application.dateKey') ?>" title="<?= lang('Application.dateKey') ?>"><span class="keyiconfill">vpn_key</span></a></th>
                 <?php if (isset($includeLawGroup)) { ?>
-                    <th>Group</th>
+                    <th><?= lang('Application.group') ?></th>
                 <?php } if (isset($eventRelationship)) { ?>
-                    <th>Relationship <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#eventrelationship" aria-label="Relationship Key" title="Relationship Key"><span class="keyiconfill">vpn_key</span></a></th>
+                    <th><?= lang('Application.relationship') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#eventrelationship" aria-label="<?= lang('Application.relationshipKey') ?>" title="<?= lang('Application.relationshipKey') ?>"><span class="keyiconfill">vpn_key</span></a></th>
                 <?php } ?>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($query as $row) { ?>
                 <tr>
-                    <td><a href="/<?= \Config\Services::request()->getLocale() ?>/event/<?= $row->eventslug ?>/">View</a></td>
+                    <td><a href="/<?= \Config\Services::request()->getLocale() ?>/event/<?= $row->eventslug ?>/"><?= lang('Application.view') ?></a></td>
                     <td><?= $row->eventtypeshort ?></td>
                     <td><?= $row->eventlong ?></td>
                     <td><?= $row->eventgranted ?></td>

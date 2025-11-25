@@ -5,17 +5,17 @@ $isComplete ??= true;
 ?>
 <section>
     <?php if ($isComplete) { ?>
-        <h2>Affected Government</h2>
+        <h2><?= lang('Application.affectedGovernment') ?></h2>
     <?php } ?>
     <table class="normal cell-border compact stripe wrap">
         <thead>
             <tr>
                 <?php if ($includeDate) { ?>
-                    <th>Detail</th>
-                    <th>Date <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#date" aria-label="Date Key" title="Date Key"><span class="keyiconfill">vpn_key</span></a>
+                    <th><?= lang('Application.detail') ?></th>
+                    <th><?= lang('Application.date') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#date" aria-label="<?= lang('Application.dateKey') ?>" title="<?= lang('Application.dateKey') ?>"><span class="keyiconfill">vpn_key</span></a>
                     </th>
                 <?php } elseif (\App\Controllers\BaseController::isLive() && $isComplete) { ?>
-                    <th>Map<br>Link</th>
+                    <th><?= lang('Application.mapLink') ?></th>
                     <?php }
                 foreach ($affectedGovernment['types'] as $fromTo => $levels) {
                     foreach ($levels as $level) { ?>
@@ -32,7 +32,7 @@ $isComplete ??= true;
                         <td data-sort="<?= $row->eventsort ?>"><?php echo view('core/link', [
                             'type' => 'event',
                             'link' => $row->eventslug,
-                            'text' => ($row->eventslug  === '' ? 'Missing' : 'View'),
+                            'text' => ($row->eventslug  === '' ? lang('Application.missing') : lang('Application.view')),
                         ]) ?></td>
                         <td data-sort="<?= $row->eventsort ?>"><?= $row->eventeffective ?></td>
                     <?php } elseif (\App\Controllers\BaseController::isLive() && $isComplete) { ?>
@@ -64,7 +64,7 @@ $isComplete ??= true;
                                         'link' => $row->{ucfirst($fromTo) . ' ' . $level . ' Link'},
                                         'text' => $row->{ucfirst($fromTo) . ' ' . $level . ' Long'},
                                     ]) ?>
-                                    <br><span class="i"><?= $row->{ucfirst($fromTo) . ' ' . $level . ' Affected'} ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#affectedtype" aria-label="Affected Type Key" title="Affected Type Key"><span class="keyiconfill">vpn_key</span></a></span>
+                                    <br><span class="i"><?= $row->{ucfirst($fromTo) . ' ' . $level . ' Affected'} ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#affectedtype" aria-label="<?= lang('Application.affectedTypeKey') ?>" title="<?= lang('Application.affectedTypeKey') ?>"><span class="keyiconfill">vpn_key</span></a></span>
                                 <?php } ?>
                             </td>
                     <?php }

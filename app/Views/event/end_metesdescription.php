@@ -5,8 +5,8 @@ layers: [baseMap, governmentOverlayMap, metesdescriptionlayer]
 map.fitBounds(metesdescriptionlayer.getBounds());
 
 var overlayMaps = {
-"Approximate Current Boundaries": governmentOverlayMap,
-"Descriptions": metesdescriptionlayer
+"<?= lang('Application.approximateCurrentBoundaries') ?>": governmentOverlayMap,
+"<?= lang('Application.descriptions') ?>": metesdescriptionlayer
 };
 
 Object.keys(stateOverlayMaps).forEach(function (element) {

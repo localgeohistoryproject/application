@@ -1,16 +1,16 @@
 <?php if (is_array($query ?? '') && $query !== []) { ?>
 <section>
-    <h2>Current Government</h2>
+    <h2><?= lang('Application.currentGovernment') ?></h2>
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
                 <?php if (\App\Controllers\BaseController::isLive() && isset($query[0]->governmentshapeid)) { ?>
-                    <th>ID</th>
+                    <th><?= lang('Application.id') ?></th>
                 <?php } ?>
-                <th>Sub-Municipality</th>
-                <th>Municipality</th>
-                <th>County</th>
-                <th>State</th>
+                <th><?= lang('Application.subMunicipality') ?></th>
+                <th><?= lang('Application.municipality') ?></th>
+                <th><?= lang('Application.county') ?></th>
+                <th><?= lang('Application.state') ?></th>
             </tr>
         </thead>
         <tbody>

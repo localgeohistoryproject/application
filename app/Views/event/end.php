@@ -10,8 +10,8 @@ layers: [baseMap, governmentOverlayMap, affectedgovernmentlayer<?php foreach ($l
 map.fitBounds(affectedgovernmentlayer.getBounds());
 
 var overlayMaps = {
-    "Approximate Current Boundaries": governmentOverlayMap,
-    "Affected Government Portion": affectedgovernmentlayer<?php
+    "<?= lang('Application.approximateCurrentBoundaries') ?>": governmentOverlayMap,
+    "<?= lang('Application.affectedGovernmentPortion') ?>": affectedgovernmentlayer<?php
                                                             foreach ($layers as $key => $layer) {
                                                                 echo ",\n  ", '"', $layer, '": ', $key, 'layer';
                                                             } ?>
@@ -64,7 +64,7 @@ info.update = function (props) {
         });
         affectedGovernmentString += '</div>';
     } else {
-        affectedGovernmentString = '<div class="b">Click for more info.</span>';
+        affectedGovernmentString = '<div class="b"><?= lang('Application.clickForMoreInfo') ?>.</span>';
     }
     this._div.innerHTML = affectedGovernmentString;
 };

@@ -3,21 +3,21 @@
     $isHistory ??= false;
     ?>
 <section>
-    <h2>Affected Government Form</h2>
+    <h2><?= lang('Application.affectedGovernmentForm') ?></h2>
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
                 <?php if ($includeGovernment) { ?>
-                    <th>Government</th>
+                    <th><?= lang('Application.government') ?></th>
                 <?php } else { ?>
-                    <th>Detail</th>
+                    <th><?= lang('Application.detail') ?></th>
                 <?php }
                 if (isset($isMultiple) && !$isMultiple) { ?>
-                    <th>Government</th>
+                    <th><?= lang('Application.government') ?></th>
                 <?php } ?>
-                <th>Government Form</th>
+                <th><?= lang('Application.governmentForm') ?></th>
                 <?php if (!$includeGovernment) { ?>
-                    <th>Date <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#date" aria-label="Date Key" title="Date Key"><span class="keyiconfill">vpn_key</span></a></th>
+                    <th><?= lang('Application.date') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#date" aria-label="<?= lang('Application.dateKey') ?>" title="<?= lang('Application.dateKey') ?>"><span class="keyiconfill">vpn_key</span></a></th>
                 <?php } ?>
             </tr>
         </thead>
@@ -32,7 +32,7 @@
                             'text' => $row->governmentlong,
                         ]) ?></td>
                     <?php } else { ?>
-                        <td data-sort="<?= $row->eventsort ?>"><?= ($isHistory ? $i : '<a href="/' . \Config\Services::request()->getLocale() . '/event/' . $row->eventslug . '/">View</a>') ?></td>
+                        <td data-sort="<?= $row->eventsort ?>"><?= ($isHistory ? $i : '<a href="/' . \Config\Services::request()->getLocale() . '/event/' . $row->eventslug . '/">' . lang('Application.view') . '</a>') ?></td>
                     <?php }
                     if (isset($isMultiple) && !$isMultiple) { ?>
                         <td><?= $row->governmentaffectedlong ?></td>

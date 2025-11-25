@@ -1,22 +1,22 @@
 <?php if (is_array($query ?? '') && $query !== []) {
     $row = $query[0]; ?>
 <section>
-    <h2>Summary</h2>
+    <h2><?= lang('Application.summary') ?></h2>
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
                 <?php if (\App\Controllers\BaseController::isLive()) { ?>
-                    <th>ID</th>
+                    <th><?= lang('Application.id') ?></th>
                 <?php } ?>
-                <th>Type <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#eventtype" aria-label="Type Key" title="Type Key"><span class="keyiconfill">vpn_key</span></a></th>
+                <th><?= lang('Application.type') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#eventtype" aria-label="<?= lang('Application.typeKey') ?>" title="<?= lang('Application.typeKey') ?>"><span class="keyiconfill">vpn_key</span></a></th>
                 <?php if ($row->eventgranted !== 'government') { ?>
-                    <th>Method</th>
+                    <th><?= lang('Application.method') ?></th>
                 <?php } ?>
-                <th>Description</th>
+                <th><?= lang('Application.description') ?></th>
                 <?php if ($row->eventgranted !== 'government') { ?>
-                    <th>Successful? <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#eventgranted" aria-label="Successful? Key" title="Successful? Key"><span class="keyiconfill">vpn_key</span></a></th>
+                    <th><?= lang('Application.successful') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#eventgranted" aria-label="<?= lang('Application.successfulKey') ?>" title="<?= lang('Application.successfulKey') ?>"><span class="keyiconfill">vpn_key</span></a></th>
                 <?php } else { ?>
-                    <th>Government</th>
+                    <th><?= lang('Application.government') ?></th>
                 <?php } ?>
             </tr>
         </thead>
@@ -36,7 +36,7 @@
                     <td><?php echo view('core/link', [
                         'type' => 'government',
                         'link' => $row->government,
-                        'text' => 'View',
+                        'text' => lang('Application.view'),
                     ]) ?></td>
                 <?php } ?>
             </tr>
@@ -45,14 +45,14 @@
 </section>
 <?php if ($row->textflag === 't') { ?>
     <section>
-        <h2>Dates</h2>
+        <h2><?= lang('Application.dates') ?></h2>
         <table class="normal cell-border compact stripe">
             <thead>
                 <tr>
-                    <th>Event Year(s) <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#date" aria-label="Date Key" title="Date Key"><span class="keyiconfill">vpn_key</span></a></th>
-                    <th><?= (is_null($row->otherdatetype) ? 'Final Decree' : $row->otherdatetype) ?> Date</th>
-                    <th>Effective Date <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#date" aria-label="Date Key" title="Date Key"><span class="keyiconfill">vpn_key</span></a></th>
-                    <th>How Effective Date Determined</th>
+                    <th><?= lang('Application.eventYears') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#date" aria-label="<?= lang('Application.dateKey') ?>" title="<?= lang('Application.dateKey') ?>"><span class="keyiconfill">vpn_key</span></a></th>
+                    <th><?= (is_null($row->otherdatetype) ? lang('Application.finalDecree') : $row->otherdatetype) ?> Date</th>
+                    <th><?= lang('Application.effectiveDate') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#date" aria-label="<?= lang('Application.dateKey') ?>" title="<?= lang('Application.dateKey') ?>"><span class="keyiconfill">vpn_key</span></a></th>
+                    <th><?= lang('Application.howEffectiveDateDetermined') ?></th>
                 </tr>
             </thead>
             <tbody>

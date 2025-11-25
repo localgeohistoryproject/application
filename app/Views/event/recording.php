@@ -1,15 +1,15 @@
 <?php if (is_array($query ?? '') && $query !== []) { ?>
 <section>
-    <h2>Recorded Document</h2>
+    <h2><?= lang('Application.recordedDocument') ?></h2>
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
-                <th>Government</th>
-                <th>Type</th>
-                <th>Location</th>
-                <th>Alternate Location</th>
-                <th>Date</th>
-                <th>Relationship <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#eventrelationship" aria-label="Relationship Key" title="Relationship Key"><span class="keyiconfill">vpn_key</span></a></th>
+                <th><?= lang('Application.government') ?></th>
+                <th><?= lang('Application.type') ?></th>
+                <th><?= lang('Application.location') ?></th>
+                <th><?= lang('Application.alternateLocation') ?></th>
+                <th><?= lang('Application.date') ?></th>
+                <th><?= lang('Application.relationship') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#eventrelationship" aria-label="<?= lang('Application.relationshipKey') ?>" title="<?= lang('Application.relationshipKey') ?>"><span class="keyiconfill">vpn_key</span></a></th>
             </tr>
         </thead>
         <tbody>
@@ -26,11 +26,11 @@
                     <td><?= $row->recordinglocation . ($row->hasbothtype === 't' ? '<br>' : '') . $row->recordingnumberlocation ?></td>
                     <td><?=
                         $row->recordingrepositoryshort
-                                        . ($row->recordingrepositoryseries === '' ? '' : ', series ' . $row->recordingrepositoryseries)
-                                        . ($row->recordingrepositorycontainer === '' ? '' : ', container ' . $row->recordingrepositorycontainer)
-                                        . ($row->recordingrepositoryitemlocation === '' ? '' : ', location ' . $row->recordingrepositoryitemlocation)
-                                        . ($row->recordingrepositoryitemnumber === '' ? '' : ', folder ' . $row->recordingrepositoryitemnumber)
-                                        . ($row->recordingrepositoryitemrange === '' ? '' : ', part ' . $row->recordingrepositoryitemrange)
+                                        . ($row->recordingrepositoryseries === '' ? '' : ', ' . lang('Application.series') . ' ' . $row->recordingrepositoryseries)
+                                        . ($row->recordingrepositorycontainer === '' ? '' : ', ' . lang('Application.container') . ' ' . $row->recordingrepositorycontainer)
+                                        . ($row->recordingrepositoryitemlocation === '' ? '' : ', ' . lang('Application.location_lower') . ' ' . $row->recordingrepositoryitemlocation)
+                                        . ($row->recordingrepositoryitemnumber === '' ? '' : ', ' . lang('Application.folder') . ' ' . $row->recordingrepositoryitemnumber)
+                                        . ($row->recordingrepositoryitemrange === '' ? '' : ', ' . lang('Application.part_lower') . ' ' . $row->recordingrepositoryitemrange)
                 ?></td>
                     <td data-sort="<?= $row->recordingdatesort ?>"><?= $row->recordingdate ?></td>
                     <td><?= $row->recordingeventrelationship ?></td>
