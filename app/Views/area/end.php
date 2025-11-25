@@ -17,8 +17,8 @@ echo implode(', ', $layerArray);
 map.fitBounds(arealayer.getBounds());
 
 var overlayMaps = {
-    "Shape Area": arealayer<?= ($includePoint ? ',
-    "Point": pointlayer' : ''); ?>
+    "<?= lang('Application.shapeArea') ?>": arealayer<?= ($includePoint ? ',
+    "' . lang('Application.addressPoint') . '": pointlayer' : ''); ?>
 };
 
 Object.keys(stateOverlayMaps).forEach(function (element) {
