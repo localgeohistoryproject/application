@@ -1,4 +1,4 @@
 <section>
-    <h2>Population</h2>
+    <h2><?= lang('Application.population') ?></h2>
     <div id="chart"></div>
 </section>

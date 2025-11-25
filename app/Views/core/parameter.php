@@ -1,6 +1,6 @@
 <?php if (is_array($searchParameter ?? '') && $searchParameter !== []) { ?>
 <section>
-    <h2>Requested Information<?= (isset($omitColon) ? '' : ':') ?></h2>
+    <h2><?= lang('Application.requestedInformation') ?><?= (isset($omitColon) ? '' : ':') ?></h2>
     <div class="parameter">
         <?php foreach ($searchParameter as $parameter => $value) { ?>
             <div class="parameter-line">

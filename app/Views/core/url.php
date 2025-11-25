@@ -5,7 +5,7 @@
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
-                <th>URL</th>
+                <th><?= lang('Application.url') ?></th>
             </tr>
         </thead>
         <tbody>

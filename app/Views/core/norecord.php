@@ -1,1 +1,1 @@
-        <p>I am sorry, but no matching record has been located. Please try your search again.</p>
+        <p><?= lang('Application.noRecord') ?></p>

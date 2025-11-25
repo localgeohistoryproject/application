@@ -20,15 +20,15 @@ $url ??= '';
 
             gtag('config', '<?= $_ENV['analytics_google'] ?>');
         </script>
-    <?php } if (($title !== 'Welcome' && $url === '') || mb_strpos(base_url(), $_ENV['app_baseCanonicalProjectUrl']) === false) { ?>
+    <?php } if (($title !== lang('Application.welcome') && $url === '') || mb_strpos(base_url(), $_ENV['app_baseCanonicalProjectUrl']) === false) { ?>
     <meta name="robots" content="noindex">
     <?php } ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <title><?= (isset($pageTitle) ? $pageTitle . ' | ' : '') . (isset($pageTitleType) ? $pageTitleType . ' | ' : '') . $title ?> | <?= lang('Application.projectName') ?></title>
-    <?php if ($title === 'Welcome' || $url !== '') { ?>
+    <?php if ($title === lang('Application.welcome') || $url !== '') { ?>
     <link rel="canonical" href="<?= $_ENV['app_baseCanonicalProjectUrl'] ?>/<?= \Config\Services::request()->getLocale() ?>/<?= $url ?>">
-    <?php } if ($title === 'Welcome' && $mastodon !== '') { ?>
+    <?php } if ($title === lang('Application.welcome') && $mastodon !== '') { ?>
     <link rel="me" href="<?= $mastodon ?>">
     <?php } ?>
     <link rel="preload" href="/asset/font/lora-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
@@ -49,44 +49,44 @@ $url ??= '';
 </head>
 
 <body>
-    <?php if ($title === 'Welcome') { ?>
+    <?php if ($title === lang('Application.welcome')) { ?>
         <img src="/asset/application/image/ct001800.jpg" id="welcome" alt="Map of annexations to Los Angeles from 1916">
     <?php } ?>
-    <div class="wrapper" <?= ($title === 'Welcome' ? ' id="welcomewrapper"' : '') ?>>
+    <div class="wrapper" <?= ($title === lang('Application.welcome') ? ' id="welcomewrapper"' : '') ?>>
         <header class="headerfooter">
             <div id="headertext">
                 <div id="headertitle"><a href="/<?= \Config\Services::request()->getLocale() ?>/"><?= lang('Application.projectName') ?></a></div>
-                <?php if ($title !== 'Welcome') { ?>
+                <?php if ($title !== lang('Application.welcome')) { ?>
                     <nav id="headernavigation">
                             <div id="headernavigationpart">
                                 <div id="headernavigationpartpart">
                                     <div class="keyiconcontainer">
-                                        <a href="/<?= \Config\Services::request()->getLocale() ?>/" aria-label="Return to Home" title="Return to Home">
+                                        <a href="/<?= \Config\Services::request()->getLocale() ?>/" aria-label="<?= lang('Application.returnToHome') ?>" title="<?= lang('Application.returnToHome') ?>">
                                             <span class="headericonfill">home</span>
                                         </a>
                                     </div>
                                     <div class="keyiconcontainer">
-                                        <a href="/<?= \Config\Services::request()->getLocale() ?>/about/" aria-label="About" title="About">
+                                        <a href="/<?= \Config\Services::request()->getLocale() ?>/about/" aria-label="<?= lang('Application.about') ?>" title="<?= lang('Application.about') ?>">
                                             <span class="headericon">info</span>
                                         </a>
                                     </div>
                                     <div class="keyiconcontainer">
-                                        <a href="/<?= \Config\Services::request()->getLocale() ?>/key/" aria-label="Key" title="Key">
+                                        <a href="/<?= \Config\Services::request()->getLocale() ?>/key/" aria-label="<?= lang('Application.key') ?>" title="<?= lang('Application.key') ?>">
                                         <span class="headericonfill">vpn_key</span>
                                         </a>
                                     </div>
                                     <div class="keyiconcontainer">
-                                        <a href="/<?= \Config\Services::request()->getLocale() ?>/search/" aria-label="Search" title="Search">
+                                        <a href="/<?= \Config\Services::request()->getLocale() ?>/search/" aria-label="<?= lang('Application.search') ?>" title="<?= lang('Application.search') ?>">
                                             <span class="headericon">search</span>
                                         </a>
                                     </div>
                                     <div class="keyiconcontainer">
-                                        <a href="/<?= \Config\Services::request()->getLocale() ?>/statistics/" aria-label="Statistics" title="Statistics">
+                                        <a href="/<?= \Config\Services::request()->getLocale() ?>/statistics/" aria-label="<?= lang('Application.statistics') ?>" title="<?= lang('Application.statistics') ?>">
                                             <span class="headericon">insert_chart</span>
                                         </a>
                                     </div>
                                     <div class="keyiconcontainer">
-                                        <a href="/<?= \Config\Services::request()->getLocale() ?>/status/" aria-label="Status" title="Status">
+                                        <a href="/<?= \Config\Services::request()->getLocale() ?>/status/" aria-label="<?= lang('Application.status') ?>" title="<?= lang('Application.status') ?>">
                                             <span class="headericon">map</span>
                                         </a>
                                     </div>
@@ -97,6 +97,6 @@ $url ??= '';
             </div>
         </header>
         <main class="bodytext" <?= (isset($widthOverride) ? ' style="width: ' . $widthOverride . 'px; max-width: ' . $widthOverride . 'px;"' : '') ?>>
-            <?php if ($title !== 'Welcome') { ?>
+            <?php if ($title !== lang('Application.welcome')) { ?>
                 <h1><?= $title ?></h1>
             <?php } ?>
