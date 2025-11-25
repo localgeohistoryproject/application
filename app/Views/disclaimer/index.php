@@ -8,10 +8,10 @@
     </section>
 <?php } ?>
     <section id="compiler">
-        <h2>Compiler Contact Information</h2>
+        <h2><?= lang('Application.compilerContactInformation') ?></h2>
         <p>
             <?= getenv('app_compiler_name') ?><br>
-            Email: <a href="mailto:<?= getenv('app_compiler_email') ?>"><?= getenv('app_compiler_email') ?></a><br>
-            Fax: <?= getenv('app_compiler_fax') ?>
+            <?= lang('Application.email') ?>: <a href="mailto:<?= getenv('app_compiler_email') ?>"><?= getenv('app_compiler_email') ?></a><br>
+            <?= lang('Application.fax') ?>: <?= getenv('app_compiler_fax') ?>
         </p>
     </section>
