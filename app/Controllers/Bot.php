@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Models\DocumentationModel;
+
 class Bot extends BaseController
 {
     private string $title = 'Bot';
@@ -9,7 +11,12 @@ class Bot extends BaseController
     public function index(): void
     {
         echo view('core/header', ['title' => $this->title, 'url' => 'bot/']);
-        echo view('bot/index');
+        $DocumentationModel = new DocumentationModel();
+        $summary = $DocumentationModel->getKey('bot');
+        $summary = $summary[0]->keylong ?? '';
+        echo view('bot/index', [
+            'summary' => $summary,
+        ]);
         echo view('core/footer');
     }
 
