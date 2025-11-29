@@ -1,12 +1,12 @@
 <?php if (is_array($query ?? '') && $query !== []) { ?>
 <section>
-    <h2>Authorship</h2>
+    <h2><?= lang('Application.authorship') ?></h2>
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
-                <th>Reporter</th>
-                <th>Opinion Adjudicator(s)</th>
-                <th>Dissenting Adjudicator(s)</th>
+                <th><?= lang('Application.reporter') ?></th>
+                <th><?= lang('Application.opinionAdjudicators') ?></th>
+                <th><?= lang('Application.dissentingAdjudicators') ?></th>
             </tr>
         </thead>
         <tbody>

@@ -8,18 +8,18 @@
         <thead>
             <tr>
                 <?php if ($hasLink) { ?>
-                    <th>Detail</th>
+                    <th><?= lang('Application.detail') ?></th>
                 <?php } ?>
-                <th>Citation</th>
-                <th>Opinion Date</th>
-                <th>Title</th>
+                <th><?= lang('Application.citation') ?></th>
+                <th><?= lang('Application.opinionDate') ?></th>
+                <th><?= lang('Application.title') ?></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($query as $row) { ?>
                 <tr>
                     <?php if ($hasLink) { ?>
-                        <td><a href="/<?= \Config\Services::request()->getLocale() ?>/reporter/<?= $row->adjudicationsourcecitationslug ?>/">View</a></td>
+                        <td><a href="/<?= \Config\Services::request()->getLocale() ?>/reporter/<?= $row->adjudicationsourcecitationslug ?>/"><?= lang('Application.view') ?></a></td>
                     <?php } ?>
                     <td><?= $row->adjudicationsourcecitationvolume . ' ' . $row->sourceshort . ' ' . $row->adjudicationsourcecitationpage
                     . ($row->adjudicationsourcecitationyear !== '' ? ' (' . $row->adjudicationsourcecitationyear . ')' : '') ?></td>
