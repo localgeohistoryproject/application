@@ -26,6 +26,7 @@ return [
     'boundaryNameAlterationCount' => 'Boundary-Name Alteration Count',
     'byJurisdiction' => 'By Jurisdiction',
     'byYear' => 'By Year',
+    'censusGazetteer' => 'Census Gazetteer',
     'certified' => 'Certified',
     'chains' => 'Chains',
     'change' => 'Change',

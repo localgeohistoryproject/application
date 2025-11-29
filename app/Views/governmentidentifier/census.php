@@ -1,17 +1,17 @@
 <?php if (is_array($query ?? '') && $query !== []) {
     $type ??= ''; ?>
 <section>
-    <h2>Census Gazetteer</h2>
+    <h2><?= lang('Application.censusGazetteer') ?></h2>
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
                 <?php if ($type === 'usgs') { ?>
-                    <th>Type</th>
+                    <th><?= lang('Application.type') ?></th>
                 <?php } ?>
-                <th>From</th>
-                <th>To</th>
-                <th>Name</th>
-                <th>Related Identifier</th>
+                <th><?= lang('Application.from') ?></th>
+                <th><?= lang('Application.to') ?></th>
+                <th><?= lang('Application.name') ?></th>
+                <th><?= lang('Application.relatedIdentifier') ?></th>
             </tr>
         </thead>
         <tbody>
