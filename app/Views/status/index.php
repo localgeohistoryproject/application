@@ -1,6 +1,6 @@
 <?php $jurisdictions ??= []; ?>
     <section>
-        <h2>Jurisdiction:</h2>
+        <h2><?= lang('Application.jurisdiction') ?>:</h2>
         <style>
             @media screen and (max-width: 499px) {
                 #map {
@@ -26,7 +26,7 @@
         <div id="map" class="map" style="margin: 0 auto;"></div>
     </section>
     <section>
-        <h2>Detail:</h2>
+        <h2><?= lang('Application.detail') ?>:</h2>
         <div id="status-task"></div>
     </section>
     <script>
