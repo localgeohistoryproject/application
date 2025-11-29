@@ -11,20 +11,20 @@
         <thead>
             <tr>
                 <?php if ($hasLink) { ?>
-                    <th>Detail</th>
+                    <th><?= lang('Application.detail') ?></th>
                     <?php if (!$hasColor) { ?>
-                        <th>Source</th>
+                        <th><?= lang('Application.source') ?></th>
                     <?php }
                     }
     if ($hasColor || !$hasLink && \App\Controllers\BaseController::isLive()) { ?>
-                    <th>ID</th>
+                    <th><?= lang('Application.id') ?></th>
                 <?php } ?>
-                <th>Title</th>
-                <th><?= ($hasColor ? 'Government References' : 'Person(s)') ?></th>
-                <th>Vol.</th>
-                <th>Page(s)</th>
-                <th>Date 1</th>
-                <th>Date 2</th>
+                <th><?= lang('Application.title') ?></th>
+                <th><?= ($hasColor ? lang('Application.governmentReferences') : lang('Application.persons')) ?></th>
+                <th><?= lang('Application.vol') ?></th>
+                <th><?= lang('Application.pages') ?></th>
+                <th><?= lang('Application.date1') ?></th>
+                <th><?= lang('Application.date2') ?></th>
             </tr>
         </thead>
         <tbody>
@@ -37,7 +37,7 @@
                 ?>
                 <tr>
                     <?php if ($hasLink) { ?>
-                        <td<?= ($hasColor ? ' class="folder' . $rowColor . '"' : '') ?>><a href="/<?= \Config\Services::request()->getLocale() ?>/source/<?= $row->sourcecitationslug ?>/">View</a></td>
+                        <td<?= ($hasColor ? ' class="folder' . $rowColor . '"' : '') ?>><a href="/<?= \Config\Services::request()->getLocale() ?>/source/<?= $row->sourcecitationslug ?>/"><?= lang('Application.view') ?></a></td>
                             <?php if (!$hasColor) { ?>
                                 <td><?= $row->sourceabbreviation ?></td>
                                 <?php }

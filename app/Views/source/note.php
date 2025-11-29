@@ -1,11 +1,11 @@
 <?php if (is_array($query ?? '') && $query !== []) { ?>
 <section>
-    <h2>Summarized Source Data</h2>
+    <h2><?= lang('Application.summarizedSourceData') ?></h2>
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
-                <th>Type</th>
-                <th>Summary</th>
+                <th><?= lang('Application.type') ?></th>
+                <th><?= lang('Application.summary') ?></th>
             </tr>
         </thead>
         <tbody>

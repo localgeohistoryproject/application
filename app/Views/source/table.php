@@ -1,23 +1,23 @@
 <?php if (is_array($query ?? '') && $query !== []) {
     $hasLink ??= false; ?>
 <section>
-    <h2>Source</h2>
+    <h2><?= lang('Application.source') ?></h2>
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
                 <?php if ($hasLink) { ?>
-                    <th>Detail</th>
+                    <th><?= lang('Application.detail') ?></th>
                 <?php } ?>
-                <th>Abbreviation</th>
-                <th>Type</th>
-                <th>Citation</th>
+                <th><?= lang('Application.abbreviation') ?></th>
+                <th><?= lang('Application.type') ?></th>
+                <th><?= lang('Application.citation') ?></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($query as $row) { ?>
                 <tr>
                     <?php if ($hasLink) { ?>
-                        <td><a href="/<?= \Config\Services::request()->getLocale() ?>/<?= $row->linktype ?>/<?= $row->sourceid ?>/">View</a></td>
+                        <td><a href="/<?= \Config\Services::request()->getLocale() ?>/<?= $row->linktype ?>/<?= $row->sourceid ?>/"><?= lang('Application.view') ?></a></td>
                     <?php } ?>
                     <td><?= $row->sourceabbreviation ?></td>
                     <td><?= $row->sourcetype ?></td>
