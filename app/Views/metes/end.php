@@ -25,11 +25,11 @@ map.fitBounds(<?= ($includeMetes ? 'point' : 'area') ?>layer.getBounds());
     var overlayMaps = {
     <?php
     if ($includeArea) {
-        $overlayArray[] = '"Description Area": arealayer';
+        $overlayArray[] = '"' . lang('Application.descriptionArea') . '": arealayer';
     }
     if ($includeMetes) {
-        $overlayArray[] = '"Description Line": linelayer';
-        $overlayArray[] = '"Description Point": pointlayer';
+        $overlayArray[] = '"' . lang('Application.descriptionLine') . '": linelayer';
+        $overlayArray[] = '"' . lang('Application.descriptionPoint') . '": pointlayer';
     }
     echo "\t" . implode(',' . PHP_EOL . "\t", $overlayArray) . PHP_EOL;
     ?>
@@ -53,7 +53,7 @@ if ($includeMetes) { ?>
 
     info.update = function(props) {
     this._div.innerHTML = (props ? '<span class="b">' + props.type + ' ' + props.line + ':</span> ' + props.description :
-    '<div class="b">Click for more info.</span>');
+    '<div class="b"><?= lang('Application.clickForMoreInfo') ?>.</span>');
         };
 
         info.addTo(map);

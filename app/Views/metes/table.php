@@ -8,22 +8,22 @@
         <thead>
             <tr>
                 <?php if ($hasLink) { ?>
-                    <th>Detail</th>
+                    <th><?= lang('Application.detail') ?></th>
                 <?php } elseif (\App\Controllers\BaseController::isLive()) { ?>
-                    <th>ID</th>
+                    <th><?= lang('Application.id') ?></th>
                 <?php } ?>
-                <th>Description</th>
-                <th>Type</th>
-                <th>Source</th>
-                <th>Acres</th>
-                <th>Beginning Point</th>
+                <th><?= lang('Application.description') ?></th>
+                <th><?= lang('Application.type') ?></th>
+                <th><?= lang('Application.source') ?></th>
+                <th><?= lang('Application.acres') ?></th>
+                <th><?= lang('Application.beginningPoint') ?></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($query as $row) { ?>
                 <tr>
                     <?php if ($hasLink) { ?>
-                        <td><a href="/<?= \Config\Services::request()->getLocale() ?>/metes/<?= $row->metesdescriptionslug ?>/">View</a></td>
+                        <td><a href="/<?= \Config\Services::request()->getLocale() ?>/metes/<?= $row->metesdescriptionslug ?>/"><?= lang('Application.view') ?></a></td>
                     <?php } elseif (\App\Controllers\BaseController::isLive()) { ?>
                         <td><?= $row->metesdescriptionid ?></td>
                     <?php } ?>

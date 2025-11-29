@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\AffectedGovernmentGroupModel;
+use App\Models\DocumentationModel;
 use App\Models\MetesDescriptionModel;
 use CodeIgniter\HTTP\RedirectResponse;
 
@@ -48,7 +49,13 @@ class Metes extends BaseController
                 $hasMap = true;
                 echo view('core/map', ['includeBase' => $hasBegin, 'includeDisclaimer' => true]);
             }
-            echo view('metes/row', ['query' => $MetesDescriptionLineModel->getByMetesDescription($id)]);
+            $DocumentationModel = new DocumentationModel();
+            $summary = $DocumentationModel->getKey('metes');
+            $summary = $summary[0]->keylong ?? '';
+            echo view('metes/row', [
+                'query' => $MetesDescriptionLineModel->getByMetesDescription($id),
+                'summary' => $summary,
+            ]);
             echo view('event/table', ['query' => $areaQuery, 'title' => 'Event Links']);
             if ($hasMap) {
                 echo view('leaflet/start', ['type' => 'metes', 'jurisdictions' => $jurisdictions, 'includeBase' => $hasBegin, 'needRotation' => false]);

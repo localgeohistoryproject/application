@@ -92,6 +92,7 @@ return [
     'firstDivision' => 'First Division',
     'folder' => 'folder',
     'from' => 'From',
+    'ft' => 'ft.',
     'government' => 'Government',
     'governmentAction' => 'Government Action',
     'governmentForm' => 'Government Form',
