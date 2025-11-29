@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\DocumentationModel;
 use App\Models\EventTypeModel;
 use App\Models\GovernmentModel;
 use CodeIgniter\HTTP\RedirectResponse;
@@ -152,12 +153,20 @@ class Statistics extends BaseController
             }
             echo view('core/header', ['title' => $this->title]);
             echo view('core/parameter', ['searchParameter' => $searchParameter]);
+            $DocumentationModel = new DocumentationModel();
+            $statisticsOriginal = $DocumentationModel->getKey('statistics');
+            $statistics = [];
+            foreach ($statisticsOriginal as $item) {
+                $statistics[$item->keyshort] = $item->keylong;
+            }
+            unset($statisticsOriginal);
             echo view('statistics/view', [
                 'wholeQuery' => $wholeQuery,
                 'isContemporaneous' => ($searchParameter['Grouped By'] === 'Contemporaneous Jurisdictions'),
                 'notEvent' => ($searchParameter['Metric'] === 'Events by Event Type'),
                 'query' => $query,
                 'jurisdiction' => $jurisdiction,
+                'statistics' => $statistics,
             ]);
             echo view('core/chartjs', ['query' => $wholeQuery, 'xLabel' => 'Year', 'yLabel' => ($for === 'createddissolved' ? 'Governments' : 'Events')]);
             echo view('core/footer');
