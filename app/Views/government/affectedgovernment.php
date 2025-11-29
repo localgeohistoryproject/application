@@ -4,26 +4,26 @@
     ?>
 <section>
     <?php if (!$isHistory) { ?>
-        <h2>Affected Government</h2>
+        <h2><?= lang('Application.affectedGovernment') ?></h2>
     <?php } ?>
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
-                <th><?= ($isHistory ? 'Label' : 'Detail') ?></th>
+                <th><?= ($isHistory ? lang('Application.label') : lang('Application.detail')) ?></th>
                 <?php if ($isMultiple) { ?>
-                    <th>Government</th>
+                    <th><?= lang('Application.government') ?></th>
                 <?php } ?>
-                <th>How Affected <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#affectedtype" aria-label="Affected Type Key" title="Affected Type Key"><span class="keyiconfill">vpn_key</span></a></th>
-                <th>Adverse Government</th>
-                <th>How Adverse Affected <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#affectedtype" aria-label="Affected Type Key" title="Affected Type Key"><span class="keyiconfill">vpn_key</span></a></th>
-                <th>Date <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#date" aria-label="Date Key" title="Date Key"><span class="keyiconfill">vpn_key</span></a></th>
+                <th><?= lang('Application.howAffected') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#affectedtype" aria-label="<?= lang('Application.affectedTypeKey') ?>" title="<?= lang('Application.affectedTypeKey') ?>"><span class="keyiconfill">vpn_key</span></a></th>
+                <th><?= lang('Application.adverseGovernment') ?></th>
+                <th><?= lang('Application.howAdverseAffected') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#affectedtype" aria-label="<?= lang('Application.affectedTypeKey') ?>" title="<?= lang('Application.affectedTypeKey') ?>"><span class="keyiconfill">vpn_key</span></a></th>
+                <th><?= lang('Application.date') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#date" aria-label="<?= lang('Application.dateKey') ?>" title="<?= lang('Application.dateKey') ?>"><span class="keyiconfill">vpn_key</span></a></th>
             </tr>
         </thead>
         <tbody>
             <?php $i = 1;
     foreach ($query as $row) { ?>
                 <tr>
-                    <td data-sort="<?= $row->eventsort ?>"><?= ($isHistory ? $i : '<a href="/' . \Config\Services::request()->getLocale() . '/event/' . $row->eventslug . '/">View</a>') ?></td>
+                    <td data-sort="<?= $row->eventsort ?>"><?= ($isHistory ? $i : '<a href="/' . \Config\Services::request()->getLocale() . '/event/' . $row->eventslug . '/">' . lang('Application.view') . '</a>') ?></td>
                     <?php if ($isMultiple) { ?>
                         <td><?= $row->governmentaffectedlong ?></td>
                     <?php } ?>

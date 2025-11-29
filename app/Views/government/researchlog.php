@@ -1,16 +1,16 @@
 <?php if (is_array($query ?? '') && $query !== []) {
     $isMultiple ??= false; ?>
 <section>
-    <h2>Research Log</h2>
+    <h2><?= lang('Application.researchLog') ?></h2>
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
                 <?php if ($isMultiple) { ?>
-                    <th>Government</th>
+                    <th><?= lang('Application.government') ?></th>
                 <?php } ?>
-                <th>Type/Notes</th>
-                <th>Log Date</th>
-                <th>Coverage</th>
+                <th><?= lang('Application.type') ?>/<?= lang('Application.notes') ?></th>
+                <th><?= lang('Application.logDate') ?></th>
+                <th><?= lang('Application.coverage') ?></th>
             </tr>
         </thead>
         <tbody>

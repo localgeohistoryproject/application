@@ -16,7 +16,7 @@ var map = L.map("map", {
 map.fitBounds(<?= $primaryLayer ?>layer.getBounds());
 
 var overlayMaps = {
-    "Approximate Current Boundaries": governmentOverlayMap,
+    "<?= lang('Application.approximateCurrentBoundaries') ?>": governmentOverlayMap,
     <?php
     $i = 0;
 if (is_array($layers) && $layers !== []) {
@@ -54,35 +54,35 @@ info.onAdd = function(map) {
 infoRegularUpdate = function(props) {
     if (props) {
         t = '<div id="mapinfo">'
-            + (props.plsstownshipshort !== '' ? '<div class="mapwidth">Survey Township: </div>'
+            + (props.plsstownshipshort !== '' ? '<div class="mapwidth"><?= lang('Application.surveyTownship') ?>: </div>'
             + '<div>' + (props.plsstownship !== '' ? '<a href="' + props.plsstownship + '">' : '')
             + props.plsstownshipshort + (props.plsstownship !== '' ? '</a>' : '') + '</div>' : '')
-            + (props.submunicipalitylong !== '' ? '<div class="mapwidth">Sub-Municipality: </div>'
+            + (props.submunicipalitylong !== '' ? '<div class="mapwidth"><?= lang('Application.subMunicipality') ?>: </div>'
             + '<div><a href="/<?= \Config\Services::request()->getLocale() ?>/government/' + props.submunicipality + '/">'
             + props.submunicipalitylong + '</a></div>' : '')
-            + '<div class="mapwidth">Municipality: </div>'
+            + '<div class="mapwidth"><?= lang('Application.municipality') ?>: </div>'
             + '<div>' + (props.municipality !== '' ? '<a href="/<?= \Config\Services::request()->getLocale() ?>/government/' + props.municipality + '/">' : '')
             + props.municipalitylong + (props.municipality !== '' ? '</a>' : '') + '</div>'
-            + '<div class="mapwidth">County: </div>'
+            + '<div class="mapwidth"><?= lang('Application.county') ?>: </div>'
             + '<div>' + (props.county !== '' ? '<a href="/<?= \Config\Services::request()->getLocale() ?>/government/' + props.county + '/">' : '')
             + props.countyshort + (props.county !== '' ? '</a>' : '') + '</div>'
-            + '<div class="mapwidth">Status: </div>'
+            + '<div class="mapwidth"><?= lang('Application.status') ?>: </div>'
             + '<div><a href="/<?= \Config\Services::request()->getLocale() ?>/key/#governmentmapstatus">'
             + dispositionColorName(props.disposition) + '</a></div>';
         for (i = 0; i < props.event.length; i++) {
             if (i == 0) {
-                t += '<div class="mapwidth">Event' + (props.event.length > 1 ? 's' : '') + ': </div>';
+                t += '<div class="mapwidth"><?= lang('Application.event') ?>' + (props.event.length > 1 ? 's' : '') + ': </div>';
             } else {
                 t += '<div class="mapwidth"></div>';
             }
             t += '<div><a href="/<?= \Config\Services::request()->getLocale() ?>/event/' + props.event[i].eventslug + '/">'
                 + props.event[i].eventdatetext + '</a></div>';
         }
-        t += '<div class="mapwidth">Area: </div>'
-            + '<div><a href="/<?= \Config\Services::request()->getLocale() ?>/area/' + props.governmentshapeslug + '/">View</a></div>';
+        t += '<div class="mapwidth"><?= lang('Application.area') ?>: </div>'
+            + '<div><a href="/<?= \Config\Services::request()->getLocale() ?>/area/' + props.governmentshapeslug + '/"><?= lang('Application.view') ?></a></div>';
         t += '</>'
     } else {
-        t = '<div class="b">Click for more info.</span>';
+        t = '<div class="b"><?= lang('Application.clickForMoreInfo') ?>.</span>';
     }
     this._div.innerHTML = t;
 };
@@ -102,8 +102,8 @@ info2.onAdd = function(map) {
 };
 
 info2RegularUpdate = function(props) {
-    this._div.innerHTML = (props ? '<div class="mapwidth">Event: </div><a href="/<?= \Config\Services::request()->getLocale() ?>/event/' + props.event + '/">'
-        + props.metesdescriptionlong + '</a> <br>' : '<div class="b">Click for more info.</span>');
+    this._div.innerHTML = (props ? '<div class="mapwidth"><?= lang('Application.event') ?>: </div><a href="/<?= \Config\Services::request()->getLocale() ?>/event/' + props.event + '/">'
+        + props.metesdescriptionlong + '</a> <br>' : '<div class="b"><?= lang('Application.clickForMoreInfo') ?>.</span>');
 };
 
 info2.update = info2RegularUpdate;
@@ -172,9 +172,9 @@ function toTimeLine() {
     timeString = '';
     nameString = '';
     infoTimeUpdate = function(props) {
-        newTimeString = '<span class="b">Event Date <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#date" aria-label="Date Key" title="Date Key"><span class="keyiconfill">vpn_key</span></a>:</span> ' + timeString;
+        newTimeString = '<span class="b"><?= lang('Application.eventDate') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#date" aria-label="<?= lang('Application.dateKey') ?>" title="<?= lang('Application.dateKey') ?>"><span class="keyiconfill">vpn_key</span></a>:</span> ' + timeString;
         if (nameString) {
-            newTimeString += '<br><span class="b">Government:</span> ' + nameString;
+            newTimeString += '<br><span class="b"><?= lang('Application.government') ?>:</span> ' + nameString;
         }
         this._div.innerHTML = newTimeString;
     }
@@ -273,7 +273,7 @@ L.Control.TimeLine = L.Control.extend({
         controlUI.href = "#";
         controlUI.innerHTML = '<span class="leaflet-control-timelapse-button mapicon">timelapse</span>';
         this._button = controlUI;
-        this._button.title = "View Timelapse";
+        this._button.title = "<?= lang('Application.viewTimelapse') ?>";
         this._container = controlDiv;
         this._createTooltip();
         return controlDiv;
@@ -288,12 +288,12 @@ L.Control.TimeLine = L.Control.extend({
                 toTimeLine();
                 $('.leaflet-control-timelapse-button').html('cancel');
                 document.getElementsByClassName('timelapsebox')[0].style.display = 'flex';
-                this.title = "Exit Timelapse";
+                this.title = "<?= lang('Application.exitTimelapse') ?>";
             } else {
                 toRegular();
                 $('.leaflet-control-timelapse-button').html('timelapse');
                 document.getElementsByClassName('timelapsebox')[0].style.display = 'none';
-                this.title = "View Timelapse";
+                this.title = "<?= lang('Application.viewTimelapse') ?>";
             }
             return false;
         });

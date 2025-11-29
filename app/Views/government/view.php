@@ -4,17 +4,17 @@
     ?>
 <section>
     <?php if (!$isHistory) { ?>
-        <h2>Summary</h2>
+        <h2><?= lang('Application.summary') ?></h2>
     <?php } ?>
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
                 <?php if (\App\Controllers\BaseController::isLive()) { ?>
-                    <th>ID</th>
+                    <th><?= lang('Application.id') ?></th>
                 <?php } ?>
-                <th>Name</th>
-                <th>Level <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#governmentlevel" aria-label="Level Key" title="Level Key"><span class="keyiconfill">vpn_key</span></a></th>
-                <th>Type</th>
+                <th><?= lang('Application.name') ?></th>
+                <th><?= lang('Application.level') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#governmentlevel" aria-label="<?= lang('Application.levelKey') ?>" title="<?= lang('Application.levelKey') ?>"><span class="keyiconfill">vpn_key</span></a></th>
+                <th><?= lang('Application.type') ?></th>
             </tr>
         </thead>
         <tbody>
@@ -31,18 +31,18 @@
 </section>
 <?php if ($row->textflag === 't' && !$isHistory) { ?>
     <section>
-        <h2>Detail</h2>
+        <h2><?= lang('Application.detail') ?></h2>
         <table class="normal cell-border compact stripe">
             <thead>
                 <tr>
-                    <th>Created <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#date" aria-label="Date Key" title="Date Key"><span class="keyiconfill">vpn_key</span></a></th>
+                    <th><?= lang('Application.created') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#date" aria-label="<?= lang('Application.dateKey') ?>" title="<?= lang('Application.dateKey') ?>"><span class="keyiconfill">vpn_key</span></a></th>
                     <?php if ($row->governmentcreationlong !== '') { ?>
-                        <th>Created As</th>
+                        <th><?= lang('Application.createdAs') ?></th>
                     <?php } ?>
-                    <th>Boundary-Name Alteration Count</th>
-                    <th>Dissolved <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#date" aria-label="Date Key" title="Date Key"><span class="keyiconfill">vpn_key</span></a></th>
+                    <th><?= lang('Application.boundaryNameAlterationCount') ?></th>
+                    <th><?= lang('Application.dissolved') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#date" aria-label="<?= lang('Application.dateKey') ?>" title="<?= lang('Application.dateKey') ?>"><span class="keyiconfill">vpn_key</span></a></th>
                     <?php if (\App\Controllers\BaseController::isLive()) { ?>
-                        <th>Mapping Complete?</th>
+                        <th><?= lang('Application.mappingComplete') ?></th>
                     <?php } ?>
                 </tr>
             </thead>
@@ -65,7 +65,7 @@
                                     <?php }
                                     } ?>
                                 </select>
-                                <button type="submit">Change</button>
+                                <button type="submit"><?= lang('Application.change') ?></button>
                             </form>
                         </td>
                     <?php } ?>

@@ -1,29 +1,29 @@
 <?php if (is_array($query ?? '') && $query !== []) {
     $isMultiple ??= false; ?>
 <section>
-    <h2>National Archives</h2>
+    <h2><?= lang('Application.nationalArchives') ?></h2>
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
-                <th>Detail</th>
+                <th><?= lang('Application.detail') ?></th>
                 <?php if ($isMultiple) { ?>
-                    <th>Government</th>
+                    <th><?= lang('Application.government') ?></th>
                 <?php } ?>
-                <th>Source</th>
-                <th>Set</th>
-                <th>Description</th>
-                <th>File Unit</th>
-                <th>From</th>
-                <th>To</th>
+                <th><?= lang('Application.source') ?></th>
+                <th><?= lang('Application.set') ?></th>
+                <th><?= lang('Application.description') ?></th>
+                <th><?= lang('Application.fileUnit') ?></th>
+                <th><?= lang('Application.from') ?></th>
+                <th><?= lang('Application.to') ?></th>
                 <?php if (\App\Controllers\BaseController::isLive()) { ?>
-                    <th>Examined?</th>
+                    <th><?= lang('Application.examined') ?></th>
                 <?php } ?>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($query as $row) { ?>
                 <tr>
-                    <td><?php if ($row->url !== '') { ?><a href="<?= $row->url ?>">View</a><?php } ?></td>
+                    <td><?php if ($row->url !== '') { ?><a href="<?= $row->url ?>"><?= lang('Application.view') ?></a><?php } ?></td>
                     <?php if ($isMultiple) { ?>
                         <td><?= $row->governmentlong ?></td>
                     <?php } ?>

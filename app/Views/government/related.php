@@ -1,12 +1,12 @@
 <?php if (is_array($query ?? '') && $query !== []) { ?>
 <section>
-    <h2>Related</h2>
+    <h2><?= lang('Application.related') ?></h2>
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
-                <th>Government</th>
-                <th>Relationship</th>
-                <th>Status</th>
+                <th><?= lang('Application.government') ?></th>
+                <th><?= lang('Application.relationship') ?></th>
+                <th><?= lang('Application.status') ?></th>
             </tr>
         </thead>
         <tbody>
