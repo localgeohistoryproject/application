@@ -9,14 +9,14 @@
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
-                <th>Detail</th>
-                <th>Citation <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#law" aria-label="Law Key" title="Law Key"><span class="keyiconfill">vpn_key</span></a></th>
+                <th><?= lang('Application.detail') ?></th>
+                <th><?= lang('Application.citation') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#law" aria-label="<?= lang('Application.lawKey') ?>" title="<?= lang('Application.lawKey') ?>"><span class="keyiconfill">vpn_key</span></a></th>
                 <th><?php if ($type === 'relationship') {
                     if (isset($includeLawGroup)) { ?>
-                        Group</th>
-                        <th><?php } ?>Relationship <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#eventrelationship" aria-label="Relationship Key" title="Relationship Key"><span class="keyiconfill">vpn_key</span></a>
+                        <?= lang('Application.group') ?></th>
+                        <th><?php } ?><?= lang('Application.relationship') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#eventrelationship" aria-label="<?= lang('Application.relationshipKey') ?>" title="<?= lang('Application.relationshipKey') ?>"><span class="keyiconfill">vpn_key</span></a>
                     <?php } else { ?>
-                        Type
+                        <?= lang('Application.type') ?>
                     <?php } ?>
                 </th>
             </tr>
@@ -24,7 +24,7 @@
         <tbody>
             <?php foreach ($query as $row) { ?>
                 <tr>
-                    <td><a href="/<?= \Config\Services::request()->getLocale() ?>/law/<?= $row->lawsectionslug ?>/"><?= ($row->lawsectionslug === '' ? '' : 'View') ?></a></td>
+                    <td><a href="/<?= \Config\Services::request()->getLocale() ?>/law/<?= $row->lawsectionslug ?>/"><?= ($row->lawsectionslug === '' ? '' : lang('Application.view')) ?></a></td>
                     <td data-sort="<?= $row->lawapproved ?>"><?= $row->lawsectioncitation ?></td>
                     <?php if ($type === 'relationship' && isset($includeLawGroup)) { ?>
                         <td><?= $row->lawgrouplong ?></td>
