@@ -12,10 +12,10 @@
     <table class="normal cell-border compact stripe">
         <thead>
             <tr>
-                <th>Term</th>
-                <th>Description</th>
+                <th><?= lang('Application.term') ?></th>
+                <th><?= lang('Application.description') ?></th>
                 <?php if ($type === 'EventType') { ?>
-                    <th>Only<br>Border<br>Changes?</th>
+                    <th><?= lang('Application.onlyBorderChanges') ?></th>
                 <?php } ?>
             </tr>
         </thead>
