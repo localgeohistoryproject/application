@@ -12,15 +12,15 @@ downloadBox.onAdd = function(map) {
 };
 downloadBox.update = function() {
 <?php if (\App\Controllers\BaseController::isInternetExplorer()) { ?>
-    var textToAdd = 'Sorry, downloads not supported in outdated browsers. <a href="https://browsehappy.com/?locale=<?= \Config\Services::request()->getLocale() ?>" target="_blank" rel="noopener noreferrer">More information »</a>';
+    var textToAdd = '<?= lang('Application.outdatedBrowser') ?> <a href="https://browsehappy.com/?locale=<?= \Config\Services::request()->getLocale() ?>" target="_blank" rel="noopener noreferrer"><?= lang('Application.moreInformation') ?> »</a>';
 <?php } else { ?>
-    var textToAdd = '<span class="b">Select a layer to download:</span>';
+    var textToAdd = '<span class="b"><?= lang('Application.selectALayerToDownload') ?>:</span>';
     Object.keys(overlayMaps).forEach(function (element) {
-        if (element.indexOf("Parcels") == -1 && element !== "Approximate Current Boundaries") {
+        if (element.indexOf("<?= lang('Application.parcels') ?>") == -1 && element !== "<?= lang('Application.approximateCurrentBoundaries') ?>") {
             textToAdd += '<br><a class="datadownload" id="' + overlayMaps[element].options.title + '" href="#">' + element + '</a>';
         }
     });
-    textToAdd += '<br><a class="imagedownload" href="#">Image</a>';
+    textToAdd += '<br><a class="imagedownload" href="#"><?= lang('Application.image') ?></a>';
 <?php } ?>
     this._div.innerHTML = textToAdd;
 };
@@ -31,5 +31,5 @@ map.on("click", function(e) {
     document.getElementById("coord").innerHTML = +e.latlng.lng.toFixed(7) + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + +e.latlng.lat.toFixed(7);
 });
 <?php } ?>
-map.attributionControl.setPrefix(Object.getPrototypeOf(map.attributionControl).options.prefix + ' | Not a survey product.');
+map.attributionControl.setPrefix(Object.getPrototypeOf(map.attributionControl).options.prefix + ' | <?= lang('Application.notASurveyProduct') ?>.');
 </script>
