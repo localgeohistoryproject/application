@@ -4,6 +4,7 @@
 
 ### Changed
 
+- Composer dependency version updates where not predefined in composer.json.
 - Locale settings to prepare for future French translation.
 
 ## [3.1.4] - 2025-04-29
