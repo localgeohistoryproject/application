@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.5] - 2025-12-12
+
+### Changed
+
+- Composer dependency version updates where not predefined in composer.json.
+- Locale settings to prepare for future French translation.
+
 ## [3.1.4] - 2025-04-29
 
 ### Changed
@@ -493,6 +500,7 @@
 
 - Public release of the Local Geohistory Project: Application repository.
 
+[3.1.5]: https://github.com/localgeohistoryproject/application/compare/v3.1.4...v3.1.5
 [3.1.4]: https://github.com/localgeohistoryproject/application/compare/v3.1.3...v3.1.4
 [3.1.3]: https://github.com/localgeohistoryproject/application/compare/v3.1.2...v3.1.3
 [3.1.2]: https://github.com/localgeohistoryproject/application/compare/v3.1.1...v3.1.2
