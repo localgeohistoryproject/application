@@ -23,7 +23,6 @@
 - In database table geohistory.lawsection, change trigger lawsection_update_trigger to lawsection_insertupdate_trigger; trigger function lawsection_update to lawsection_insertupdate; and update logic to handle default values and singular/plural symbols for lawsectionsymbol and lawsectionnewsymbol.
 - In database table geohistory.source, change column sourcelawisbynumber to sourcelawnumbertype.
 - In database table geohistory.sourcecitation, change column sourcecitationarchivecarton to sourcecitationcontainer, and column sourcecitationarchiveslotfilm to sourcecitationitemlocation.
-- Locale settings to prepare for future French translation.
 - MapLibre GL JS from 4.7.1 to 5.14.0.
 - MapLibre GL Leaflet from 0.0.22 to 0.1.3.
 - PHP coding style to PER-CS 3.0.
@@ -48,6 +47,13 @@
 - Law page, Summary table, Page Begin column (pincite now included in Citation column).
 - View for unavailable state message (no longer needed due to jurisdictions being removed from URLs).
 - Volume references in docker-compose.yaml, .gitignore, and Sample.env that were only used in development.
+
+## [3.1.5] - 2025-12-12
+
+### Changed
+
+- Composer dependency version updates where not predefined in composer.json.
+- Locale settings to prepare for future French translation.
 
 ## [3.1.4] - 2025-04-29
 
@@ -542,7 +548,8 @@
 
 - Public release of the Local Geohistory Project: Application repository.
 
-[4.0.0]: https://github.com/localgeohistoryproject/application/compare/v3.1.4...develop
+[4.0.0]: https://github.com/localgeohistoryproject/application/compare/v3.1.5...develop
+[3.1.5]: https://github.com/localgeohistoryproject/application/compare/v3.1.4...v3.1.5
 [3.1.4]: https://github.com/localgeohistoryproject/application/compare/v3.1.3...v3.1.4
 [3.1.3]: https://github.com/localgeohistoryproject/application/compare/v3.1.2...v3.1.3
 [3.1.2]: https://github.com/localgeohistoryproject/application/compare/v3.1.1...v3.1.2
