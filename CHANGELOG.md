@@ -14,7 +14,7 @@
 - Composer docker image from 2.8.6 to 2.9.2.
 - Database extract pg_dump and OS versions.
 - Database function geohistory.sourcelawisbynumber to sourcelawnumbertype.
-- DataTables from 2.2.2 to 2.3.4.
+- DataTables from 2.2.2 to 2.3.5.
 - In database schema gis, all items moved to schema geohistory.
 - In database table geohistory.law, change generated column lawcitation to align with Bluebook formatting.
 - In database table geohistory.lawalternate, change generated column lawalternatecitation to align with Bluebook formatting.
@@ -24,7 +24,7 @@
 - In database table geohistory.source, change column sourcelawisbynumber to sourcelawnumbertype.
 - In database table geohistory.sourcecitation, change column sourcecitationarchivecarton to sourcecitationcontainer, and column sourcecitationarchiveslotfilm to sourcecitationitemlocation.
 - Locale settings to prepare for future French translation.
-- MapLibre GL JS from 4.7.1 to 5.9.0.
+- MapLibre GL JS from 4.7.1 to 5.14.0.
 - MapLibre GL Leaflet from 0.0.22 to 0.1.3.
 - PHP coding style to PER-CS 3.0.
 - PHP CS Fixer from 3.73.1 to 3.91.3.
