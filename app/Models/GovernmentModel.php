@@ -757,6 +757,60 @@ class GovernmentModel extends BaseModel
         return $this->getObject($query);
     }
 
+    public function getFolderParent(int $id): array
+    {
+        $query = <<<QUERY
+                WITH RECURSIVE governmenthierarchy(governmentparent, governmentid, n) AS (
+                    SELECT s0.governmentid AS governmentcurrentleadparent,
+                        s0.governmentid,
+                        0 AS n
+                    FROM geohistory.government s0
+                    WHERE s0.governmentid = ?
+                    UNION
+                    SELECT s1.governmentcurrentleadparent,
+                        s1.governmentid,
+                        -1 AS n
+                    FROM geohistory.government s1
+                    WHERE s1.governmentid = ?
+                    UNION
+                    SELECT s2.governmentcurrentleadparent,
+                        s1.governmentid,
+                        s1.n - 1 AS n
+                    FROM geohistory.government s2,
+                        governmenthierarchy s1
+                    WHERE s2.governmentid = s1.governmentparent
+                        AND n > -10
+                )
+                SELECT government.governmentslugsubstitute AS governmentslug,
+                    government.governmentlong,
+                    '/' || array_to_string(
+                        array_remove(
+                            array_agg(
+                                lpad(governmentname.governmentid::text, 6, '0') || ' ' || replace(governmentname.governmentname, '/', '-')
+                                ORDER BY governmenthierarchy.n
+                            ), NULL
+                        ), '/'
+                    ) || '/' AS governmentfolder,
+                    governmentcurrentleadparent.governmentslugsubstitute AS governmentparentslug,
+                    governmentcurrentleadparent.governmentlong AS governmentparentlong
+                FROM governmenthierarchy
+                JOIN geohistory.government
+                    ON governmenthierarchy.governmentid = government.governmentid
+                JOIN geohistory.government governmentname
+                    ON governmenthierarchy.governmentparent = governmentname.governmentid
+                LEFT JOIN geohistory.government governmentcurrentleadparent
+                    ON government.governmentcurrentleadparent = governmentcurrentleadparent.governmentid
+                GROUP BY 1, 2, 4, 5
+        QUERY;
+
+        $query = $this->db->query($query, [
+            $id,
+            $id,
+        ]);
+
+        return $this->getObject($query);
+    }
+
     public function getIdByGovernment(int $government): string
     {
         $query = <<<QUERY
