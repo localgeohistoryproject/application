@@ -8,6 +8,7 @@
 - In database table geohistory.law, column lawpagetextbefore.
 - In database table geohistory.lawsection, constraint lawsection_check.
 - In GovernmentModel, getFolderParent function.
+- POSTGRES_SCHEMA variable to .env.
 
 ### Changed
 

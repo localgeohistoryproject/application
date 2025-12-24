@@ -45,6 +45,7 @@ services:
             POSTGRES_DB: ${POSTGRES_DB}
             POSTGRES_OTHER_USER: ${POSTGRES_OTHER_USER}
             POSTGRES_OTHER_PASSWORD: ${POSTGRES_OTHER_PASSWORD}
+            POSTGRES_SCHEMA: ${POSTGRES_SCHEMA}
             TZ: ${TZ}
         ports:
             - ${database_default_port}:5432
