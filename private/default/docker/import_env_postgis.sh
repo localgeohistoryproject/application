@@ -40,8 +40,10 @@ if [ "$CI_ENVIRONMENT" = "production" ]; then
     ## Reinstate foreign key checks and refresh views
     tableString+="COMMIT;
     ALTER TABLE geohistory.governmentshape ENABLE TRIGGER governmentshape_insert_trigger;
+    SELECT geohistory.refresh_sequence('geohistory');
+    SELECT geohistory.refresh_generated();
+    SELECT geohistory.refresh_analyze('geohistory');
     SELECT geohistory.refresh_view();
-    SELECT geohistory.refresh_sequence();
     "
     ## Save combined commands
     echo "${tableString}" > /tmp/inpostgis/import.sql

@@ -4,7 +4,7 @@
 
 ### Added
 
-- Database functions geohistory.lawsectionnewfrom, lawsectionnewsymbol, and lawsectionnewto.
+- Database functions geohistory.lawsectionnewfrom, lawsectionnewsymbol, lawsectionnewto, refresh_analyze, and refresh_generated.
 - In database table geohistory.law, column lawpagetextbefore.
 - In database table geohistory.lawsection, constraint lawsection_check.
 - In GovernmentModel, getFolderParent function.
@@ -14,7 +14,10 @@
 - CodeIgniter from 4.6.0 to 4.6.3.
 - Composer docker image from 2.8.6 to 2.9.2.
 - Database extract pg_dump and OS versions.
+- Database function geohistory.refresh_sequence to accept schema as parameter.
+- Database function geohistory.refresh_view to remove everything except for refresh materialized view to the new geohistory.refresh_generated function.
 - Database function geohistory.sourcelawisbynumber to sourcelawnumbertype.
+- Database import function order.
 - DataTables from 2.2.2 to 2.3.5.
 - In database schema gis, all items moved to schema geohistory.
 - In database table geohistory.law, change generated column lawcitation to align with Bluebook formatting.
