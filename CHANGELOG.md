@@ -39,6 +39,7 @@
 - PHPStan CodeIgniter from 1.5.3 to 1.5.4.
 - PHPStan Strict Rules from 2.0.4 to 2.0.7.
 - README to expand Build command.
+- README to have users download TSVs into inpostgis/geohistory instead of inpostgis.
 - Rector from 2.0.10 to 2.2.14.
 - Robots.txt to add Crawl-delay.
 

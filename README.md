@@ -44,9 +44,9 @@ Within the newly-created **PHP** folder, there is a Sample.env file that can be 
 
 First, copy the Sample.env, and name the copy **.env** (with nothing before the period). Then, populate the values labeled ***, following the directions in the file.
 
-### Copy data files into the inpostgis folder
+### Copy data files into the inpostgis/geohistory folder
 
-The **inpostgis** folder contains 2 SQL files containing the structural elements of the database. To replicate the data as presented on the [project website](https://www.localgeohistory.pro/en/), download the tab-separated values (TSV) files from the **data** folder in the [Open Data repository](https://github.com/localgeohistoryproject/open-data) and place them in the **inpostgis** folder.
+The **inpostgis** folder and the **inpostgis/geohistory** folder each contain one SQL file containing the structural elements of the database. To replicate the data as presented on the [project website](https://www.localgeohistory.pro/en/), download the tab-separated values (TSV) files from the **data** folder in the [Open Data repository](https://github.com/localgeohistoryproject/open-data) and place them in the **inpostgis/geohistory** folder.
 
 ### Build
 
