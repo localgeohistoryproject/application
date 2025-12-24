@@ -36,6 +36,7 @@ html/asset/tile/*
 !html/asset/tile/.gitkeep
 inpostgis/**
 !inpostgis/postgresql_calendar_extension.sql
+!inpostgis/geohistory/_schema.sql
 !inpostgis/postgresql_public_backup.sql
 !inpostgis/postgresql_calendar_extension_update**
 module/**
