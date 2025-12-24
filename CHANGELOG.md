@@ -20,6 +20,7 @@
 - Database import function order.
 - DataTables from 2.2.2 to 2.3.5.
 - In database schema gis, all items moved to schema geohistory.
+- In database table geohistory.adjudication, change how generated column is refreshed.
 - In database table geohistory.law, change generated column lawcitation to align with Bluebook formatting.
 - In database table geohistory.lawalternate, change generated column lawalternatecitation to align with Bluebook formatting.
 - In database table geohistory.lawalternatesection, change generated columns lawalternatesectioncitation and lawalternatesectionslug to align with Bluebook formatting.
