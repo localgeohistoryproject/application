@@ -18,7 +18,7 @@
 - Database function geohistory.refresh_sequence to accept schema as parameter.
 - Database function geohistory.refresh_view to remove everything except for refresh materialized view to the new geohistory.refresh_generated function.
 - Database function geohistory.sourcelawisbynumber to sourcelawnumbertype.
-- Database import function order.
+- Database import to consolidate logic regardless of environment.
 - DataTables from 2.2.2 to 2.3.5.
 - In database schema gis, all items moved to schema geohistory.
 - In database table geohistory.adjudication, change how generated column is refreshed.
@@ -31,6 +31,7 @@
 - In database table geohistory.sourcecitation, change column sourcecitationarchivecarton to sourcecitationcontainer, and column sourcecitationarchiveslotfilm to sourcecitationitemlocation.
 - MapLibre GL JS from 4.7.1 to 5.14.0.
 - MapLibre GL Leaflet from 0.0.22 to 0.1.3.
+- Moved schema SQL file from inpostgis/postgresql_public_backup.sql to inpostgis/geohistory/_schema.sql.
 - PHP coding style to PER-CS 3.0.
 - PHP CS Fixer from 3.73.1 to 3.91.3.
 - PHP docker image from 8.4.3-apache-bookworm to 8.5.0-apache-trixie.
@@ -49,6 +50,7 @@
 
 - app/Views/errors files that match CodeIgniter defaults from repository.
 - Database schema gis.
+- DOCKER_POSTGIS variable from .env.
 - Inphp and outpostgis folders.
 - Law page, Summary table, Page Begin column (pincite now included in Citation column).
 - View for unavailable state message (no longer needed due to jurisdictions being removed from URLs).

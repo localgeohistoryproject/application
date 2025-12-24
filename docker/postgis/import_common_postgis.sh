@@ -17,3 +17,82 @@ psql --command="CREATE SCHEMA calendar;" $POSTGRES_DB
 psql --command="GRANT USAGE ON SCHEMA calendar TO readonly;" $POSTGRES_DB
 psql --file="/inpostgis/postgresql_calendar_extension.sql" $POSTGRES_DB
 psql --command="CREATE EXTENSION calendar;" $POSTGRES_DB
+# Start database restoration
+mkdir /tmp/inpostgis/schema/
+echo "DATABASE RESTORATION:"
+refreshString=""
+tsvSchemas=( $POSTGRES_SCHEMA )
+for tsvSchema in "${tsvSchemas[@]}"
+do
+    if [ -f "/inpostgis/${tsvSchema,,}/_schema.sql" ]; then
+        echo "Restoring ${tsvSchema,,} schema:"
+        psql --file="/inpostgis/${tsvSchema,,}/_schema.sql" $POSTGRES_DB
+        ## Block foreign key checks
+        tableString="BEGIN;
+        SET CONSTRAINTS ALL DEFERRED;
+        "
+        if [ "$tsvSchema" == "geohistory" ]; then
+            tableString+="ALTER TABLE geohistory.governmentshape DISABLE TRIGGER governmentshape_insert_trigger;
+            "
+            # Concatenate governmentshape_*.tsv files
+            if [ ! -f "/inpostgis/${tsvSchema,,}/governmentshape.tsv" ]; then
+                isFirstFile=Y
+                for fileName in /inpostgis/${tsvSchema,,}/governmentshape_*.tsv
+                do
+                    if [ "$isFirstFile" == "Y" ]; then
+                        head -n +1 "${fileName}" > "/inpostgis/${tsvSchema,,}/governmentshape.tsv"
+                        isFirstFile=N
+                    fi
+                    tail -n +2 "${fileName}" >> "/inpostgis/${tsvSchema,,}/governmentshape.tsv"
+                    rm "${fileName}"
+                done
+            fi
+        fi
+        ## Add table imports
+        hasTableImport=Y
+        for tableName in /inpostgis/${tsvSchema,,}/*.tsv
+        do
+            tableName=$(basename $tableName .tsv)
+            if [ "$tableName" != "*" ]; then
+                tsvHeader=$(head -n +1 "/inpostgis/${tsvSchema,,}/${tableName,,}.tsv" | sed "s/\t/,/g")
+                tail -n +2 "/inpostgis/${tsvSchema,,}/${tableName,,}.tsv" > "/tmp/inpostgis/schema/${tableName,,}.tsv"
+                tableString+="\COPY ${tsvSchema,,}.${tableName,,} ($tsvHeader) FROM '/tmp/inpostgis/schema/${tableName,,}.tsv';
+                "
+            else
+                hasTableImport=N
+            fi
+        done
+        if [ "$hasTableImport" == "Y" ]; then
+            tableString+="COMMIT;
+            CHECKPOINT;
+            "
+        else
+            tableString=""
+        fi
+        ## Add refresh sequence/generated columns and analyze
+        tableString+="SELECT geohistory.refresh_sequence('${tsvSchema,,}');
+        SELECT ${tsvSchema,,}.refresh_generated();
+        SELECT geohistory.refresh_analyze('${tsvSchema,,}');
+        CHECKPOINT;
+        "
+        # Add refresh views (run later)
+        refreshString+="SELECT ${tsvSchema,,}.refresh_view();
+        "
+        if [ "$tsvSchema" == "geohistory" ]; then
+            tableString+="ALTER TABLE geohistory.governmentshape ENABLE TRIGGER governmentshape_insert_trigger;
+            "
+        fi
+        ## Run table imports, refresh sequence/generated columns, and analyze
+        echo "${tableString}" > /tmp/inpostgis/schema/import.sql
+        psql --file="/tmp/inpostgis/schema/import.sql" $POSTGRES_DB
+        rm /tmp/inpostgis/schema/*
+    else
+        echo "WARNING: ${tsvSchema,,} SQL file missing"
+    fi
+done
+# Run refresh views
+refreshString+="CHECKPOINT;
+"
+echo "${refreshString}" > /tmp/inpostgis/schema/import.sql
+psql --file="/tmp/inpostgis/schema/import.sql" $POSTGRES_DB
+rm /tmp/inpostgis/schema/*

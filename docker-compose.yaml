@@ -31,8 +31,6 @@ services:
         build:
             context: ./
             dockerfile: ./docker/postgis/Dockerfile
-            args:
-                DOCKER_POSTGIS: ${DOCKER_POSTGIS}
         restart: always
         command:
           - "postgres"
