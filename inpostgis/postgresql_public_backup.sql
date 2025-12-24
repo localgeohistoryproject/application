@@ -5,7 +5,7 @@
 \restrict 0
 
 -- Dumped from database version 17.5 (Debian 17.5-1.pgdg110+1)
--- Dumped by pg_dump version 17.6 (Ubuntu 17.6-2.pgdg24.04+1)
+-- Dumped by pg_dump version 17.7 (Ubuntu 17.7-3.pgdg24.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -1134,67 +1134,59 @@ $_$;
 ALTER FUNCTION geohistory.rangeformat(text, text) OWNER TO postgres;
 
 --
--- Name: refresh_sequence(); Type: FUNCTION; Schema: geohistory; Owner: postgres
+-- Name: refresh_analyze(text); Type: FUNCTION; Schema: geohistory; Owner: postgres
 --
 
-CREATE FUNCTION geohistory.refresh_sequence() RETURNS void
-    LANGUAGE plpgsql STABLE
-    AS $_$
+CREATE FUNCTION geohistory.refresh_analyze(t_schema text) RETURNS void
+    LANGUAGE plpgsql
+    AS $$
 
     DECLARE
 
         columncursor refcursor;
         tableschema text;
         tablename text;
-        columnname text;
-        columnsequence text;
-        maxidvalue bigint;
 
     BEGIN
 
         OPEN columncursor FOR
-        SELECT columns.table_schema::text,
-           columns.table_name::text,
-           columns.column_name::text,
-           split_part(columns.column_default::text, '''', 2) AS column_sequence
-          FROM information_schema.columns
-         WHERE columns.table_schema::text = ANY (ARRAY['geohistory'::text])
-           AND columns.column_default ~~ 'nextval(%'
-         ORDER BY 1, 2;
+        SELECT tables.table_schema AS tableschema,
+	        tables.table_name AS tablename
+        FROM information_schema.tables
+        WHERE tables.table_schema = t_schema
+	    AND tables.table_type = 'BASE TABLE'
+        ORDER BY 1, 2;
+        
+        RAISE INFO '%', clock_timestamp();
 
         LOOP
         
-          FETCH columncursor INTO tableschema, tablename, columnname, columnsequence;
+          FETCH columncursor INTO tableschema, tablename;
 
           IF NOT FOUND THEN
             EXIT;
           END IF;
 
-          EXECUTE format('SELECT COALESCE(max(%I.%I) + 1, 1) FROM %I.%I',
-            tablename,
-            columnname,
+          EXECUTE format('ANALYZE %I.%I',
             tableschema,
-            tablename)
-          INTO maxidvalue;
-
-          EXECUTE 'SELECT pg_catalog.setval($1, $2, false)'
-          USING columnsequence,
-            maxidvalue;
+            tablename);
+          
+          RAISE INFO '%', clock_timestamp();
 
         END LOOP;
 
     END;
 
-$_$;
+$$;
 
 
-ALTER FUNCTION geohistory.refresh_sequence() OWNER TO postgres;
+ALTER FUNCTION geohistory.refresh_analyze(t_schema text) OWNER TO postgres;
 
 --
--- Name: refresh_view(); Type: FUNCTION; Schema: geohistory; Owner: postgres
+-- Name: refresh_generated(); Type: FUNCTION; Schema: geohistory; Owner: postgres
 --
 
-CREATE FUNCTION geohistory.refresh_view() RETURNS void
+CREATE FUNCTION geohistory.refresh_generated() RETURNS void
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -1299,7 +1291,8 @@ RAISE INFO '%', clock_timestamp();
     SET governmentname = governmentname || '';
 RAISE INFO '%', clock_timestamp();
     UPDATE geohistory.adjudication
-    SET adjudicationname = adjudicationname || '';
+    SET adjudicationnumber = adjudicationnumber || '',
+	adjudicationlong = adjudicationlong || '';
 RAISE INFO '%', clock_timestamp();
     UPDATE geohistory.adjudicationsourcecitation
     SET adjudicationsourcecitationname = adjudicationsourcecitationname || '';
@@ -1325,10 +1318,6 @@ RAISE INFO '%', clock_timestamp();
     UPDATE geohistory.sourcecitation
     SET sourcecitationname = sourcecitationname || '';
 RAISE INFO '%', clock_timestamp();
-    REFRESH MATERIALIZED VIEW geohistory.governmentchangecountcache;
-RAISE INFO '%', clock_timestamp();
-    REFRESH MATERIALIZED VIEW geohistory.governmentchangecountpartcache;
-RAISE INFO '%', clock_timestamp();
     UPDATE geohistory.lastrefresh
     SET lastrefreshdate = current_date
     WHERE lastrefreshversion = 'LIVE';
@@ -1346,6 +1335,86 @@ RAISE INFO '%', clock_timestamp();
         governmentshapereference IS NOT NULL
         AND governmentshapereference <> governmentshapeid
     );
+RAISE INFO '%', clock_timestamp();
+END
+$$;
+
+
+ALTER FUNCTION geohistory.refresh_generated() OWNER TO postgres;
+
+--
+-- Name: refresh_sequence(text); Type: FUNCTION; Schema: geohistory; Owner: postgres
+--
+
+CREATE FUNCTION geohistory.refresh_sequence(t_schema text) RETURNS void
+    LANGUAGE plpgsql STABLE
+    AS $_$
+
+    DECLARE
+
+        columncursor refcursor;
+        tableschema text;
+        tablename text;
+        columnname text;
+        columnsequence text;
+        maxidvalue bigint;
+
+    BEGIN
+
+        OPEN columncursor FOR
+        SELECT columns.table_schema::text,
+           columns.table_name::text,
+           columns.column_name::text,
+           split_part(columns.column_default::text, '''', 2) AS column_sequence
+        FROM information_schema.columns
+        WHERE columns.table_schema::text = t_schema
+            AND columns.column_default ~~ 'nextval(%'
+        ORDER BY 1, 2;
+        
+        RAISE INFO '%', clock_timestamp();
+
+        LOOP
+        
+          FETCH columncursor INTO tableschema, tablename, columnname, columnsequence;
+
+          IF NOT FOUND THEN
+            EXIT;
+          END IF;
+
+          EXECUTE format('SELECT COALESCE(max(%I.%I) + 1, 1) FROM %I.%I',
+              tablename,
+              columnname,
+              tableschema,
+              tablename)
+          INTO maxidvalue;
+
+          EXECUTE 'SELECT pg_catalog.setval($1, $2, false)'
+          USING columnsequence,
+              maxidvalue;
+              
+          RAISE INFO '%', clock_timestamp();
+
+        END LOOP;
+
+    END;
+
+$_$;
+
+
+ALTER FUNCTION geohistory.refresh_sequence(t_schema text) OWNER TO postgres;
+
+--
+-- Name: refresh_view(); Type: FUNCTION; Schema: geohistory; Owner: postgres
+--
+
+CREATE FUNCTION geohistory.refresh_view() RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+RAISE INFO '%', clock_timestamp();
+    REFRESH MATERIALIZED VIEW geohistory.governmentchangecountcache;
+RAISE INFO '%', clock_timestamp();
+    REFRESH MATERIALIZED VIEW geohistory.governmentchangecountpartcache;
 RAISE INFO '%', clock_timestamp();
     REFRESH MATERIALIZED VIEW geohistory.governmentshapecache;
 RAISE INFO '%', clock_timestamp();
@@ -9732,10 +9801,27 @@ REVOKE ALL ON FUNCTION geohistory.rangeformat(text, text) FROM PUBLIC;
 
 
 --
--- Name: FUNCTION refresh_sequence(); Type: ACL; Schema: geohistory; Owner: postgres
+-- Name: FUNCTION refresh_analyze(t_schema text); Type: ACL; Schema: geohistory; Owner: postgres
 --
 
-REVOKE ALL ON FUNCTION geohistory.refresh_sequence() FROM PUBLIC;
+REVOKE ALL ON FUNCTION geohistory.refresh_analyze(t_schema text) FROM PUBLIC;
+GRANT ALL ON FUNCTION geohistory.refresh_analyze(t_schema text) TO readonly;
+
+
+--
+-- Name: FUNCTION refresh_generated(); Type: ACL; Schema: geohistory; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION geohistory.refresh_generated() FROM PUBLIC;
+GRANT ALL ON FUNCTION geohistory.refresh_generated() TO readonly;
+
+
+--
+-- Name: FUNCTION refresh_sequence(t_schema text); Type: ACL; Schema: geohistory; Owner: postgres
+--
+
+REVOKE ALL ON FUNCTION geohistory.refresh_sequence(t_schema text) FROM PUBLIC;
+GRANT ALL ON FUNCTION geohistory.refresh_sequence(t_schema text) TO readonly;
 
 
 --
