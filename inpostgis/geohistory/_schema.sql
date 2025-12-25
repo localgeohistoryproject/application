@@ -4,8 +4,8 @@
 
 \restrict 0
 
--- Dumped from database version 17.5 (Debian 17.5-1.pgdg110+1)
--- Dumped by pg_dump version 17.7 (Ubuntu 17.7-3.pgdg24.04+1)
+-- Dumped from database version 18.1 (Debian 18.1-1.pgdg13+2)
+-- Dumped by pg_dump version 18.1 (Ubuntu 18.1-1.pgdg24.04+2)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -1621,7 +1621,7 @@ ALTER TABLE geohistory.affectedgovernmentgroup OWNER TO postgres;
 --
 
 CREATE TABLE geohistory.affectedgovernmentgrouppart (
-    affectedgovernmentgrouppartid integer NOT NULL,
+    affectedgovernmentgrouppartid integer CONSTRAINT affectedgovernmentgrouppart_affectedgovernmentgrouppar_not_null NOT NULL,
     affectedgovernmentgroup integer NOT NULL,
     affectedgovernmentpart integer NOT NULL,
     affectedgovernmentlevel integer NOT NULL
@@ -1639,7 +1639,7 @@ CREATE TABLE geohistory.affectedgovernmentlevel (
     affectedgovernmentlevelshort character varying(20) NOT NULL,
     affectedgovernmentlevellong character varying(20) NOT NULL,
     affectedgovernmentlevelgroup integer NOT NULL,
-    affectedgovernmentleveldisplayorder integer NOT NULL
+    affectedgovernmentleveldisplayorder integer CONSTRAINT affectedgovernmentlevel_affectedgovernmentleveldisplay_not_null NOT NULL
 );
 
 
@@ -2389,15 +2389,15 @@ CREATE TABLE geohistory.adjudicationlocation (
     adjudicationlocationpagefrom character varying(10) DEFAULT ''::text NOT NULL,
     adjudicationlocationpageto character varying(10) DEFAULT ''::text NOT NULL,
     adjudicationlocationrepositorylevel integer,
-    adjudicationlocationrepositoryshort character varying(30) DEFAULT ''::text NOT NULL,
-    adjudicationlocationrepositoryitemnumber character varying(10) DEFAULT ''::text NOT NULL,
+    adjudicationlocationrepositoryshort character varying(30) DEFAULT ''::text CONSTRAINT adjudicationlocation_adjudicationlocationrepositorysho_not_null NOT NULL,
+    adjudicationlocationrepositoryitemnumber character varying(10) DEFAULT ''::text CONSTRAINT adjudicationlocation_adjudicationlocationrepositoryite_not_null NOT NULL,
     adjudicationlocationrepositoryitemfrom integer,
     adjudicationlocationrepositoryitemto integer,
-    adjudicationlocationrepositoryitemlocation character varying(25) DEFAULT ''::character varying NOT NULL,
-    adjudicationlocationrepositoryextractdate calendar.historicdatetext DEFAULT (''::text)::calendar.historicdatetext NOT NULL,
+    adjudicationlocationrepositoryitemlocation character varying(25) DEFAULT ''::character varying CONSTRAINT adjudicationlocation_adjudicationlocationrepositoryit_not_null1 NOT NULL,
+    adjudicationlocationrepositoryextractdate calendar.historicdatetext DEFAULT (''::text)::calendar.historicdatetext CONSTRAINT adjudicationlocation_adjudicationlocationrepositoryext_not_null NOT NULL,
     adjudicationlocationrepositoryorder smallint,
-    adjudicationlocationrepositoryentry character varying(75) DEFAULT ''::text NOT NULL,
-    adjudicationlocationrepositoryseries character varying(50) DEFAULT ''::character varying NOT NULL,
+    adjudicationlocationrepositoryentry character varying(75) DEFAULT ''::text CONSTRAINT adjudicationlocation_adjudicationlocationrepositoryent_not_null NOT NULL,
+    adjudicationlocationrepositoryseries character varying(50) DEFAULT ''::character varying CONSTRAINT adjudicationlocation_adjudicationlocationrepositoryser_not_null NOT NULL,
     adjudicationlocationpage text GENERATED ALWAYS AS (geohistory.rangeformat((adjudicationlocationpagefrom)::text, (adjudicationlocationpageto)::text)) STORED
 );
 
@@ -2412,11 +2412,11 @@ CREATE TABLE geohistory.adjudicationlocationtype (
     adjudicationlocationtypeid integer NOT NULL,
     tribunal integer NOT NULL,
     adjudicationlocationtypearchivelevel integer,
-    adjudicationlocationtypearchiveseries character varying(10) DEFAULT ''::character varying NOT NULL,
+    adjudicationlocationtypearchiveseries character varying(10) DEFAULT ''::character varying CONSTRAINT adjudicationlocationtype_adjudicationlocationtypearchi_not_null NOT NULL,
     adjudicationlocationtypetype character varying(20) DEFAULT 'Docket'::text NOT NULL,
-    adjudicationlocationtypevolumetype character varying(15) DEFAULT 'Volume'::text NOT NULL,
-    adjudicationlocationtypepagetype character varying(10) DEFAULT 'Page'::text NOT NULL,
-    adjudicationlocationtypeabbreviation character varying(45) DEFAULT ''::character varying NOT NULL,
+    adjudicationlocationtypevolumetype character varying(15) DEFAULT 'Volume'::text CONSTRAINT adjudicationlocationtype_adjudicationlocationtypevolum_not_null NOT NULL,
+    adjudicationlocationtypepagetype character varying(10) DEFAULT 'Page'::text CONSTRAINT adjudicationlocationtype_adjudicationlocationtypepaget_not_null NOT NULL,
+    adjudicationlocationtypeabbreviation character varying(45) DEFAULT ''::character varying CONSTRAINT adjudicationlocationtype_adjudicationlocationtypeabbre_not_null NOT NULL,
     adjudicationlocationtypelong character varying(60) DEFAULT ''::character varying NOT NULL,
     adjudicationlocationtypeshort character varying(25) NOT NULL,
     CONSTRAINT adjudicationlocationtype_check CHECK (((adjudicationlocationtypeshort)::text <> ''::text))
@@ -2980,7 +2980,7 @@ CREATE TABLE geohistory.recordingofficetype (
     recordingofficetypeshort character varying(25) DEFAULT ''::character varying NOT NULL,
     recordingofficetypelong text NOT NULL,
     recordingofficetypedivision character varying(50) DEFAULT ''::character varying NOT NULL,
-    recordingofficetypeisaftergovernment boolean DEFAULT false NOT NULL,
+    recordingofficetypeisaftergovernment boolean DEFAULT false CONSTRAINT recordingofficetype_recordingofficetypeisaftergovernme_not_null NOT NULL,
     abbreviationverified boolean DEFAULT false NOT NULL,
     CONSTRAINT recordingofficetype_check CHECK ((recordingofficetypelong <> ''::text))
 );
@@ -3822,9 +3822,9 @@ ALTER TABLE geohistory.lawgroupsection OWNER TO postgres;
 --
 
 CREATE TABLE geohistory.governmentothercurrentparent (
-    governmentothercurrentparentid integer NOT NULL,
+    governmentothercurrentparentid integer CONSTRAINT governmentothercurrentparen_governmentothercurrentpare_not_null NOT NULL,
     government integer NOT NULL,
-    governmentothercurrentparent integer NOT NULL
+    governmentothercurrentparent integer CONSTRAINT governmentothercurrentpare_governmentothercurrentpare_not_null1 NOT NULL
 );
 
 
@@ -3933,20 +3933,20 @@ ALTER SEQUENCE geohistory.adjudicationlocationtype_adjudicationlocationtypeid_se
 --
 
 CREATE TABLE geohistory.adjudicationsourcecitation (
-    adjudicationsourcecitationid integer NOT NULL,
+    adjudicationsourcecitationid integer CONSTRAINT adjudicationsourcecitation_adjudicationsourcecitationi_not_null NOT NULL,
     source integer NOT NULL,
-    adjudicationsourcecitationvolume smallint NOT NULL,
-    adjudicationsourcecitationpagefrom smallint NOT NULL,
+    adjudicationsourcecitationvolume smallint CONSTRAINT adjudicationsourcecitation_adjudicationsourcecitationv_not_null NOT NULL,
+    adjudicationsourcecitationpagefrom smallint CONSTRAINT adjudicationsourcecitation_adjudicationsourcecitationp_not_null NOT NULL,
     adjudicationsourcecitationpageto smallint,
-    adjudicationsourcecitationyear character varying(4) DEFAULT ''::character varying NOT NULL,
-    adjudicationsourcecitationdate calendar.historicdatetext DEFAULT (''::text)::calendar.historicdatetext NOT NULL,
-    adjudicationsourcecitationtitle text DEFAULT ''::text NOT NULL,
-    adjudicationsourcecitationauthor character varying(45) DEFAULT ''::character varying NOT NULL,
-    adjudicationsourcecitationjudge character varying(45) DEFAULT ''::character varying NOT NULL,
-    adjudicationsourcecitationdissentjudge character varying(45) DEFAULT ''::character varying NOT NULL,
-    adjudicationsourcecitationurl text DEFAULT ''::text NOT NULL,
+    adjudicationsourcecitationyear character varying(4) DEFAULT ''::character varying CONSTRAINT adjudicationsourcecitation_adjudicationsourcecitationy_not_null NOT NULL,
+    adjudicationsourcecitationdate calendar.historicdatetext DEFAULT (''::text)::calendar.historicdatetext CONSTRAINT adjudicationsourcecitation_adjudicationsourcecitationd_not_null NOT NULL,
+    adjudicationsourcecitationtitle text DEFAULT ''::text CONSTRAINT adjudicationsourcecitation_adjudicationsourcecitationt_not_null NOT NULL,
+    adjudicationsourcecitationauthor character varying(45) DEFAULT ''::character varying CONSTRAINT adjudicationsourcecitation_adjudicationsourcecitationa_not_null NOT NULL,
+    adjudicationsourcecitationjudge character varying(45) DEFAULT ''::character varying CONSTRAINT adjudicationsourcecitation_adjudicationsourcecitationj_not_null NOT NULL,
+    adjudicationsourcecitationdissentjudge character varying(45) DEFAULT ''::character varying CONSTRAINT adjudicationsourcecitation_adjudicationsourcecitation_not_null1 NOT NULL,
+    adjudicationsourcecitationurl text DEFAULT ''::text CONSTRAINT adjudicationsourcecitation_adjudicationsourcecitationu_not_null NOT NULL,
     adjudication integer NOT NULL,
-    adjudicationsourcecitationname text DEFAULT ''::text NOT NULL,
+    adjudicationsourcecitationname text DEFAULT ''::text CONSTRAINT adjudicationsourcecitation_adjudicationsourcecitationn_not_null NOT NULL,
     adjudicationsourcecitationslug text GENERATED ALWAYS AS (geohistory.array_to_slug(ARRAY[(adjudicationsourcecitationvolume)::text, geohistory.sourceshort(source), (adjudicationsourcecitationpagefrom)::text,
 CASE
     WHEN ((adjudicationsourcecitationdate)::text = ''::text) THEN (adjudicationsourcecitationyear)::text
@@ -4225,7 +4225,7 @@ ALTER SEQUENCE geohistory.currentgovernment_currentgovernmentid_seq OWNED BY geo
 --
 
 CREATE TABLE geohistory.deleted_affectedgovernmentgis (
-    deleted_affectedgovernmentgisid integer NOT NULL,
+    deleted_affectedgovernmentgisid integer CONSTRAINT deleted_affectedgovernmentg_deleted_affectedgovernment_not_null NOT NULL,
     affectedgovernment integer NOT NULL,
     governmentshape integer,
     deletedat timestamp with time zone DEFAULT now()
@@ -4268,7 +4268,7 @@ ALTER SEQUENCE geohistory.deleted_affectedgovernmentgis_deleted_affectedgovernme
 --
 
 CREATE TABLE geohistory.deleted_metesdescriptiongis (
-    deleted_metesdescriptiongisid integer NOT NULL,
+    deleted_metesdescriptiongisid integer CONSTRAINT deleted_metesdescriptiongis_deleted_metesdescriptiongi_not_null NOT NULL,
     metesdescription integer NOT NULL,
     governmentshape integer,
     deletedat timestamp with time zone DEFAULT now()
@@ -4662,7 +4662,7 @@ CREATE TABLE geohistory.governmentformgovernment (
     governmentformgovernmentyear integer NOT NULL,
     governmentformgovernmentpage character varying(4) DEFAULT ''::character varying NOT NULL,
     governmentformgovernmentnotes text DEFAULT ''::text NOT NULL,
-    governmentformgovernmenteffective calendar.historicdatetext DEFAULT (''::text)::calendar.historicdatetext NOT NULL
+    governmentformgovernmenteffective calendar.historicdatetext DEFAULT (''::text)::calendar.historicdatetext CONSTRAINT governmentformgovernment_governmentformgovernmenteffec_not_null NOT NULL
 );
 
 
@@ -4734,7 +4734,7 @@ CREATE TABLE geohistory.governmentidentifiertype (
     governmentidentifiertypelengthfrom integer,
     governmentidentifiertypelengthto integer,
     governmentidentifiertypeslug text,
-    governmentidentifiertypeprefixdelimiter character varying(1) DEFAULT ''::character varying NOT NULL,
+    governmentidentifiertypeprefixdelimiter character varying(1) DEFAULT ''::character varying CONSTRAINT governmentidentifiertype_governmentidentifiertypeprefi_not_null NOT NULL,
     governmentidentifiertypenote text DEFAULT ''::text NOT NULL,
     CONSTRAINT governmentidentifiertype_check CHECK (((governmentidentifiertypeshort)::text <> ''::text))
 );
