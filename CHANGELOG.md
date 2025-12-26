@@ -19,7 +19,7 @@
 - Database function geohistory.refresh_view to remove everything except for refresh materialized view to the new geohistory.refresh_generated function.
 - Database function geohistory.sourcelawisbynumber to sourcelawnumbertype.
 - Database import to consolidate logic regardless of environment.
-- DataTables from 2.2.2 to 2.3.5.
+- DataTables from 2.2.2 to 2.3.6.
 - In database schema gis, all items moved to schema geohistory.
 - In database table geohistory.adjudication, change how generated column is refreshed.
 - In database table geohistory.law, change generated column lawcitation to align with Bluebook formatting.
@@ -29,7 +29,7 @@
 - In database table geohistory.lawsection, change trigger lawsection_update_trigger to lawsection_insertupdate_trigger; trigger function lawsection_update to lawsection_insertupdate; and update logic to handle default values and singular/plural symbols for lawsectionsymbol and lawsectionnewsymbol.
 - In database table geohistory.source, change column sourcelawisbynumber to sourcelawnumbertype.
 - In database table geohistory.sourcecitation, change column sourcecitationarchivecarton to sourcecitationcontainer, and column sourcecitationarchiveslotfilm to sourcecitationitemlocation.
-- MapLibre GL JS from 4.7.1 to 5.14.0.
+- MapLibre GL JS from 4.7.1 to 5.15.0.
 - MapLibre GL Leaflet from 0.0.22 to 0.1.3.
 - Moved schema SQL file from inpostgis/postgresql_public_backup.sql to inpostgis/geohistory/_schema.sql.
 - Pg_tle from unreleased commit between v1.2.0 and v1.3.0 to v1.5.2.
@@ -39,6 +39,7 @@
 - PHPStan from 2.1.8 to 2.1.33.
 - PHPStan CodeIgniter from 1.5.3 to 1.5.4.
 - PHPStan Strict Rules from 2.0.4 to 2.0.7.
+- PMTiles from 4.3.0 to 4.3.1.
 - Postgis/postgis docker image from 17-3.5 to 18-3.6.
 - README to expand Build command.
 - README to have users download TSVs into inpostgis/geohistory instead of inpostgis.
