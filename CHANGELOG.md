@@ -12,7 +12,7 @@
 
 ### Changed
 
-- CodeIgniter from 4.6.0 to 4.6.3.
+- CodeIgniter from 4.6.0 to 4.6.4.
 - Composer docker image from 2.8.6 to 2.9.2.
 - Database extract pg_dump and OS versions.
 - Database function geohistory.refresh_sequence to accept schema as parameter.
@@ -34,7 +34,7 @@
 - Moved schema SQL file from inpostgis/postgresql_public_backup.sql to inpostgis/geohistory/_schema.sql.
 - Pg_tle from unreleased commit between v1.2.0 and v1.3.0 to v1.5.2.
 - PHP coding style to PER-CS 3.0.
-- PHP CS Fixer from 3.73.1 to 3.91.3.
+- PHP CS Fixer from 3.73.1 to 3.92.3.
 - PHP docker image from 8.4.3-apache-bookworm to 8.5.0-apache-trixie.
 - PHPStan from 2.1.8 to 2.1.33.
 - PHPStan CodeIgniter from 1.5.3 to 1.5.4.
@@ -42,7 +42,7 @@
 - Postgis/postgis docker image from 17-3.5 to 18-3.6.
 - README to expand Build command.
 - README to have users download TSVs into inpostgis/geohistory instead of inpostgis.
-- Rector from 2.0.10 to 2.2.14.
+- Rector from 2.0.10 to 2.3.0.
 - Robots.txt to add Crawl-delay.
 
 ### Fixed
