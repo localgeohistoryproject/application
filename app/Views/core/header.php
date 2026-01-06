@@ -7,20 +7,7 @@ $url ??= '';
 <html lang="<?= \Config\Services::request()->getLocale() ?>">
 
 <head>
-    <?php if (\App\Controllers\BaseController::isLive() === false && ($_ENV['analytics_google'] ?? '') !== '' && mb_strpos(base_url(), $_ENV['app_baseCanonicalProjectUrl']) !== false) { ?>
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=<?= $_ENV['analytics_google'] ?>"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-            gtag('js', new Date());
-
-            gtag('config', '<?= $_ENV['analytics_google'] ?>');
-        </script>
-    <?php } if (($title !== lang('Application.welcome') && $url === '') || mb_strpos(base_url(), $_ENV['app_baseCanonicalProjectUrl']) === false) { ?>
+    <?php if (($title !== lang('Application.welcome') && $url === '') || mb_strpos(base_url(), $_ENV['app_baseCanonicalProjectUrl']) === false) { ?>
     <meta name="robots" content="noindex">
     <?php } ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">

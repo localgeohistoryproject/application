@@ -55,6 +55,7 @@
 - app/Views/errors files that match CodeIgniter defaults from repository.
 - Database schema gis.
 - DOCKER_POSTGIS variable from .env.
+- Google Analytics.
 - Inphp and outpostgis folders.
 - Law page, Summary table, Page Begin column (pincite now included in Citation column).
 - View for unavailable state message (no longer needed due to jurisdictions being removed from URLs).
