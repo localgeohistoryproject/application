@@ -25,7 +25,7 @@ class Area extends BaseController
             $data = file_get_contents('https://us1.locationiq.com/v1/search.php?key=' . getenv('locationiq_key') . '&format=json&countrycodes=us&dedupe=1&q=' . urlencode($addressText));
             if (($data = json_decode($data, true)) !== false) {
                 if (count($data) === 1) {
-                    $this->extraAttribution = 'Address searching courtesy of <a href="https://locationiq.com/attribution/">LocationIQ</a>.';
+                    $this->extraAttribution = lang('Application.addressSearchBy') . ' <a href="https://locationiq.com/attribution/">LocationIQ</a>.';
                     $this->point($data[0]['lat'], $data[0]['lon'], $addressText);
                 } else {
                     $this->addressCensusBureau($addressText);
@@ -42,7 +42,7 @@ class Area extends BaseController
             $data = file_get_contents('https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?benchmark=9&format=json&address=' . $addressText);
             if (($data = json_decode($data, true)) !== false) {
                 if (count($data['result']['addressMatches']) === 1) {
-                    $this->extraAttribution = 'Address searching courtesy of the <a href="https://geocoding.geo.census.gov/geocoder/">U.S. Census Bureau</a>.';
+                    $this->extraAttribution = lang('Application.addressSearchBy') . ' <a href="https://geocoding.geo.census.gov/geocoder/">U.S. Census Bureau</a>.';
                     $this->point($data['result']['addressMatches'][0]['coordinates']['y'], $data['result']['addressMatches'][0]['coordinates']['x'], $addressText);
                 } else {
                     $this->noRecord();
@@ -114,9 +114,9 @@ class Area extends BaseController
             echo view('core/header', ['title' => $this->title, 'pageTitle' => $pageTitle, 'url' => $url]);
             $searchParameter = [];
             if ($addressText !== '') {
-                $searchParameter['Address'] = $addressText;
+                $searchParameter[lang('Application.address')] = $addressText;
             } elseif ($x !== 0.0 || $y !== 0.0) {
-                $searchParameter['Coordinates'] = $y . ', ' . $x;
+                $searchParameter[lang('Application.coordinates')] = $y . ', ' . $x;
             }
             if ($searchParameter === []) {
                 echo view('core/parameter', ['searchParameter' => $searchParameter, 'omitColon' => true]);
@@ -132,7 +132,7 @@ class Area extends BaseController
             $MetesDescriptionModel = new MetesDescriptionModel();
             $query = $MetesDescriptionModel->getByGovernmentShape($id);
             $events = array_merge($events, $query['event']);
-            echo view('metes/table', ['query' => $query['query'], 'hasLink' => true, 'title' => 'Metes and Bounds Description']);
+            echo view('metes/table', ['query' => $query['query'], 'hasLink' => true, 'title' => lang('Application.metesAndBoundsDescription')]);
             $EventModel = new EventModel();
             echo view('event/table', ['query' => $EventModel->getByGovernmentShapeFailure($id, $events), 'title' => 'Other Event Links']);
             echo view('leaflet/start', ['type' => 'area', 'jurisdictions' => $jurisdictions, 'includeBase' => true, 'needRotation' => false]);

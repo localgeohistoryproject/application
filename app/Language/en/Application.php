@@ -7,6 +7,7 @@ return [
     'action' => 'Action',
     'address' => 'Address',
     'addressPoint' => 'Address Point',
+    'addressSearchBy' => 'Address Search by',
     'adjudication' => 'Adjudication',
     'adverseGovernment' => 'Adverse Government',
     'affectedGovernment' => 'Affected Government',
