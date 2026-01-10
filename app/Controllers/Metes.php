@@ -37,7 +37,7 @@ class Metes extends BaseController
                 $jurisdictions = $jurisdictions['jurisdictions'];
             }
             echo view('core/header', ['title' => $this->title, 'pageTitle' => $areaQuery[0]->metesdescriptionlong, 'url' => $url]);
-            echo view('metes/table', ['query' => $areaQuery, 'hasLink' => false, 'title' => 'Detail']);
+            echo view('metes/table', ['query' => $areaQuery, 'hasLink' => false, 'title' => lang('Application.detail')]);
             $hasMap = false;
             $hasMetes = false;
             $hasArea = (!is_null($areaQuery[0]->geometry));
@@ -56,7 +56,7 @@ class Metes extends BaseController
                 'query' => $MetesDescriptionLineModel->getByMetesDescription($id),
                 'summary' => $summary,
             ]);
-            echo view('event/table', ['query' => $areaQuery, 'title' => 'Event Links']);
+            echo view('event/table', ['query' => $areaQuery, 'title' => lang('Application.eventLinks')]);
             if ($hasMap) {
                 echo view('leaflet/start', ['type' => 'metes', 'jurisdictions' => $jurisdictions, 'includeBase' => $hasBegin, 'needRotation' => false]);
                 if ($hasArea) {
