@@ -28,10 +28,10 @@ class Governmentidentifier extends BaseController
             $governmentidentifierids = $query[0]->governmentidentifierids;
             $governments = $query[0]->governments;
             echo view('core/header', ['title' => $this->title, 'url' => $url]);
-            echo view('governmentidentifier/table', ['query' => $query, 'title' => 'Detail']);
+            echo view('governmentidentifier/table', ['query' => $query, 'title' => lang('Application.detail')]);
             $GovernmentModel = new GovernmentModel();
-            echo view('government/table', ['query' => $GovernmentModel->getByGovernmentIdentifier($governmentidentifierids), 'title' => 'Government', 'type' => 'identifier']);
-            echo view('governmentidentifier/table', ['query' => $GovernmentIdentifierModel->getRelated($governments, $governmentidentifierids), 'title' => 'Related']);
+            echo view('government/table', ['query' => $GovernmentModel->getByGovernmentIdentifier($governmentidentifierids), 'title' => lang('Application.government'), 'type' => 'identifier']);
+            echo view('governmentidentifier/table', ['query' => $GovernmentIdentifierModel->getRelated($governments, $governmentidentifierids), 'title' => lang('Application.related')]);
             if ($type === 'us-census' || $type === 'usgs') {
                 if ($type === 'us-census') {
                     $query = $GovernmentIdentifierModel->getCensus($governmentidentifierids);
