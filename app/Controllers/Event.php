@@ -64,13 +64,13 @@ class Event extends BaseController
             $CurrentGovernmentModel = new CurrentGovernmentModel();
             echo view('event/table_currentgovernment', ['query' => $CurrentGovernmentModel->getByEvent($id)]);
             $MetesDescriptionModel = new MetesDescriptionModel();
-            echo view('metes/table', ['query' => $MetesDescriptionModel->getByEvent($id), 'hasLink' => true, 'title' => 'Metes and Bounds Description']);
+            echo view('metes/table', ['query' => $MetesDescriptionModel->getByEvent($id), 'hasLink' => true, 'title' => lang('Application.metesAndBoundsDescription')]);
             $PlssModel = new PlssModel();
             echo view('event/plss', ['query' => $PlssModel->getByEvent($id)]);
             $AdjudicationModel = new AdjudicationModel();
             echo view('adjudication/table', ['query' => $AdjudicationModel->getByEvent($id), 'eventRelationship' => true]);
             $LawSectionModel = new LawSectionModel();
-            echo view('law/table', ['query' => $LawSectionModel->getByEvent($id), 'title' => 'Law', 'type' => 'relationship', 'includeLawGroup' => true]);
+            echo view('law/table', ['query' => $LawSectionModel->getByEvent($id), 'title' => lang('Application.law'), 'type' => 'relationship', 'includeLawGroup' => true]);
             $RecordingModel = new RecordingModel();
             echo view('event/recording', ['query' => $RecordingModel->getByEvent($id)]);
             $GovernmentSourceModel = new GovernmentSourceModel();
@@ -104,7 +104,7 @@ class Event extends BaseController
                         'color' => 'D5103F',
                         'fillOpacity' => 0.1,
                     ]);
-                    $layers['metesdescription'] = 'Descriptions';
+                    $layers['metesdescription'] = lang('Application.descriptions');
                 }
                 if ($hasAffectedGovernmentMap) {
                     echo view('event/end', ['layers' => $layers]);
