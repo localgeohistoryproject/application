@@ -34,9 +34,9 @@ class Governmentsource extends BaseController
             echo view('governmentsource/table', ['query' => $query, 'type' => 'source']);
             echo view('source/table', ['query' => $query, 'hasLink' => $this->isLive()]);
             $SourceItemPartModel = new SourceItemPartModel();
-            echo view('core/url', ['query' => $SourceItemPartModel->getByGovernmentSource($id), 'title' => 'Calculated URL']);
+            echo view('core/url', ['query' => $SourceItemPartModel->getByGovernmentSource($id), 'title' => lang('Application.calculatedUrl')]);
             $EventModel = new EventModel();
-            echo view('event/table', ['query' => $EventModel->getByGovernmentSource($id), 'title' => 'Event Links']);
+            echo view('event/table', ['query' => $EventModel->getByGovernmentSource($id), 'title' => lang('Application.eventLinks')]);
             echo view('core/footer');
         }
     }
