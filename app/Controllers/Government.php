@@ -70,7 +70,7 @@ class Government extends BaseController
                 }
                 echo view('government/related', ['query' => $GovernmentModel->getRelated($id)]);
                 $GovernmentIdentifierModel = new GovernmentIdentifierModel();
-                echo view('governmentidentifier/table', ['query' => $GovernmentIdentifierModel->getByGovernment($id), 'title' => 'Identifier', 'isMultiple' => $isMultiple]);
+                echo view('governmentidentifier/table', ['query' => $GovernmentIdentifierModel->getByGovernment($id), 'title' => lang('Application.identifier'), 'isMultiple' => $isMultiple]);
             }
             $AffectedGovernmentGroupModel = new AffectedGovernmentGroupModel();
             $query = $AffectedGovernmentGroupModel->getByGovernmentGovernment($id);
@@ -97,7 +97,7 @@ class Government extends BaseController
                     }
                 }
                 if ($isCountyOrLower) {
-                    echo view('event/table', ['query' => $EventModel->getByGovernmentOther($allId, $events), 'title' => 'Other Event Links', 'tableId' => 'eventother']);
+                    echo view('event/table', ['query' => $EventModel->getByGovernmentOther($allId, $events), 'title' => lang('Application.otherEventLinks'), 'tableId' => 'eventother']);
                 }
                 $this->viewPrivateTwo($id, $isMultiple);
                 echo view('source/table', ['query' => $SourceModel->getByGovernment($id), 'hasLink' => true]);
@@ -106,7 +106,7 @@ class Government extends BaseController
                 $NationalArchivesModel = new NationalArchivesModel();
                 echo view('government/nationalarchives', ['query' => $NationalArchivesModel->getByGovernment($id), 'isMultiple' => $isMultiple]);
                 $this->viewPrivateThree($id, $isMultiple, $isMunicipalityOrLower, $isCountyOrLower, $isCountyOrState, $isStateOrHigher, $jurisdictions);
-                echo view('core/chartjs', ['query' => $populationQuery, 'xLabel' => 'Year', 'yLabel' => 'Population']);
+                echo view('core/chartjs', ['query' => $populationQuery, 'xLabel' => lang('Application.year'), 'yLabel' => lang('Application.population')]);
             }
             if ($hasMap) {
                 echo view('leaflet/start', ['type' => 'government', 'jurisdictions' => $jurisdictions, 'includeBase' => true, 'needRotation' => false]);
@@ -123,7 +123,7 @@ class Government extends BaseController
                         'color' => 'D5103F',
                         'fillOpacity' => 0,
                     ]);
-                    $layers['metesdescription'] = 'Descriptions';
+                    $layers['metesdescription'] = lang('Application.descriptions');
                     $primaryLayer = 'metesdescription';
                 }
                 $GovernmentShapeModel = new GovernmentShapeModel();
@@ -138,7 +138,7 @@ class Government extends BaseController
                         'color' => '000000',
                         'fillOpacity' => 0,
                     ]);
-                    $layers['current'] = 'Approximate Current Boundary';
+                    $layers['current'] = lang('Application.approximateCurrentBoundary');
                 }
                 $query = $GovernmentShapeModel->getPartByGovernment($id);
                 if ($query !== []) {
@@ -149,7 +149,7 @@ class Government extends BaseController
                         'onEachFeature2' => true,
                         'customStyle' => 'dispositionStyle',
                     ]);
-                    $layers['shape'] = 'Government Area';
+                    $layers['shape'] = lang('Application.governmentArea');
                     $primaryLayer = 'shape';
                 }
                 date_default_timezone_set('America/New_York');
