@@ -32,18 +32,18 @@ class Reporter extends BaseController
         } else {
             $id = $query[0]->adjudicationsourcecitationid;
             echo view('core/header', ['title' => $this->title, 'url' => $url]);
-            echo view('reporter/table', ['query' => $query, 'hasLink' => false, 'title' => 'Detail']);
+            echo view('reporter/table', ['query' => $query, 'hasLink' => false, 'title' => lang('Application.detail')]);
             echo view('source/table', ['query' => $query, 'hasLink' => false]);
             echo view('reporter/authorship', ['query' => $query]);
             if ($query[0]->url !== '') {
-                echo view('core/url', ['query' => $query, 'title' => 'Actual URL']);
+                echo view('core/url', ['query' => $query, 'title' => lang('Application.actualUrl')]);
             }
             $SourceItemPartModel = new SourceItemPartModel();
-            echo view('core/url', ['query' => $SourceItemPartModel->getByAdjudicationSourceCitation($id), 'title' => 'Calculated URL']);
+            echo view('core/url', ['query' => $SourceItemPartModel->getByAdjudicationSourceCitation($id), 'title' => lang('Application.calculatedUrl')]);
             $AdjudicationModel = new AdjudicationModel();
             echo view('adjudication/table', ['query' => $AdjudicationModel->getByAdjudicationSourceCitation($id)]);
             $EventModel = new EventModel();
-            echo view('event/table', ['query' => $EventModel->getByAdjudicationSourceCitation($id), 'title' => 'Event Links']);
+            echo view('event/table', ['query' => $EventModel->getByAdjudicationSourceCitation($id), 'title' => lang('Application.eventLinks')]);
             echo view('core/footer');
         }
     }
