@@ -39,14 +39,14 @@ class Law extends BaseController
             echo view('law/view', ['query' => $query]);
             echo view('source/table', ['query' => $query, 'hasLink' => false]);
             if ($query[0]->url !== '') {
-                echo view('core/url', ['query' => $query, 'title' => 'Actual URL']);
+                echo view('core/url', ['query' => $query, 'title' => lang('Application.actualUrl')]);
             }
             $this->viewPrivate($id);
-            echo view('law/table', ['query' => $LawSectionModel->getRelated($id), 'title' => 'Related Law', 'type' => 'relationship']);
+            echo view('law/table', ['query' => $LawSectionModel->getRelated($id), 'title' => lang('Application.relatedLaw'), 'type' => 'relationship']);
             $SourceItemPartModel = new SourceItemPartModel();
-            echo view('core/url', ['query' => $SourceItemPartModel->$function($id), 'title' => 'Calculated URL']);
+            echo view('core/url', ['query' => $SourceItemPartModel->$function($id), 'title' => lang('Application.calculatedUrl')]);
             $EventModel = new EventModel();
-            echo view('event/table', ['query' => $EventModel->$function($id), 'title' => 'Event Links', 'eventRelationship' => true, 'includeLawGroup' => true]);
+            echo view('event/table', ['query' => $EventModel->$function($id), 'title' => lang('Application.eventLinks'), 'eventRelationship' => true, 'includeLawGroup' => true]);
             echo view('core/footer');
         }
     }
