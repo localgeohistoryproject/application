@@ -11,25 +11,29 @@ class Statistics extends BaseController
 {
     private string $title;
 
+    private array $byType;
+
+    private array $forType;
+
     public function __construct() {
         $this->title = lang('Application.statistics');
+
+        $this->byType = [
+            'current' => lang('Application.modernDayJurisdictions'),
+            'historic' => lang('Application.contemporaneousJurisdictions'),
+            'incorporated' => lang('Application.incorporatedMunicipalities'),
+            'total' => lang('Application.totalMunicipalities'),
+        ];
+
+        $this->forType = [
+            'eventtype' => lang('Application.eventsByEventType'),
+            'created' => lang('Application.createdMunicipalities'),
+            'dissolved' => lang('Application.dissolvedMunicipalities'),
+            'net' => lang('Application.netCreatedDissolvedMunicipalities'),
+            'mapped' => lang('Application.mappedMunicipalities'),
+            'mapped_review' => lang('Application.reviewedMunicipalities'),
+        ];
     }
-
-    private array $byType = [
-        'current' => 'Modern-Day Jurisdictions',
-        'historic' => 'Contemporaneous Jurisdictions',
-        'incorporated' => 'Incorporated Municipalities',
-        'total' => 'Total Municipalities',
-    ];
-
-    private array $forType = [
-        'eventtype' => 'Events by Event Type',
-        'created' => 'Created Municipalities',
-        'dissolved' => 'Dissolved Municipalities',
-        'net' => 'Net Created-Dissolved Municipalities',
-        'mapped' => 'Mapped Municipalities',
-        'mapped_review' => 'Reviewed Municipalities',
-    ];
 
     public function index(): void
     {
@@ -97,8 +101,8 @@ class Statistics extends BaseController
             $isError = true;
         } else {
             $searchParameter = [
-                'Metric' => $this->forType[$for . $byExtra],
-                'Grouped By' => $searchParameter['byType'],
+                lang('Application.metric') => $this->forType[$for . $byExtra],
+                lang('Application.groupedBy') => $searchParameter['byType'],
             ];
         }
 
@@ -111,7 +115,7 @@ class Statistics extends BaseController
                 $isError = true;
             } else {
                 array_unshift($fields, $eventType);
-                $searchParameter['Event Type'] = $query[0]->eventtypeshort;
+                $searchParameter[lang('Application.eventType')] = $query[0]->eventtypeshort;
             }
         } else {
             $eventType = '';
@@ -162,13 +166,13 @@ class Statistics extends BaseController
             unset($statisticsOriginal);
             echo view('statistics/view', [
                 'wholeQuery' => $wholeQuery,
-                'isContemporaneous' => ($searchParameter['Grouped By'] === 'Contemporaneous Jurisdictions'),
-                'notEvent' => ($searchParameter['Metric'] === 'Events by Event Type'),
+                'isContemporaneous' => ($searchParameter[lang('Application.groupedBy')] === lang('Application.contemporaneousJurisdictions')),
+                'notEvent' => ($searchParameter[lang('Application.metric')] === lang('Application.eventsByEventType')),
                 'query' => $query,
                 'jurisdiction' => $jurisdiction,
                 'statistics' => $statistics,
             ]);
-            echo view('core/chartjs', ['query' => $wholeQuery, 'xLabel' => 'Year', 'yLabel' => ($for === 'createddissolved' ? 'Governments' : 'Events')]);
+            echo view('core/chartjs', ['query' => $wholeQuery, 'xLabel' => lang('Application.year'), 'yLabel' => ($for === 'createddissolved' ? lang('Application.governments') : lang('Application.events'))]);
             echo view('core/footer');
         }
     }
