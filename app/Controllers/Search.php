@@ -12,52 +12,58 @@ class Search extends BaseController
 {
     private string $title;
 
+    private array $categoryType;
+
+    private array $parameterType;
+
+    private array $typeType;
+
     public function __construct() {
         $this->title = lang('Application.search');
+
+        $this->categoryType = [
+            'event' => lang('Application.event'),
+            'government' => lang('Application.government'),
+            'governmentidentifier' => lang('Application.government'),
+            'law' => lang('Application.law'),
+        ];
+
+        $this->parameterType = [
+            'date' => lang('Application.date'),
+            'eventtype' => lang('Application.eventType'),
+            'government' => lang('Application.government'),
+            'governmentjurisdiction' => lang('Application.government'),
+            'governmentidentifiertype' => lang('Application.identifierSource'),
+            'governmentlevel' => lang('Application.level'),
+            'governmentparent' => lang('Application.parent'),
+            'identifier' => lang('Application.identifier'),
+            'numberchapter' => lang('Application.number') . '/' . lang('Application.chapter'),
+            'page' => lang('Application.page'),
+            'plusminus' => '±',
+            'year' => lang('Application.year'),
+            'yearvolume' => lang('Application.year') . '/' . lang('Application.volume'),
+        ];
+
+        $this->typeType = [
+            'dateEvent' => lang('Application.dateAndEventType'),
+            'government' => lang('Application.government'),
+            'identifier' => lang('Application.identifier'),
+            'reference' => lang('Application.reference'),
+            'statewide' => lang('Application.statewide'),
+        ];
     }
-
-    private array $categoryType = [
-        'event' => 'Event',
-        'government' => 'Government',
-        'governmentidentifier' => 'Government',
-        'law' => 'Law',
-    ];
-
-    private array $parameterType = [
-        'date' => 'Date',
-        'eventtype' => 'Event Type',
-        'government' => 'Government',
-        'governmentjurisdiction' => 'Government',
-        'governmentidentifiertype' => 'Identifier Source',
-        'governmentlevel' => 'Level',
-        'governmentparent' => 'Parent',
-        'identifier' => 'Identifier',
-        'numberchapter' => 'Number/Chapter',
-        'page' => 'Page',
-        'plusminus' => '+/-',
-        'year' => 'Year',
-        'yearvolume' => 'Year/Volume',
-    ];
-
-    private array $typeType = [
-        'dateEvent' => 'Date and Event Type',
-        'government' => 'Government',
-        'identifier' => 'Identifier',
-        'reference' => 'Reference',
-        'statewide' => 'Statewide',
-    ];
 
     private function governmentLevel(string $a): int
     {
         return match ($a) {
-            'State' => 2,
-            'County' => 3,
-            'Municipality' => 4,
+            lang('Application.state') => 2,
+            lang('Application.county') => 3,
+            lang('Application.municipality') => 4,
             default => 0,
         };
     }
 
-    public function governmentlookup(string $government = '', string $type = ''): void
+    public function governmentLookup(string $government = '', string $type = ''): void
     {
         $GovernmentModel = new GovernmentModel();
         $type = 'getLookupByGovernment' . ucwords($type);
@@ -72,20 +78,10 @@ class Search extends BaseController
         $EventTypeModel = new EventTypeModel();
         $GovernmentIdentifierTypeModel = new GovernmentIdentifierTypeModel();
         $SourceModel = new SourceModel();
-        $months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        foreach ($months as $k => $m) {
-            $months[$k] = [
-                'monthNumber' => $k + 1,
-                'monthName' => $m,
-            ];
-        }
         $GovernmentModel = new GovernmentModel();
         echo view('search/index', [
             'eventTypeQuery' => $EventTypeModel->getSearch(),
             'governmentIdentifierTypeQuery' => $GovernmentIdentifierTypeModel->getSearch(),
-            'months' => $months,
-            'reporterQuery' => $SourceModel->getSearch(),
-            'tribunalgovernmentshortQuery' => $GovernmentModel->getSearch(),
         ]);
         echo view('core/footer');
     }
@@ -169,8 +165,8 @@ class Search extends BaseController
             $model = new $model();
             $modelType = 'getSearchBy' . ucwords($type);
             $searchParameter = [
-                'Search For' => $this->categoryType[$category],
-                'Search By' => $this->typeType[$this->request->getPost('type')],
+                lang('Application.searchFor') => $this->categoryType[$category],
+                lang('Application.searchBy') => $this->typeType[$this->request->getPost('type')],
             ];
             foreach ($this->request->getPost() as $key => $value) {
                 if ($value !== '' && $key !== 'type') {
@@ -178,7 +174,7 @@ class Search extends BaseController
                 }
             }
             echo view('core/parameter', ['searchParameter' => $searchParameter]);
-            echo view($category . '/table', ['query' => $model->$modelType($fields), 'title' => 'Results:', 'type' => $type]);
+            echo view($category . '/table', ['query' => $model->$modelType($fields), 'title' => lang('Application.results') . ':', 'type' => $type]);
             echo view('core/footer');
         } else {
             $this->response->setHeader('Content-Type', 'application/json');

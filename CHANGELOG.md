@@ -58,6 +58,7 @@
 - Google Analytics.
 - Inphp and outpostgis folders.
 - Law page, Summary table, Page Begin column (pincite now included in Citation column).
+- Search code for unimplemented Adjudication searching.
 - View for unavailable state message (no longer needed due to jurisdictions being removed from URLs).
 - Volume references in docker-compose.yaml, .gitignore, and Sample.env that were only used in development.
 

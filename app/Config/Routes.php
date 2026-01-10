@@ -35,10 +35,9 @@ if (mb_strpos(base_url(), $_ENV['app_baseRouteProjectUrl']) !== false) {
         $routes->get($defaultLocale . '/(' . $jurisdictionRedirectRegex . ')', 'Search::redirect');
     }
 
-    $routes->get($defaultLocale . '/lookup/government/(:segment)', 'Search::governmentlookup/$1/');
-    $routes->get($defaultLocale . '/lookup/government-jurisdiction/(:segment)', 'Search::governmentlookup/$1/jurisdiction');
-    $routes->get($defaultLocale . '/lookup/government-parent/(:segment)', 'Search::governmentlookup/$1/parent');
-    $routes->get($defaultLocale . '/lookup/tribunal/(:num)', 'Search::tribunallookup');
+    $routes->get($defaultLocale . '/lookup/government/(:segment)', 'Search::governmentLookup/$1/');
+    $routes->get($defaultLocale . '/lookup/government-jurisdiction/(:segment)', 'Search::governmentLookup/$1/jurisdiction');
+    $routes->get($defaultLocale . '/lookup/government-parent/(:segment)', 'Search::governmentLookup/$1/parent');
 
     $routes->get($defaultLocale . '/search', 'Search::index');
     $routes->post($defaultLocale . '/search/' . $mainSearchRegex, 'Search::view/$1');

@@ -180,6 +180,7 @@ return [
     'reporter' => 'Reporter',
     'requestedInformation' => 'Requested Information',
     'researchLog' => 'Research Log',
+    'results' => 'Results',
     'returnToHome' => 'Return to Home',
     'reviewedIncorporatedMunicipalities' => 'Reviewed Incorporated Municipalities',
     'reviewedTotalMunicipalities' => 'Reviewed Total Municipalities',

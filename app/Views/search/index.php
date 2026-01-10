@@ -1,9 +1,6 @@
 <?php
 $eventTypeQuery ??= [];
 $governmentIdentifierTypeQuery ??= [];
-$months ??= '';
-$reporterQuery ??= [];
-$tribunalgovernmentshortQuery ??= [];
 ?>
 <fieldset>
     <legend><?= lang('Application.searchFor') ?>:</legend>
@@ -133,9 +130,6 @@ echo view('search/submit', ['type' => 'dateEvent']);
 <script>
     var eventTypeList = <?= json_encode($eventTypeQuery); ?>;
     var governmentIdentifierTypeList = <?= json_encode($governmentIdentifierTypeQuery); ?>;
-    var monthList = <?= json_encode($months); ?>;
-    var reporterList = <?= json_encode($reporterQuery); ?>;
-    var tribunalGovernmentShortList = <?= json_encode($tribunalgovernmentshortQuery); ?>;
 
     $(function() {
 
@@ -299,36 +293,6 @@ echo view('search/submit', ['type' => 'dateEvent']);
             valueField: 'governmentidentifiertypeshort',
             labelField: 'governmentidentifiertypeshort',
             searchField: 'governmentidentifiertypeshort'
-        });
-
-        $('select[name=tribunalgovernment]').selectize({
-            selectOnTab: true,
-            closeAfterSelect: true,
-            highlight: false,
-            options: tribunalGovernmentShortList,
-            valueField: 'governmentshort',
-            labelField: 'governmentshort',
-            searchField: 'governmentshort'
-        });
-
-        $('select[name=reporter]').selectize({
-            selectOnTab: true,
-            closeAfterSelect: true,
-            highlight: false,
-            options: reporterList,
-            valueField: 'sourceshort',
-            labelField: 'sourceshort',
-            searchField: 'sourceshort'
-        });
-
-        $('select[name=month]').selectize({
-            selectOnTab: true,
-            closeAfterSelect: true,
-            highlight: false,
-            options: monthList,
-            valueField: 'monthNumber',
-            labelField: 'monthName',
-            searchField: ['monthName']
         });
 
         $('.stringcheck').change(function() {
