@@ -19,13 +19,13 @@ class Key extends BaseController
         $keyQueries = [];
 
         $keys = [
-            'Adjudication, Government Action, and Recorded Document' => 'adjudicationgovernmentactionrecordeddocument',
-            'Date' => 'date',
-            'Government Level' => 'governmentlevel',
-            'Government Map Status' => 'governmentmapstatus',
-            'Government Timelapse Map Color' => 'governmenttimelapsemapcolor',
-            'Law' => 'law',
-            'Name and Abbreviation' => 'nameabbreviation',
+            lang('Application.adjudicationGovernmentActionAndRecordedDocument') => 'adjudicationgovernmentactionrecordeddocument',
+            lang('Application.date') => 'date',
+            lang('Application.governmentLevel') => 'governmentlevel',
+            lang('Application.governmentMapStatus') => 'governmentmapstatus',
+            lang('Application.governmentTimelapseMapColor') => 'governmenttimelapsemapcolor',
+            lang('Application.law') => 'law',
+            lang('Application.nameAndAbbreviation') => 'nameabbreviation',
         ];
         $DocumentationModel = new DocumentationModel();
         foreach ($keys as $k => $v) {
@@ -33,10 +33,10 @@ class Key extends BaseController
         }
 
         $modelKeys = [
-            'Event Type' => 'EventType',
-            'How Affected' => 'AffectedType',
-            'Relationship' => 'EventRelationship',
-            'Successful?' => 'EventGranted',
+            lang('Application.eventType') => 'EventType',
+            lang('Application.howAffected') => 'AffectedType',
+            lang('Application.relationship') => 'EventRelationship',
+            lang('Application.successful') => 'EventGranted',
         ];
         $keys = array_merge($keys, $modelKeys);
         foreach ($modelKeys as $k => $v) {
