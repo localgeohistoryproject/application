@@ -37,7 +37,7 @@ $jurisdictions ??= [];
                 <input id="to" class="selectize-input" name="to" type="number" step="1" min="0" style="width: 100px;">
             </div>
             <br>
-            <button class="submitbutton" type="submit"><?= lang('Application.search') ?></button>
+            <button class="submitbutton" type="submit"><?= lang('Application.searchButton') ?></button>
         </div>
     </fieldset>
 </form>

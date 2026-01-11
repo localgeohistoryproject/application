@@ -208,6 +208,7 @@ return [
     'reviewedTotalMunicipalities' => 'Reviewed Total Municipalities',
     'rods' => 'Rods',
     'search' => 'Search',
+    'searchButton' => 'Search',
     'searchBy' => 'Search By',
     'searchFor' => 'Search For',
     'searchTerms' => 'Search Terms',
