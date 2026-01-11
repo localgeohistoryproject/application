@@ -103,7 +103,7 @@ info2.onAdd = function(map) {
 
 info2RegularUpdate = function(props) {
     this._div.innerHTML = (props ? '<div class="mapwidth"><?= lang('Application.event') ?>: </div><a href="/<?= \Config\Services::request()->getLocale() ?>/event/' + props.event + '/">'
-        + props.metesdescriptionlong + '</a> <br>' : '<div class="b"><?= lang('Application.clickForMoreInfo') ?>.</span>');
+        + props.metesdescriptionlong + '</a> <br>' : '<div class="b">' + "<?= lang('Application.clickForMoreInfo') ?>" + '.</span>');
 };
 
 info2.update = info2RegularUpdate;
@@ -172,7 +172,7 @@ function toTimeLine() {
     timeString = '';
     nameString = '';
     infoTimeUpdate = function(props) {
-        newTimeString = '<span class="b"><?= lang('Application.eventDate') ?> <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#date" aria-label="<?= lang('Application.dateKey') ?>" title="<?= lang('Application.dateKey') ?>"><span class="keyiconfill">vpn_key</span></a>:</span> ' + timeString;
+        newTimeString = '<span class="b">' + "<?= lang('Application.eventDate') ?>" + ' <a href="/<?= \Config\Services::request()->getLocale() ?>/key/#date" aria-label="<?= lang('Application.dateKey') ?>" title="<?= lang('Application.dateKey') ?>"><span class="keyiconfill">vpn_key</span></a>:</span> ' + timeString;
         if (nameString) {
             newTimeString += '<br><span class="b"><?= lang('Application.government') ?>:</span> ' + nameString;
         }
