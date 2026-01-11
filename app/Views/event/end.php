@@ -64,7 +64,7 @@ info.update = function (props) {
         });
         affectedGovernmentString += '</div>';
     } else {
-        affectedGovernmentString = '<div class="b"><?= lang('Application.clickForMoreInfo') ?>.</span>';
+        affectedGovernmentString = '<div class="b">' + "<?= lang('Application.clickForMoreInfo') ?>" + '.</span>';
     }
     this._div.innerHTML = affectedGovernmentString;
 };
