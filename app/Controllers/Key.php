@@ -23,7 +23,7 @@ class Key extends BaseController
             lang('Application.date') => 'date',
             lang('Application.governmentLevel') => 'governmentlevel',
             lang('Application.governmentMapStatus') => 'governmentmapstatus',
-            lang('Application.governmentTimelapseMapColor') => 'governmenttimelapsemapcolor',
+            lang('Application.governmentTerritorialEvolutionMapColor') => 'governmentterritorialevolutionmapcolor',
             lang('Application.law') => 'law',
             lang('Application.nameAndAbbreviation') => 'nameabbreviation',
         ];

@@ -273,7 +273,7 @@ L.Control.TimeLine = L.Control.extend({
         controlUI.href = "#";
         controlUI.innerHTML = '<span class="leaflet-control-timelapse-button mapicon">timelapse</span>';
         this._button = controlUI;
-        this._button.title = "<?= lang('Application.viewTimelapse') ?>";
+        this._button.title = "<?= lang('Application.viewTerritorialEvolution') ?>";
         this._container = controlDiv;
         this._createTooltip();
         return controlDiv;
@@ -288,12 +288,12 @@ L.Control.TimeLine = L.Control.extend({
                 toTimeLine();
                 $('.leaflet-control-timelapse-button').html('cancel');
                 document.getElementsByClassName('timelapsebox')[0].style.display = 'flex';
-                this.title = "<?= lang('Application.exitTimelapse') ?>";
+                this.title = "<?= lang('Application.exitTerritorialEvolution') ?>";
             } else {
                 toRegular();
                 $('.leaflet-control-timelapse-button').html('timelapse');
                 document.getElementsByClassName('timelapsebox')[0].style.display = 'none';
-                this.title = "<?= lang('Application.viewTimelapse') ?>";
+                this.title = "<?= lang('Application.viewTerritorialEvolution') ?>";
             }
             return false;
         });
