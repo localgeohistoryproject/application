@@ -82,7 +82,7 @@ infoRegularUpdate = function(props) {
             + '<div><a href="/<?= \Config\Services::request()->getLocale() ?>/area/' + props.governmentshapeslug + '/"><?= lang('Application.view') ?></a></div>';
         t += '</>'
     } else {
-        t = '<div class="b"><?= lang('Application.clickForMoreInfo') ?>.</span>';
+        t = '<div class="b">' + "<?= lang('Application.clickForMoreInfo') ?>" + '.</span>';
     }
     this._div.innerHTML = t;
 };
