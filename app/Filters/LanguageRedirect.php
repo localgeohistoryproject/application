@@ -9,7 +9,7 @@ use CodeIgniter\Filters\FilterInterface;
 class LanguageRedirect implements FilterInterface
 {
     #[\Override]
-    public function before(RequestInterface $request, $arguments = null): void
+    public function before(RequestInterface $request, $arguments = null): null
     {
         $segments = $request->getUri()->getSegments();
         $locale = method_exists($request, 'getLocale') ? $request->getLocale() : 'en';
@@ -19,8 +19,12 @@ class LanguageRedirect implements FilterInterface
             header('Location: ' . $segments);
             die();
         }
+        return null;
     }
 
     #[\Override]
-    public function after(RequestInterface $request, ResponseInterface $response, $arguments = null): void {}
+    public function after(RequestInterface $request, ResponseInterface $response, $arguments = null): null
+    {
+        return null;
+    }
 }
