@@ -9,13 +9,14 @@ use CodeIgniter\HTTP\RedirectResponse;
 
 class Statistics extends BaseController
 {
-    private string $title;
+    private readonly string $title;
 
     private array $byType;
 
     private array $forType;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->title = lang('Application.statistics');
 
         $this->byType = [

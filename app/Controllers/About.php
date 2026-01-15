@@ -9,7 +9,8 @@ class About extends BaseController
 {
     private string $title;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->title = lang('Application.about');
     }
 

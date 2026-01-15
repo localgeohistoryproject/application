@@ -16,9 +16,10 @@ use CodeIgniter\HTTP\RedirectResponse;
 
 class Event extends BaseController
 {
-    private string $title;
+    private readonly string $title;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->title = lang('Application.event');
     }
 

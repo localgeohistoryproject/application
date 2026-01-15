@@ -10,7 +10,7 @@ use CodeIgniter\HTTP\RedirectResponse;
 
 class Search extends BaseController
 {
-    private string $title;
+    private readonly string $title;
 
     private array $categoryType;
 
@@ -18,7 +18,8 @@ class Search extends BaseController
 
     private array $typeType;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->title = lang('Application.search');
 
         $this->categoryType = [
@@ -77,8 +78,6 @@ class Search extends BaseController
         echo view('core/ui');
         $EventTypeModel = new EventTypeModel();
         $GovernmentIdentifierTypeModel = new GovernmentIdentifierTypeModel();
-        $SourceModel = new SourceModel();
-        $GovernmentModel = new GovernmentModel();
         echo view('search/index', [
             'eventTypeQuery' => $EventTypeModel->getSearch(),
             'governmentIdentifierTypeQuery' => $GovernmentIdentifierTypeModel->getSearch(),
