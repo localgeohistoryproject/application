@@ -801,7 +801,7 @@ class GovernmentModel extends BaseModel
                 LEFT JOIN geohistory.government governmentcurrentleadparent
                     ON government.governmentcurrentleadparent = governmentcurrentleadparent.governmentid
                 GROUP BY 1, 2, 4, 5
-        QUERY;
+            QUERY;
 
         $query = $this->db->query($query, [
             $id,
