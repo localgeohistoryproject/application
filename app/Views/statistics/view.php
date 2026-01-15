@@ -4,6 +4,15 @@
     $notEvent ??= true;
     $query ??= '{}';
     $jurisdiction ??= '';
+    $statistics ??= [
+        'Contemporaneous' => '',
+        'CreationDissolution' => '',
+        'DateKey' => '',
+        'DateStart' => '',
+        'Incomplete' => '',
+        'Parent' => '',
+        'Successful' => '',
+    ];
     ?>
     <section>
         <h2><?= lang('Application.byJurisdiction') ?>:</h2>

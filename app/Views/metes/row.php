@@ -1,4 +1,6 @@
-<?php if (is_array($query ?? '') && $query !== []) { ?>
+<?php
+$summary ??= '';
+if (is_array($query ?? '') && $query !== []) { ?>
 <section>
     <h2><?= lang('Application.coursesAndDistances') ?></h2>
     <p><span class="b"><?= lang('Application.note') ?>: </span><?= $summary ?></p>
