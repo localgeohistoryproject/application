@@ -7,6 +7,7 @@ use CodeIgniter\Router\RouteCollection;
  */
 
 $defaultLocale = 'en';
+$routes->useSupportedLocalesOnly(true);
 
 if (mb_strpos(base_url(), $_ENV['app_baseRouteProjectUrl']) !== false) {
     $routes->get('robots.txt', 'Bot::robotsTxt');

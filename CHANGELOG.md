@@ -45,6 +45,7 @@
 - README to have users download TSVs into inpostgis/geohistory instead of inpostgis.
 - Rector from 2.0.10 to 2.3.0.
 - Robots.txt to add Crawl-delay.
+- Routes to only use supported locales.
 - "Timelapse" renamed to "Territorial Evolution."
 
 ### Fixed
