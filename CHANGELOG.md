@@ -53,7 +53,9 @@
 
 ### Removed
 
+- app/Config/Filters (custom version).
 - app/Config/Services (custom version).
+- app/Filters/LanguageRedirect.
 - app/Libraries/IncomingRequest.
 - app/Views/errors files that match CodeIgniter defaults from repository.
 - Database schema gis.

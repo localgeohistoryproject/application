@@ -34,7 +34,6 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
-        'language-redirect' => \App\Filters\LanguageRedirect::class,
     ];
 
     /**
@@ -73,7 +72,6 @@ class Filters extends BaseFilters
      */
     public array $globals = [
         'before' => [
-            'language-redirect',
             // 'honeypot',
             // 'csrf',
             // 'invalidchars',

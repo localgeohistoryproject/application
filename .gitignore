@@ -1,7 +1,6 @@
 app/Config/**
 !app/Config/App.php
 !app/Config/Boot**
-!app/Config/Filters.php
 !app/Config/Paths.php
 !app/Config/Routes.php
 app/Views/errors/cli/**
