@@ -53,6 +53,8 @@
 
 ### Removed
 
+- app/Config/Services (custom version).
+- app/Libraries/IncomingRequest.
 - app/Views/errors files that match CodeIgniter defaults from repository.
 - Database schema gis.
 - DOCKER_POSTGIS variable from .env.
