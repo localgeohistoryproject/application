@@ -4,7 +4,6 @@ app/Config/**
 !app/Config/Filters.php
 !app/Config/Paths.php
 !app/Config/Routes.php
-!app/Config/Services.php
 app/Views/errors/cli/**
 !app/Views/errors/cli/.gitkeep
 app/Views/errors/html/**
