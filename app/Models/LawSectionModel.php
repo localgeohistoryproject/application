@@ -112,11 +112,8 @@ class LawSectionModel extends BaseModel
                 UNION
                 SELECT DISTINCT NULL AS lawsectionslug,
                     law.lawapproved,
-                    replace(replace(law.lawcitation, '@SECTION@'), '@PAGE@') AS lawsectioncitation,
-                    'Amended To Add ' || lawsection.lawsectionnewsymbol || CASE
-                        WHEN lawsection.lawsectionnewfrom <> lawsection.lawsectionnewto THEN lawsection.lawsectionnewsymbol
-                        ELSE ''
-                    END || ' ' || lawsection.lawsectionnewsection AS lawsectioneventrelationship,
+                    replace(replace(law.lawcitation, '@SECTION@', ''), '@PAGE@', '') AS lawsectioncitation,
+                    'Amended To Add ' || lawsection.lawsectionnewsymbol || ' ' || lawsection.lawsectionnewsection AS lawsectioneventrelationship,
                     lawsection.lawsectionnewfrom AS lawsectionfrom,
                     law.lawnumberchapter
                 FROM geohistory.law
