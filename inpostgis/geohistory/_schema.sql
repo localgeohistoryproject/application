@@ -4,7 +4,7 @@
 
 \restrict 0
 
--- Dumped from database version 18.1 (Debian 18.1-1.pgdg13+2)
+-- Dumped from database version 18.2 (Debian 18.2-1.pgdg13+1)
 -- Dumped by pg_dump version 18.1 (Ubuntu 18.1-1.pgdg24.04+2)
 
 SET statement_timeout = 0;
