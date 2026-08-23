@@ -68,6 +68,12 @@
 - View for unavailable state message (no longer needed due to jurisdictions being removed from URLs).
 - Volume references in docker-compose.yaml, .gitignore, and Sample.env that were only used in development.
 
+## [3.1.6] - 2026-08-23
+
+### Changed
+
+- Model to require short government value to be non-empty to convert into a government ID.
+
 ## [3.1.5] - 2025-12-12
 
 ### Changed
@@ -568,7 +574,8 @@
 
 - Public release of the Local Geohistory Project: Application repository.
 
-[4.0.0]: https://github.com/localgeohistoryproject/application/compare/v3.1.5...develop
+[4.0.0]: https://github.com/localgeohistoryproject/application/compare/v3.1.6...develop
+[3.1.6]: https://github.com/localgeohistoryproject/application/compare/v3.1.5...v3.1.6
 [3.1.5]: https://github.com/localgeohistoryproject/application/compare/v3.1.4...v3.1.5
 [3.1.4]: https://github.com/localgeohistoryproject/application/compare/v3.1.3...v3.1.4
 [3.1.3]: https://github.com/localgeohistoryproject/application/compare/v3.1.2...v3.1.3

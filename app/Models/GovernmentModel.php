@@ -843,6 +843,10 @@ class GovernmentModel extends BaseModel
             return $this->getIdByGovernmentShortParent($government, $parent);
         }
 
+        if ($government === '') {
+            return '{}';
+        }
+
         $query = <<<QUERY
                 SELECT DISTINCT government.governmentid
                 FROM geohistory.government lookupgovernment
