@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.1.6] - 2026-08-23
+
+### Changed
+
+- Model to require short government value to be non-empty to convert into a government ID.
+
 ## [3.1.5] - 2025-12-12
 
 ### Changed
@@ -500,6 +506,7 @@
 
 - Public release of the Local Geohistory Project: Application repository.
 
+[3.1.6]: https://github.com/localgeohistoryproject/application/compare/v3.1.5...v3.1.6
 [3.1.5]: https://github.com/localgeohistoryproject/application/compare/v3.1.4...v3.1.5
 [3.1.4]: https://github.com/localgeohistoryproject/application/compare/v3.1.3...v3.1.4
 [3.1.3]: https://github.com/localgeohistoryproject/application/compare/v3.1.2...v3.1.3
