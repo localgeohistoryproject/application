@@ -1,0 +1,11 @@
+typeid	typelong	typegroup	y	j	m	n	r	p	q	v	u	s	t	w	a	b	c
+B	Bahá'ic	gregorian	6560	1412	19	20	4	1461	0	3	1	19	0	0	184	274273	-50
+C	Coptic	arithmetic	4996	124	0	13	4	1461	0	3	1	30	0	0	\N	\N	\N
+E	Egyptian	arithmetic	3968	47	0	13	1	365	0	0	1	30	0	0	\N	\N	\N
+F	French Republican	gregorian	6504	111	0	13	4	1461	0	3	1	30	0	0	396	578797	-51
+G	Gregorian	default	4716	1401	2	12	4	1461	0	3	5	153	2	2	184	274277	-38
+H	Hebrew	hebrew	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
+I	Islamic	arithmetic	5519	7664	0	12	30	10631	14	15	100	2951	51	10	\N	\N	\N
+J	Julian	arithmetic	4716	1401	2	12	4	1461	0	3	5	153	2	2	\N	\N	\N
+S	Saka	saka	4794	1348	1	12	4	1461	0	3	1	31	0	0	184	274073	-36
+T	Ethiopian	arithmetic	4720	124	0	13	4	1461	0	3	1	30	0	0	\N	\N	\N

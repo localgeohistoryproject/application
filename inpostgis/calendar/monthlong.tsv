@@ -1,0 +1,347 @@
+type	locale	monthinteger	monthlong	monthabbreviation
+B	en	1	Bahá	Bahá
+B	ar	20	علاء	علاء
+B	ar	19	ايام الهاء	ايام الهاء
+B	ar	18	ملك	ملك
+B	ar	17	سلطان	سلطان
+B	ar	16	شرف	شرف
+B	ar	15	مسائل	مسائل
+B	ar	14	قول	قول
+B	ar	13	قدرة	قدرة
+B	ar	12	علم	علم
+B	ar	11	مشية	مشية
+B	ar	10	عزة	عزة
+B	ar	9	اسماء	اسماء
+B	ar	8	كمال	كمال
+B	ar	7	كلمات	كلمات
+B	ar	6	رحمة	رحمة
+B	ar	5	نور	نور
+B	ar	4	عظمة	عظمة
+B	ar	3	جمال	جمال
+B	ar	2	جلال	جلال
+B	ar	1	بهاء	بهاء
+B	en	20	ʻAláʼ	ʻAláʼ
+B	en	19	Ayyám-i-Há	Ayyám-i-Há
+B	en	18	Mulk	Mulk
+B	en	17	Sulṭán	Sulṭán
+B	en	16	S͟haraf	S͟haraf
+B	en	15	Masáʼil	Masáʼil
+B	en	14	Qawl	Qawl
+B	en	13	Qudrat	Qudrat
+B	en	12	ʻIlm	ʻIlm
+B	en	11	Mas͟híyyat	Mas͟híyyat
+B	en	10	ʻIzzat	ʻIzzat
+B	en	9	Asmáʼ	Asmáʼ
+B	en	8	Kamál	Kamál
+B	en	7	Kalimát	Kalimát
+B	en	6	Raḥmat	Raḥmat
+B	en	5	Núr	Núr
+B	en	4	ʻAẓamat	ʻAẓamat
+B	en	3	Jamál	Jamál
+B	en	2	Jalál	Jalál
+C	en	12	Mesori	Mesori
+C	en	11	Epip	Epip
+C	en	10	Paoni	Paoni
+C	en	9	Pashons	Pashons
+C	en	8	Parmouti	Parmouti
+C	en	7	Paremhat	Paremhat
+C	en	6	Meshir	Meshir
+C	en	5	Tobi	Tobi
+C	en	4	Koiak	Koiak
+C	en	3	Hathor	Hathor
+C	en	2	Paopi	Paopi
+C	en	1	Thout	Thout
+C	en	13	Pi Kogi Enavot	Pi Kogi Enavot
+E	en	12	Mesori	Mesori
+E	en	11	Epiphi	Epiphi
+E	en	10	Payni	Payni
+E	en	9	Pachons	Pachons
+E	en	8	Pharmouti	Pharmouti
+E	en	7	Phanemoth	Phanemoth
+E	en	6	Mesir	Mesir
+E	en	5	Tybi	Tybi
+E	en	4	Cohiac	Cohiac
+E	en	3	Athyr	Athyr
+E	en	2	Paophi	Paophi
+E	en	1	Thoth	Thoth
+E	en	13	Epagomenal	Epagomenal
+F	fr	9	prairial	prairial
+F	fr	1	vendémiaire	vendémiaire
+F	fr	11	thermidor	thermidor
+F	fr	12	fructidor	fructidor
+F	fr	13	jours complémentaires	jours complémentaires
+F	fr	2	brumaire	brumaire
+F	fr	3	frimaire	frimaire
+F	fr	4	nivôse	nivôse
+F	fr	5	pluviôse	pluviôse
+F	fr	6	ventôse	ventôse
+F	fr	7	germinal	germinal
+F	fr	8	floréal	floréal
+F	fr	10	messidor	messidor
+G	fr	7	juillet	juil.
+G	fr	8	août	août
+G	fr	9	septembre	sept.
+G	fr	10	octobre	oct.
+G	fr	11	novembre	nov.
+G	fr	12	décembre	déc.
+G	ga	1	Eanáir	Eanáir
+G	ga	2	Feabhra	Feabhra
+G	ga	3	Márta	Márta
+G	ga	4	Aibreán	Aibreán
+G	ga	5	Bealtaine	Bealtaine
+G	ga	6	Meitheamh	Meitheamh
+G	ga	7	Iúil	Iúil
+G	ga	8	Lúnasa	Lúnasa
+G	ga	9	Meán Fómhair	Meán Fómhair
+G	ga	10	Deireadh Fómhair	Deireadh Fómhair
+G	ga	11	Samhain	Samhain
+G	ga	12	Nollaig	Nollaig
+G	it	1	gennaio	genn.
+G	it	2	febbraio	febbr.
+G	it	3	marzo	mar.
+G	it	4	aprile	apr.
+G	it	5	maggio	magg.
+G	it	6	giugno	giugno
+G	it	7	luglio	luglio
+G	it	8	agosto	ag.
+G	it	9	settembre	sett.
+G	it	10	ottobre	ott.
+G	it	11	novembre	nov.
+G	it	12	dicembre	dic.
+G	la	1	Ianuarius	Ian.
+G	la	2	Februarius	Febr.
+G	la	3	Martius	Mart.
+G	la	4	Aprilis	Apr.
+G	la	5	Maius	Mai
+G	la	6	Iunius	Iun.
+G	la	7	Iulius	Iul.
+G	la	8	Augustus	Aug.
+G	la	9	September	Sept.
+G	la	11	November	Nov.
+G	la	12	December	Dec.
+G	nl	1	januari	jan.
+G	nl	2	februari	feb.
+G	nl	3	maart	maart
+G	nl	4	april	apr.
+G	nl	5	mei	mei
+G	nl	6	juni	juni
+G	nl	7	juli	juli
+G	nl	8	augustus	aug.
+G	nl	9	september	sept.
+G	nl	10	oktober	oct.
+G	nl	11	november	nov.
+G	nl	12	december	dec.
+G	no	1	januar	jan.
+G	no	2	februar	febr.
+G	no	3	mars	mars
+G	no	4	april	april
+G	no	5	mai	mai
+G	no	6	juni	juni
+G	no	7	juli	juli
+G	no	8	august	aug.
+G	no	9	september	sept.
+G	no	10	oktober	okt.
+G	no	11	november	nov.
+G	no	12	desember	des.
+G	pl	1	styczeń	stycz.
+G	pl	2	luty	luty
+G	pl	3	marzec	mar.
+G	pl	4	kwiecień	kwiec.
+G	pl	5	maj	maj
+G	pl	6	czerwiec	czerw.
+G	pl	7	lipiec	lip.
+G	pl	8	sierpień	sierp.
+G	pl	9	wrzesień	wrzes.
+G	pl	10	październik	paźdz.
+G	pl	11	listopad	listop.
+G	pl	12	grudzień	grudz.
+G	pt	1	janeiro	jan.
+G	pt	2	fevereiro	fev.
+G	pt	3	março	março
+G	pt	4	abril	abril
+G	pt	5	maio	maio
+G	pt	6	junho	junho
+G	pt	7	julho	julho
+G	pt	8	agosto	agosto
+G	pt	9	setembro	set.
+G	pt	10	outubro	out.
+G	pt	11	novembro	nov.
+G	pt	12	dezembro	dez.
+G	sv	1	januari	jan.
+G	sv	2	februari	febr.
+G	sv	3	mars	mars
+G	sv	4	april	april
+G	sv	5	maj	maj
+G	sv	6	juni	juni
+G	sv	7	juli	juli
+G	sv	8	augusti	aug.
+G	sv	9	september	sept.
+G	sv	10	oktober	okt.
+G	sv	11	november	nov.
+G	sv	12	december	dec.
+G	la	10	October	Oct.
+G	cs	1	leden	led.
+G	cs	2	únor	ún.
+G	cs	3	březen	břez.
+G	cs	4	duben	dub.
+G	cs	5	květen	květ.
+G	cs	6	červen	červ.
+G	cs	7	červenec	červen.
+G	cs	8	srpen	srp.
+G	cs	9	září	září
+G	cs	10	říjen	řij.
+G	cs	11	listopad	list.
+G	cs	12	prosinec	pros.
+G	cy	1	Ionawr	Ion.
+G	cy	2	Chwefror	Chwef.
+G	cy	3	Mawrth	Maw.
+G	cy	4	Ebrill	Ebr.
+G	cy	5	Mai	Mai
+G	cy	6	Mehefin	Meh.
+G	cy	7	Gorffennaf	Gorff.
+G	cy	8	Awst	Awst
+G	cy	9	Medi	Medi
+G	cy	10	Hydref	Hyd.
+G	cy	11	Tachwedd	Tach.
+G	cy	12	Rhagfyr	Rhag.
+G	da	1	januar	jan.
+G	da	2	februar	febr.
+G	da	3	marts	marts
+G	da	4	april	april
+G	da	5	maj	maj
+G	da	6	juni	juni
+G	da	7	juli	juli
+G	da	8	august	aug.
+G	da	9	september	sept.
+G	da	10	oktober	okt.
+G	da	11	november	nov.
+G	da	12	december	dec.
+G	de	1	Januar	Jan.
+G	de	2	Februar	Feb.
+G	de	3	März	März
+G	de	4	April	Apr.
+G	de	5	Mai	Mai
+G	de	6	Juni	Juni
+G	de	7	Juli	Juli
+G	de	8	August	Aug.
+G	de	9	September	Sept.
+G	de	10	Oktober	Okt.
+G	de	11	November	Nov.
+G	de	12	Dezember	Dez.
+G	en	1	January	Jan.
+G	en	2	February	Feb.
+G	en	3	March	Mar.
+G	en	4	April	Apr.
+G	en	5	May	May
+G	en	6	June	June
+G	en	7	July	July
+G	en	8	August	Aug.
+G	en	9	September	Sept.
+G	en	10	October	Oct.
+G	en	11	November	Nov.
+G	en	12	December	Dec.
+G	es	1	enero	enero
+G	es	2	febrero	feb.
+G	es	3	marzo	marzo
+G	es	4	abril	abr.
+G	es	5	mayo	mayo
+G	es	6	junio	jun.
+G	es	7	julio	jul.
+G	es	8	agosto	agosto
+G	es	9	septiembre	sept.
+G	es	10	octubre	oct.
+G	es	11	noviembre	nov.
+G	es	12	diciembre	dic.
+G	fr	1	janvier	janv.
+G	fr	2	février	févr.
+G	fr	3	mars	mars
+G	fr	4	avril	avril
+G	fr	5	mai	mai
+G	fr	6	juin	juin
+H	en	6	Adar I	Adar I
+H	en	8	Nisan	Nisan
+H	en	9	Iyar	Iyar
+H	en	10	Sivan	Sivan
+H	en	11	Tammuz	Tammuz
+H	en	12	Av	Av
+H	en	13	Elul	Elul
+H	en	1	Tishrei	Tishrei
+H	en	2	Cheshvan	Cheshvan
+H	en	3	Kislev	Kislev
+H	en	4	Tevet	Tevet
+H	en	5	Shevat	Shevat
+H	he	7	'אדר ב	'אדר ב
+H	he	6	'אדר א	'אדר א
+H	he	5	שבט	שבט
+H	he	4	טבת	טבת
+H	he	3	כסלו	כסלו
+H	he	2	חשוון	חשוון
+H	he	1	תשרי	תשרי
+H	he	13	אלול	אלול
+H	he	12	אב	אב
+H	he	11	תמוז	תמוז
+H	he	10	סיוון	סיוון
+H	he	9	אייר	אייר
+H	he	8	ניסן	ניסן
+H	en	7	Adar II	Adar II
+I	en	10	Shawwal	Shawwal
+I	en	9	Ramadan	Ramadan
+I	en	8	Sha'ban	Sha'ban
+I	en	7	Rajab	Rajab
+I	en	6	Jumada al-Thani	Jumada al-Thani
+I	en	5	Jumada al-Awwal	Jumada al-Awwal
+I	en	4	Rabi' al-Thani	Rabi' al-Thani
+I	en	3	Rabi' al-Awwal	Rabi' al-Awwal
+I	en	2	Safar	Safar
+I	en	1	Muharram	Muharram
+I	ar	12	ذو الحجة	ذو الحجة
+I	ar	11	ذو القعدة	ذو القعدة
+I	ar	10	شوال	شوال
+I	ar	9	رمضان	رمضان
+I	ar	8	شعبان	شعبان
+I	ar	7	رجب	رجب
+I	ar	6	جمادى الآخرة	جمادى الآخرة
+I	ar	5	جمادى الأولى	جمادى الأولى
+I	ar	4	ربيع الآخر	ربيع الآخر
+I	ar	3	ربيع الأول	ربيع الأول
+I	ar	2	صفر	صفر
+I	ar	1	محرم	محرم
+I	en	12	Dhu al-Hijja	Dhu al-Hijja
+I	en	11	Dhu al-Qadah	Dhu al-Qadah
+Q	en	1	First Month	1 mo.
+Q	en	12	Twelfth Month	12 mo.
+Q	en	11	Eleventh Month	11 mo.
+Q	en	10	Tenth Month	10 mo.
+Q	en	9	Ninth Month	9 mo.
+Q	en	8	Eighth Month	8 mo.
+Q	en	7	Seventh Month	7 mo.
+Q	en	6	Sixth Month	6 mo.
+Q	en	5	Fifth Month	5 mo.
+Q	en	4	Fourth Month	4 mo.
+Q	en	3	Third Month	3 mo.
+Q	en	2	Second Month	2 mo.
+S	en	5	Shraavana	Shraavana
+S	en	1	Chaitra	Chaitra
+S	en	2	Vaisakha	Vaisakha
+S	en	3	Jyeshtha	Jyeshtha
+S	en	4	Ashadha	Ashadha
+S	en	12	Phalguna	Phalguna
+S	en	11	Magha	Magha
+S	en	10	Pausha	Pausha
+S	en	9	Agrahayana	Agrahayana
+S	en	8	Kartika	Kartika
+S	en	7	Ashvin	Ashvin
+S	en	6	Bhadra	Bhadra
+T	en	2	Ṭəqəmt	Ṭəqəmt
+T	en	1	Mäskäräm	Mäskäräm
+T	en	3	Ḫədar	Ḫədar
+T	en	4	Taḫśaś	Taḫśaś
+T	en	5	Ṭərr	Ṭərr
+T	en	6	Yäkatit	Yäkatit
+T	en	7	Mägabit	Mägabit
+T	en	8	Miyazya	Miyazya
+T	en	9	Gənbo	Gənbo
+T	en	10	Säne	Säne
+T	en	11	Ḥamle	Ḥamle
+T	en	12	Nähase	Nähase
+T	en	13	Ṗagʷəmen	Ṗagʷəmen

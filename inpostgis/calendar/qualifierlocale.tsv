@@ -1,0 +1,22 @@
+qualifier	locale	qualifiershort	qualifierlong
+	fr		
+	en		
+	de		
+after	en	aft.	after
+after	de	n.	nach
+after	fr	apr.	après
+and	fr	et	et
+and	de	u.	und
+and	en	&	and
+before	en	bef.	before
+before	de	v.	vor
+before	fr	av.	avant
+between	en	bet.	between
+between	de	zw.	zwischen
+between	fr	entre	entre
+from	de	v.	von
+from	fr	de	de
+from	en	fr.	from
+to	fr	à	à
+to	en	to	to
+to	de	bis	bis
