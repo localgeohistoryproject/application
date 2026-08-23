@@ -32,10 +32,6 @@ services:
             context: ./
             dockerfile: ./docker/postgis/Dockerfile
         restart: always
-        command:
-          - "postgres"
-          - "-c"
-          - "shared_preload_libraries=pg_tle"
         environment:
             CI_ENVIRONMENT: ${CI_ENVIRONMENT}
             POSTGRES_USER: ${POSTGRES_USER}

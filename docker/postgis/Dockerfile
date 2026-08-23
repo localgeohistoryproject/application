@@ -1,11 +1,4 @@
 FROM postgis/postgis:18-3.6
-# Install pg_tle
-RUN apt-get update
-RUN apt-get install -y flex git libkrb5-dev make postgresql-server-dev-18
-RUN mkdir /tmp/pg_tle/
-RUN git clone -b v1.5.2 https://github.com/aws/pg_tle.git /tmp/pg_tle/
-RUN make -C /tmp/pg_tle/
-RUN make -C /tmp/pg_tle/ install
 # Copy scripts and imports to launch database
 COPY /docker/postgis/import_common_postgis.sh /docker-entrypoint-initdb.d/
 RUN mkdir /tmp/inpostgis/

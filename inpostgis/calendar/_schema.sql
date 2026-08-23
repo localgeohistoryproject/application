@@ -1,9 +1,9 @@
-SELECT pgtle.install_extension
-(
- 'calendar',
- '1.7',
- 'Support for non-standard calendars.',
-$_pg_tle_$
+--
+-- CREATE SCHEMA WITH PERMISSIONS
+--
+
+CREATE SCHEMA calendar;
+GRANT USAGE ON SCHEMA calendar TO readonly;
 
 --
 -- CREATE TABLES
@@ -3336,7 +3336,3 @@ CREATE DOMAIN calendar.historicdatetext AS text
 
 CREATE DOMAIN calendar.historicdaterangetext AS text
     CONSTRAINT historicdaterangetext_check CHECK (calendar.is_historicdaterange(VALUE));
-
-$_pg_tle_$
-);
-

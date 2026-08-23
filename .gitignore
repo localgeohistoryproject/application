@@ -33,11 +33,10 @@ html/asset/tile/*
 !html/asset/tile
 !html/asset/tile/.gitkeep
 inpostgis/*
+!inpostgis/calendar
 !inpostgis/geohistory
 inpostgis/geohistory/*
 !inpostgis/geohistory/_schema.sql
-!inpostgis/postgresql_calendar_extension.sql
-!inpostgis/postgresql_calendar_extension_update**
 module/**
 !module/.gitkeep
 pgdata/**

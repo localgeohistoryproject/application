@@ -12,6 +12,7 @@
 
 ### Changed
 
+- Calendar from pg_tle extension to a normal schema.
 - CodeIgniter from 4.6.0 to 4.6.4.
 - Composer docker image from 2.8.6 to 2.9.2.
 - Database extract pg_dump and OS versions.
@@ -32,7 +33,6 @@
 - MapLibre GL JS from 4.7.1 to 5.15.0.
 - MapLibre GL Leaflet from 0.0.22 to 0.1.3.
 - Moved schema SQL file from inpostgis/postgresql_public_backup.sql to inpostgis/geohistory/_schema.sql.
-- Pg_tle from unreleased commit between v1.2.0 and v1.3.0 to v1.5.2.
 - PHP coding style to PER-CS 3.0.
 - PHP CS Fixer from 3.73.1 to 3.92.3.
 - PHP docker image from 8.4.3-apache-bookworm to 8.5.0-apache-trixie.
@@ -64,6 +64,7 @@
 - Google Analytics.
 - Inphp and outpostgis folders.
 - Law page, Summary table, Page Begin column (pincite now included in Citation column).
+- Pg_tle.
 - Search code for unimplemented Adjudication searching.
 - View for unavailable state message (no longer needed due to jurisdictions being removed from URLs).
 - Volume references in docker-compose.yaml, .gitignore, and Sample.env that were only used in development.
