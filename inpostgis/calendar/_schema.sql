@@ -1650,3 +1650,45 @@ CREATE DOMAIN calendar.historicdatetext AS text
 
 CREATE DOMAIN calendar.historicdaterangetext AS text
     CONSTRAINT historicdaterangetext_check CHECK (calendar.is_historicdaterange(VALUE));
+
+--
+-- CREATE PLACEHOLDER STANDARD FUNCTIONS
+--
+
+CREATE OR REPLACE FUNCTION calendar.refresh_generated(
+	)
+    RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+  
+  BEGIN
+  END
+$BODY$;
+
+ALTER FUNCTION calendar.refresh_generated()
+    OWNER TO postgres;
+
+GRANT EXECUTE ON FUNCTION calendar.refresh_generated() TO postgres;
+
+REVOKE ALL ON FUNCTION calendar.refresh_generated() FROM PUBLIC;
+
+CREATE OR REPLACE FUNCTION calendar.refresh_view(
+	)
+    RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+  
+  BEGIN
+  END
+$BODY$;
+
+ALTER FUNCTION calendar.refresh_view()
+    OWNER TO postgres;
+
+GRANT EXECUTE ON FUNCTION calendar.refresh_view() TO postgres;
+
+REVOKE ALL ON FUNCTION calendar.refresh_view() FROM PUBLIC;
