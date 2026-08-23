@@ -98,7 +98,7 @@ CREATE TABLE calendar.regnalyear
 CREATE TABLE calendar.type (
     typeid "char" NOT NULL,
     typelong text NOT NULL,
-    "group" text NOT NULL,
+    typegroup text NOT NULL,
     y integer,
     j integer,
     m integer,
@@ -279,11 +279,11 @@ CREATE FUNCTION calendar.yearmonthday(gregorian date, typeidchar "char") RETURNS
 
       gregorianj := to_char(gregorian, 'J');
 
-      IF type.group IS NULL THEN
+      IF type.typegroup IS NULL THEN
 
         RAISE EXCEPTION 'Calendar not supported';
 
-      ELSIF type.group = 'default' THEN
+      ELSIF type.typegroup = 'default' THEN
 
         RETURN ROW(
           date_part('year', gregorian)::integer,
@@ -291,7 +291,7 @@ CREATE FUNCTION calendar.yearmonthday(gregorian date, typeidchar "char") RETURNS
           date_part('day', gregorian)::integer
         );
 
-      ELSIF type.group = 'hebrew' THEN
+      ELSIF type.typegroup = 'hebrew' THEN
 
         /* 15.11.4 Algorithm 6 */
 
@@ -344,14 +344,14 @@ CREATE FUNCTION calendar.yearmonthday(gregorian date, typeidchar "char") RETURNS
 
         f := gregorianj + type.j;
 
-        IF type.group IN ('gregorian', 'saka') THEN
+        IF type.typegroup IN ('gregorian', 'saka') THEN
           f := f + (((4 * gregorianj + type.b)/146097) * 3)/4 + type.c;
         END IF;
 
         e := type.r * f + type.v;
         g := mod(e, type.p)/type.r;
 
-        IF type.group = 'saka' THEN
+        IF type.typegroup = 'saka' THEN
           x := g/365;
           z := g/185 - x;
           type.s := 31 - z;
@@ -489,15 +489,15 @@ CREATE FUNCTION calendar.date(yearmonthday calendar.yearmonthday, typeidchar "ch
       FROM calendar.type calendar_type
       WHERE calendar_type.typeid = typeidchar;
 
-      IF type.group IS NULL THEN
+      IF type.typegroup IS NULL THEN
 
         RAISE EXCEPTION 'Calendar not supported';
 
-      ELSIF type.group = 'default' THEN
+      ELSIF type.typegroup = 'default' THEN
 
         RETURN make_date(yearmonthday.year, yearmonthday.month, yearmonthday.day);
 
-      ELSIF type.group = 'hebrew' THEN
+      ELSIF type.typegroup = 'hebrew' THEN
 
         /* 15.11.4 Algorithm 8 */
 
@@ -541,14 +541,14 @@ CREATE FUNCTION calendar.date(yearmonthday calendar.yearmonthday, typeidchar "ch
         f := mod(h - 1 + type.n, type.n);
         e := (type.p * g + type.q)/type.r + yearmonthday.day - 1 - type.j;
 
-        IF type.group = 'saka' THEN
+        IF type.typegroup = 'saka' THEN
           z := f/6;
           j := e + ((31 - z) * f + 5 * z)/type.u;
         ELSE
           j := e + (type.s * f + type.t)/type.u;
         END IF;
 
-        IF type.group IN ('gregorian', 'saka') THEN
+        IF type.typegroup IN ('gregorian', 'saka') THEN
           j := j - (3 * ((g + type.a)/100))/4 - type.c;
         END IF;
 
