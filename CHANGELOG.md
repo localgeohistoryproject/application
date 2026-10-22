@@ -35,7 +35,7 @@
 - Pg_tle from unreleased commit between v1.2.0 and v1.3.0 to v1.5.2.
 - PHP coding style to PER-CS 3.0.
 - PHP CS Fixer from 3.73.1 to 3.92.3.
-- PHP docker image from 8.4.3-apache-bookworm to 8.5.0-apache-trixie.
+- PHP docker image from 8.4.27-apache-trixie to 8.5.12-apache-trixie.
 - PHPStan from 2.1.8 to 2.1.33.
 - PHPStan CodeIgniter from 1.5.3 to 1.5.4.
 - PHPStan Strict Rules from 2.0.4 to 2.0.7.
