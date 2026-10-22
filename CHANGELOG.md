@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.1.7] - 2026-10-21
+
+### Changed
+
+- PHP docker image from 8.4.3-apache-bookworm to 8.4.27-apache-trixie.
+
 ## [3.1.6] - 2026-08-23
 
 ### Changed
@@ -506,6 +512,7 @@
 
 - Public release of the Local Geohistory Project: Application repository.
 
+[3.1.7]: https://github.com/localgeohistoryproject/application/compare/v3.1.6...v3.1.7
 [3.1.6]: https://github.com/localgeohistoryproject/application/compare/v3.1.5...v3.1.6
 [3.1.5]: https://github.com/localgeohistoryproject/application/compare/v3.1.4...v3.1.5
 [3.1.4]: https://github.com/localgeohistoryproject/application/compare/v3.1.3...v3.1.4
