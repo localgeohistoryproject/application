@@ -5,6 +5,7 @@
 ### Changed
 
 - PHP docker image from 8.4.3-apache-bookworm to 8.4.27-apache-trixie.
+- Postgis/postgis docker image from 17-3.5 to 18-3.6.
 
 ## [3.1.6] - 2026-08-23
 
