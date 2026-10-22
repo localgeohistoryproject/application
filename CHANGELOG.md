@@ -52,6 +52,7 @@
 
 ### Removed
 
+- app_baseRouteProjectUrl from .env variables and Routes.
 - app/Config/Filters (custom version).
 - app/Config/Services (custom version).
 - app/Filters/LanguageRedirect.
