@@ -32,7 +32,6 @@
 - MapLibre GL JS from 4.7.1 to 5.15.0.
 - MapLibre GL Leaflet from 0.0.22 to 0.1.3.
 - Moved schema SQL file from inpostgis/postgresql_public_backup.sql to inpostgis/geohistory/_schema.sql.
-- Pg_tle from unreleased commit between v1.2.0 and v1.3.0 to v1.5.2.
 - PHP coding style to PER-CS 3.0.
 - PHP CS Fixer from 3.73.1 to 3.92.3.
 - PHP docker image from 8.4.27-apache-trixie to 8.5.12-apache-trixie.
@@ -40,7 +39,6 @@
 - PHPStan CodeIgniter from 1.5.3 to 1.5.4.
 - PHPStan Strict Rules from 2.0.4 to 2.0.7.
 - PMTiles from 4.3.0 to 4.3.1.
-- Postgis/postgis docker image from 17-3.5 to 18-3.6.
 - README to expand Build command.
 - README to have users download TSVs into inpostgis/geohistory instead of inpostgis.
 - Rector from 2.0.10 to 2.3.0.
@@ -72,7 +70,9 @@
 
 ### Changed
 
+- Pg_tle clone command in dockerfile to specify v1.5.2 tag.
 - PHP docker image from 8.4.3-apache-bookworm to 8.4.27-apache-trixie.
+- Postgis/postgis docker image from 17-3.5 to 18-3.6.
 
 ## [3.1.6] - 2026-08-23
 
