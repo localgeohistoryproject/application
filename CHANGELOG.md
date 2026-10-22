@@ -4,6 +4,7 @@
 
 ### Changed
 
+- Pg_tle clone command in dockerfile to specify v1.5.2 tag.
 - PHP docker image from 8.4.3-apache-bookworm to 8.4.27-apache-trixie.
 - Postgis/postgis docker image from 17-3.5 to 18-3.6.
 

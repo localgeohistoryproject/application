@@ -3,9 +3,7 @@ FROM postgis/postgis:18-3.6
 RUN apt-get update
 RUN apt-get install -y flex git libkrb5-dev make postgresql-server-dev-18
 RUN mkdir /tmp/pg_tle/
-WORKDIR /tmp/pg_tle/
-RUN git clone https://github.com/aws/pg_tle.git .
-RUN git checkout -b last-tested f557f0c3d65f595ceff4e5dff430bd9d74126e0b
+RUN git clone -b v1.5.2 https://github.com/aws/pg_tle.git /tmp/pg_tle/
 RUN make -C /tmp/pg_tle/
 RUN make -C /tmp/pg_tle/ install
 # Copy scripts and imports to launch database
